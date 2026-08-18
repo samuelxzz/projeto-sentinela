@@ -1,0 +1,1912 @@
+body{
+  font-family: Arial;
+  background:#f4f6f9;
+  margin:0;
+}
+
+.container{
+  width:90%;
+  max-width:900px;
+  margin:20px auto;
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+input,
+select,
+textarea,
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+
+textarea{
+  min-height:100px;
+  resize:none;
+}
+
+button{
+  background:#3498db;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#2980b9;
+}
+
+.card{
+  border:1px solid #ddd;
+  padding:15px;
+  margin:15px 0;
+  border-radius:10px;
+  background:white;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.verde{
+  background:#2ecc71;
+  color:white;
+  padding:5px 10px;
+  border-radius:6px;
+}
+
+.amarelo{
+  background:#f1c40f;
+  padding:5px 10px;
+  border-radius:6px;
+}
+
+.vermelho{
+  background:#e74c3c;
+  color:white;
+  padding:5px 10px;
+  border-radius:6px;
+}
+/* ================================
+   ESTILO MODERNO
+================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family: 'Inter', Arial, sans-serif;
+
+    color: #172033;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(99, 102, 241, 0.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(14, 165, 233, 0.18),
+            transparent 30%
+        ),
+        #f1f5f9;
+}
+
+
+/* ================================
+   CONTAINER
+================================ */
+
+.container {
+    width: 92%;
+    max-width: 1000px;
+
+    margin: 40px auto;
+    padding: 32px;
+
+    background: rgba(255, 255, 255, 0.82);
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+
+    border-radius: 24px;
+
+    backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.12);
+
+    animation: entrada 0.6s ease;
+}
+
+
+/* ================================
+   TÍTULOS
+================================ */
+
+h1 {
+    margin: 0 0 10px;
+
+    font-size: 34px;
+    font-weight: 800;
+
+    color: #111827;
+
+    letter-spacing: -1px;
+}
+
+h2 {
+    margin-top: 30px;
+
+    font-size: 24px;
+
+    color: #1e293b;
+}
+
+h3 {
+    color: #334155;
+}
+
+
+/* Linha decorativa abaixo do título */
+
+h1::after {
+    content: "";
+
+    display: block;
+
+    width: 55px;
+    height: 5px;
+
+    margin-top: 10px;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        90deg,
+        #6366f1,
+        #06b6d4
+    );
+}
+
+
+/* ================================
+   CAMPOS
+================================ */
+
+input,
+select,
+textarea {
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 15px 17px;
+
+    border: 2px solid transparent;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background: #f8fafc;
+
+    color: #1e293b;
+
+    font-size: 15px;
+
+    transition: 0.25s;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    background: #ffffff;
+
+    border-color: #e2e8f0;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    background: #ffffff;
+
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.12);
+
+    transform: translateY(-1px);
+}
+
+
+textarea {
+    min-height: 130px;
+
+    resize: vertical;
+}
+
+
+/* ================================
+   BOTÕES
+================================ */
+
+button {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 15px 20px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #4f46e5
+        );
+
+    box-shadow:
+        0 8px 20px rgba(79, 70, 229, 0.25);
+
+    transition: 0.25s;
+}
+
+button:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 25px rgba(79, 70, 229, 0.35);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+
+/* ================================
+   CARDS
+================================ */
+
+.card {
+    position: relative;
+
+    overflow: hidden;
+
+    margin: 20px 0;
+
+    padding: 24px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 18px;
+
+    background: white;
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.07);
+
+    transition: 0.3s;
+}
+
+
+/* Barra colorida lateral */
+
+.card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 5px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #6366f1,
+            #06b6d4
+        );
+}
+
+.card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 18px 35px rgba(15, 23, 42, 0.12);
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+.verde,
+.amarelo,
+.vermelho {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 7px 13px;
+
+    border-radius: 30px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* Bolinha do status */
+
+.verde::before,
+.amarelo::before,
+.vermelho::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+/* Verde */
+
+.verde {
+    color: #15803d;
+
+    background: #dcfce7;
+
+    border: 1px solid #bbf7d0;
+}
+
+
+/* Amarelo */
+
+.amarelo {
+    color: #a16207;
+
+    background: #fef9c3;
+
+    border: 1px solid #fde68a;
+}
+
+
+/* Vermelho */
+
+.vermelho {
+    color: #b91c1c;
+
+    background: #fee2e2;
+
+    border: 1px solid #fecaca;
+}
+
+
+/* ================================
+   ANIMAÇÕES
+================================ */
+
+@keyframes entrada {
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(25px)
+            scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* ================================
+   SCROLLBAR
+================================ */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: #e2e8f0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        #6366f1,
+        #06b6d4
+    );
+
+    border-radius: 20px;
+}
+
+
+/* ================================
+   RESPONSIVO
+================================ */
+
+@media (max-width: 600px) {
+
+    .container {
+        width: 94%;
+
+        margin: 20px auto;
+
+        padding: 22px;
+
+        border-radius: 18px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .card {
+        padding: 19px;
+    }
+
+    input,
+    select,
+    textarea,
+    button {
+        padding: 13px;
+    }
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, #005ce7, #0a84ff);
+
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 420px;
+
+  background: white;
+
+  padding: 40px;
+
+  border-radius: 20px;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+
+  text-align: center;
+}
+
+/* LOGO */
+
+.logo-area {
+  margin-bottom: 30px;
+}
+
+.logo-area img {
+  width: 110px;
+  height: 110px;
+
+  object-fit: contain;
+
+  margin-bottom: 10px;
+}
+
+.logo-area h2 {
+  color: #005ce7;
+
+  font-size: 30px;
+
+  margin-bottom: 5px;
+}
+
+.logo-area p {
+  color: #777;
+
+  font-size: 14px;
+}
+
+/* FORMULÁRIO */
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+input {
+  width: 100%;
+
+  padding: 15px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  outline: none;
+
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #005ce7;
+
+  box-shadow: 0 0 0 3px rgba(0, 92, 231, 0.1);
+}
+
+button {
+  width: 100%;
+
+  padding: 15px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #005ce7;
+
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #0048b8;
+
+  transform: translateY(-2px);
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 30px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7fb;
+  color: #1f2937;
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+}
+
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+.page-header {
+  background: linear-gradient(135deg, #0066d6, #008cff);
+  color: white;
+  padding: 24px 28px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 25px rgba(0, 100, 220, 0.18);
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 27px;
+}
+
+.header-title h1 {
+  margin: 0 0 5px;
+  font-size: 25px;
+}
+
+.header-title p {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 14px;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 22px;
+  border: 1px solid #e5eaf2;
+  box-shadow: 0 5px 20px rgba(30, 60, 90, 0.06);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0 0 5px;
+  font-size: 19px;
+  color: #172b4d;
+}
+
+.section-header p {
+  margin: 0;
+  font-size: 13px;
+  color: #7b8794;
+}
+
+
+/* =========================
+   BOTÃO TV
+========================= */
+
+.btn-abrir-tv {
+  border: none;
+  background: white;
+  color: #0066d6;
+  padding: 11px 17px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-abrir-tv:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status-online {
+  color: #16803c;
+  background: #e9f9ef;
+  padding: 7px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+/* =========================
+   FILA
+========================= */
+
+.fila-info {
+  background: #eef6ff;
+  color: #2369a8;
+  padding: 11px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.fila-pacientes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fila-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 15px;
+  border: 1px solid #e3eaf3;
+  border-radius: 11px;
+  transition: 0.2s;
+}
+
+.fila-item:hover {
+  border-color: #9fc8f5;
+  background: #f8fbff;
+  transform: translateY(-1px);
+}
+
+.paciente-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.paciente-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e8f3ff;
+  color: #0066d6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.fila-item strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.fila-item small {
+  color: #7b8794;
+  font-size: 12px;
+}
+
+.btn-tv {
+  border: none;
+  background: #00a86b;
+  color: white;
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-tv:hover {
+  background: #008b59;
+  transform: translateY(-1px);
+}
+
+.btn-atualizar {
+  margin-top: 15px;
+  border: 1px solid #dce4ef;
+  background: #f8fafc;
+  color: #52606d;
+  padding: 8px 13px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-atualizar:hover {
+  background: #edf2f7;
+}
+
+
+/* =========================
+   FORMULÁRIO
+========================= */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #344563;
+  margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  border: 1px solid #d7dee8;
+  border-radius: 9px;
+  padding: 12px 13px;
+  font-size: 14px;
+  outline: none;
+  background: #fbfcfe;
+  transition: 0.2s;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #1683e8;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(22, 131, 232, 0.1);
+}
+
+.form-group textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+
+/* =========================
+   RESULTADO
+========================= */
+
+.resultado {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  align-items: center;
+  gap: 12px;
+}
+
+.resultado.verde,
+.resultado.amarelo,
+.resultado.vermelho {
+  display: flex;
+}
+
+.resultado-icon {
+  font-size: 25px;
+}
+
+.resultado strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.resultado span {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.resultado.verde {
+  background: #e9f8ef;
+  color: #16733c;
+  border: 1px solid #b9e8ca;
+}
+
+.resultado.amarelo {
+  background: #fff8df;
+  color: #946b00;
+  border: 1px solid #f2df9b;
+}
+
+.resultado.vermelho {
+  background: #fff0f0;
+  color: #c62828;
+  border: 1px solid #f0b5b5;
+}
+
+
+/* =========================
+   BOTÃO SALVAR
+========================= */
+
+.btn-salvar {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0066d6, #008cff);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-salvar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(0, 102, 214, 0.25);
+}
+
+
+/* =========================
+   ESTADOS
+========================= */
+
+.loading {
+  text-align: center;
+  padding: 25px;
+  color: #8a96a3;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  color: #7b8794;
+  gap: 5px;
+}
+
+.empty-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #e9f9ef;
+  color: #16803c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.empty-state strong {
+  color: #52606d;
+}
+
+.empty-state span {
+  font-size: 13px;
+}
+
+.error-state {
+  background: #fff0f0;
+  color: #c62828;
+  padding: 13px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 700px) {
+
+  body {
+    padding: 15px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .btn-abrir-tv {
+    width: 100%;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: auto;
+  }
+
+  .fila-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .btn-tv {
+    width: 100%;
+  }
+
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #eef4f9;
+  color: #1e293b;
+}
+
+.container {
+  width: 100%;
+  max-width: 1150px;
+  margin: auto;
+}
+
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+.container > div:first-child {
+  background: linear-gradient(135deg, #0057b8, #008cff);
+  color: white;
+  padding: 24px 28px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 87, 184, 0.22);
+
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 22px !important;
+}
+
+.container > div:first-child h2 {
+  margin: 0 !important;
+  font-size: 26px;
+}
+
+
+/* =========================
+   BOTÃO TV
+========================= */
+
+.btn-abrir-tv {
+  background: white !important;
+  color: #0066cc !important;
+  border: none !important;
+
+  padding: 12px 18px !important;
+
+  border-radius: 10px !important;
+
+  font-size: 14px !important;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.btn-abrir-tv:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.18);
+}
+
+
+/* =========================
+   CONSULTÓRIO
+========================= */
+
+.consultorio-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: white;
+
+  padding: 15px 18px;
+
+  border-radius: 13px;
+
+  border: 1px solid #dce5ee;
+
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+
+  margin-bottom: 22px !important;
+}
+
+.consultorio-input label {
+  color: #243b53;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.consultorio-input input {
+  width: 65px !important;
+
+  text-align: center;
+
+  font-size: 17px !important;
+  font-weight: bold;
+
+  padding: 8px !important;
+
+  border: 1px solid #cbd5e1 !important;
+
+  border-radius: 8px !important;
+
+  outline: none;
+}
+
+.consultorio-input input:focus {
+  border-color: #008cff !important;
+  box-shadow: 0 0 0 3px rgba(0,140,255,0.1);
+}
+
+.consultorio-input span {
+  color: #7b8794 !important;
+}
+
+
+/* =========================
+   TÍTULO DA CONSULTA
+========================= */
+
+.container > h3 {
+  color: #17324d;
+  font-size: 20px;
+
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+
+/* =========================
+   CARDS DOS PACIENTES
+========================= */
+
+#triagens {
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  );
+
+  gap: 18px;
+}
+
+
+.card {
+  background: white;
+
+  border-radius: 15px;
+
+  padding: 20px;
+
+  border: 1px solid #dce5ee;
+
+  box-shadow: 0 5px 18px rgba(30,60,90,0.07);
+
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+
+  box-shadow: 0 10px 25px rgba(30,60,90,0.11);
+
+  border-color: #a9ccef;
+}
+
+
+.card h3 {
+  margin: 0 0 15px;
+
+  font-size: 18px;
+
+  color: #0057b8;
+
+  border-bottom: 1px solid #edf1f5;
+
+  padding-bottom: 12px;
+}
+
+
+.card p {
+  margin: 9px 0;
+
+  font-size: 13px;
+
+  color: #52606d;
+}
+
+
+.card p b {
+  color: #263b53;
+}
+
+
+/* =========================
+   CLASSIFICAÇÃO DE RISCO
+========================= */
+
+.card p span {
+  display: inline-block;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: bold;
+
+  text-transform: uppercase;
+}
+
+
+/* Verde */
+
+.card p span.verde {
+  background: #e8f8ef;
+
+  color: #16803c;
+
+  border: 1px solid #b9e6c9;
+}
+
+
+/* Amarelo */
+
+.card p span.amarelo {
+  background: #fff7dc;
+
+  color: #947000;
+
+  border: 1px solid #f0dc98;
+}
+
+
+/* Vermelho */
+
+.card p span.vermelho {
+  background: #ffeded;
+
+  color: #c62828;
+
+  border: 1px solid #efb3b3;
+}
+
+
+/* =========================
+   BOTÕES DOS CARDS
+========================= */
+
+.card button {
+  border: none;
+
+  padding: 10px 14px;
+
+  border-radius: 8px;
+
+  background: #0066cc;
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.card button:hover {
+  background: #0053a6;
+
+  transform: translateY(-1px);
+}
+
+
+.btn-tv {
+  background: #00a86b !important;
+
+  color: white !important;
+
+  border: none !important;
+
+  padding: 10px 14px !important;
+
+  border-radius: 8px !important;
+
+  cursor: pointer;
+
+  font-size: 13px !important;
+
+  font-weight: bold;
+
+  margin-top: 0 !important;
+}
+
+.btn-tv:hover {
+  background: #008c59 !important;
+}
+
+
+/* =========================
+   LINHA
+========================= */
+
+hr {
+  border: none;
+
+  height: 1px;
+
+  background: #dce5ee;
+
+  margin: 28px 0;
+}
+
+
+/* =========================
+   FORMULÁRIO
+========================= */
+
+#paciente,
+#diagnostico,
+#medicacao,
+#obs {
+
+  width: 100%;
+
+  display: block;
+
+  margin-bottom: 14px;
+
+  padding: 13px 14px;
+
+  border-radius: 9px;
+
+  border: 1px solid #d2dce6;
+
+  background: white;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: 0.2s;
+}
+
+
+#paciente {
+  background: #f2f6fa;
+
+  color: #52606d;
+
+  font-weight: bold;
+}
+
+
+#paciente:focus,
+#diagnostico:focus,
+#medicacao:focus,
+#obs:focus {
+
+  border-color: #008cff;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(0,140,255,0.10);
+}
+
+
+#obs {
+  min-height: 120px;
+
+  resize: vertical;
+}
+
+
+/* =========================
+   BOTÃO SALVAR
+========================= */
+
+.container > button:not(.btn-tv):not(.btn-abrir-tv) {
+
+  width: 100%;
+
+  margin-top: 5px;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #0066cc,
+    #008cff
+  );
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.container > button:not(.btn-tv):not(.btn-abrir-tv):hover {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px
+    rgba(0,100,220,0.25);
+}
+
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 700px) {
+
+  body {
+    padding: 15px;
+  }
+
+  .container > div:first-child {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .btn-abrir-tv {
+    width: 100%;
+  }
+
+  .consultorio-input {
+
+    flex-wrap: wrap;
+
+  }
+
+  .consultorio-input span {
+
+    width: 100%;
+
+  }
+
+  #triagens {
+
+    grid-template-columns: 1fr;
+
+  }
+
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, #0b6fbd 0%, transparent 35%),
+    linear-gradient(135deg, #071d33, #0b3557);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+/* =========================
+   CONTAINER PRINCIPAL
+========================= */
+
+.tv-container {
+  display: flex;
+
+  width: 95vw;
+  height: 90vh;
+
+  gap: 20px;
+}
+
+
+/* =========================
+   PAINÉIS
+========================= */
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+
+  width: 32%;
+
+  gap: 20px;
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+
+  width: 68%;
+
+  gap: 20px;
+}
+
+
+/* =========================
+   CAIXAS
+========================= */
+
+.box {
+  background: rgba(255, 255, 255, 0.97);
+
+  border: none;
+
+  border-radius: 20px;
+
+  padding: 25px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.25);
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+/* detalhe azul no topo */
+
+.box::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 7px;
+
+  background: linear-gradient(
+    90deg,
+    #0066cc,
+    #00a8ff
+  );
+}
+
+
+/* =========================
+   TÍTULOS
+========================= */
+
+.box-title {
+  color: #52677c;
+
+  font-size: 2.2vw;
+
+  font-weight: bold;
+
+  text-transform: uppercase;
+
+  letter-spacing: 2px;
+
+  text-shadow: none;
+
+  margin-bottom: 15px;
+}
+
+
+/* =========================
+   LOCAL
+========================= */
+
+.local-box {
+  flex: 1;
+}
+
+.local-number {
+  color: #0066cc;
+
+  font-size: 9vw;
+
+  font-weight: 800;
+
+  line-height: 1;
+
+  text-shadow:
+    0 5px 15px rgba(0, 102, 204, 0.15);
+}
+
+.local-type {
+  color: #34495e;
+
+  font-size: 1.8vw;
+
+  font-weight: bold;
+
+  margin-top: 10px;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================
+   HISTÓRICO
+========================= */
+
+.history-box {
+  flex: 1;
+
+  justify-content: flex-start;
+
+  align-items: flex-start;
+
+  padding: 25px;
+}
+
+.history-box .box-title {
+  font-size: 1.6vw;
+
+  align-self: center;
+
+  color: #52677c;
+
+  margin-bottom: 20px;
+}
+
+
+#history-list {
+  list-style: none;
+
+  width: 100%;
+
+  color: #263b53;
+
+  font-size: 1.25vw;
+
+  font-weight: bold;
+
+  text-align: left;
+}
+
+
+#history-list li {
+  margin-bottom: 10px;
+
+  background: #f1f7fc;
+
+  border-left: 5px solid #008cff;
+
+  border-radius: 8px;
+
+  padding: 10px 12px;
+
+  border-bottom: none;
+
+  transition: 0.2s;
+}
+
+
+#history-list li:first-child {
+  background: #e4f3ff;
+
+  border-left-color: #0066cc;
+}
+
+
+/* =========================
+   PACIENTE
+========================= */
+
+.patient-box {
+  flex: 3;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f4faff
+    );
+}
+
+
+.patient-box .box-title {
+  color: #52677c;
+
+  font-size: 2vw;
+
+  margin-bottom: 20px;
+}
+
+
+.patient-name {
+  color: #0066cc;
+
+  font-size: 6.5vw;
+
+  font-weight: 800;
+
+  line-height: 1.15;
+
+  word-break: break-word;
+
+  text-shadow:
+    0 5px 20px rgba(0, 102, 204, 0.12);
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo-box {
+  flex: 1;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff,
+      #edf7ff
+    );
+}
+
+
+.logo-text {
+  color: #0066cc;
+
+  font-size: 3.2vw;
+
+  font-weight: bold;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================
+   ANIMAÇÃO
+========================= */
+
+@keyframes flash {
+
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  25% {
+    opacity: 0.65;
+    transform: scale(1.015);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.025);
+  }
+
+  75% {
+    opacity: 0.75;
+    transform: scale(1.015);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}
+
+.flash {
+  animation: flash 0.5s ease 3;
+
+  box-shadow:
+    0 0 0 5px rgba(0, 140, 255, 0.25),
+    0 20px 50px rgba(0, 102, 204, 0.35);
+}
+
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 900px) {
+
+  .tv-container {
+    width: 94vw;
+    height: 90vh;
+
+    gap: 12px;
+  }
+
+  .left-panel {
+    width: 35%;
+    gap: 12px;
+  }
+
+  .right-panel {
+    width: 65%;
+    gap: 12px;
+  }
+
+  .box {
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+}
+
