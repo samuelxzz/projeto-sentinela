@@ -35,7 +35,7 @@
   <script>
     function login() {
 
-      fetch("http://localhost:3000/login", {
+      fetch("/login", {
         method: "POST",
 
         headers: {
@@ -43,8 +43,8 @@
         },
 
         body: JSON.stringify({
-          usuario: document.getElementById("usuario").value,
-          senha: document.getElementById("senha").value
+        usuario: usuario.value,
+          senha: senha.value
         })
       })
 
