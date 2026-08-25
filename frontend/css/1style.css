@@ -1909,4 +1909,155 @@ body {
   }
 
 }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f8fc;
+  color: #1f2937;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+/* CONTAINER PRINCIPAL */
+.container {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 35px 40px;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 65, 130, 0.10);
+  border-top: 5px solid #1976d2;
+}
+
+/* TÍTULO */
+h2 {
+  text-align: center;
+  color: #0d47a1;
+  font-size: 30px;
+  margin-bottom: 35px;
+}
+
+/* TÍTULOS DAS SEÇÕES */
+h3 {
+  color: #1565c0;
+  font-size: 18px;
+  margin-top: 28px;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e3f2fd;
+}
+
+/* INPUTS E SELECT */
+input,
+select {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  margin-bottom: 15px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #1f2937;
+
+  font-size: 15px;
+
+  outline: none;
+  transition: 0.2s;
+}
+
+/* EFEITO AO CLICAR */
+input:focus,
+select:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
+}
+
+/* PLACEHOLDER */
+input::placeholder {
+  color: #94a3b8;
+}
+
+/* LABEL */
+label {
+  display: block;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+/* INPUT DE ARQUIVO */
+input[type="file"] {
+  height: auto;
+  padding: 12px;
+  cursor: pointer;
+  background: #f8fafc;
+}
+
+/* BOTÃO */
+button {
+  width: 100%;
+  height: 52px;
+
+  margin-top: 25px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #1976d2;
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+/* HOVER */
+button:hover {
+  background: #0d47a1;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(13, 71, 161, 0.20);
+}
+
+/* CLIQUE */
+button:active {
+  transform: translateY(0);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 600px) {
+
+  body {
+    padding: 20px 10px;
+  }
+
+  .container {
+    padding: 25px 20px;
+    border-radius: 10px;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  input,
+  select {
+    height: 46px;
+  }
+}
