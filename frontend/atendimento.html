@@ -1,36 +1,136 @@
 <!DOCTYPE html>
 <html>
-<head><link rel="stylesheet" href="style.css"></head>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+
 <body>
 <div class="container">
-<h2>Atendimento</h2>
 
-<input id="nome" placeholder="Nome">
-<input id="cpf" placeholder="CPF">
+  <h2>Cadastro de Paciente</h2>
 
-<select id="tipo">
-  <option>Convenio</option>
-  <option>Particular</option>
-</select>
+  <input id="nome" placeholder="Nome completo">
 
-<input type="file" id="foto">
+  <input id="documento" placeholder="CPF / RG ou outro documento">
 
-<button onclick="cadastrar()">Cadastrar</button>
+  <input id="dataNascimento" type="date" placeholder="Data de nascimento">
+
+  <select id="sexo">
+    <option value="">Selecione o sexo</option>
+    <option value="Masculino">Masculino</option>
+    <option value="Feminino">Feminino</option>
+    <option value="Outro">Outro</option>
+    <option value="Prefiro não informar">Prefiro não informar</option>
+  </select>
+
+  <input id="nomeMae" placeholder="Nome da mãe">
+
+  <select id="estadoCivil">
+    <option value="">Selecione o estado civil</option>
+    <option value="Solteiro(a)">Solteiro(a)</option>
+    <option value="Casado(a)">Casado(a)</option>
+    <option value="Divorciado(a)">Divorciado(a)</option>
+    <option value="Viúvo(a)">Viúvo(a)</option>
+    <option value="União estável">União estável</option>
+  </select>
+
+  <h3>Endereço</h3>
+
+  <input id="cep" placeholder="CEP">
+
+  <input id="logradouro" placeholder="Rua / Avenida">
+
+  <input id="numero" placeholder="Número">
+
+  <input id="complemento" placeholder="Complemento">
+
+  <input id="bairro" placeholder="Bairro">
+
+  <input id="cidade" placeholder="Cidade">
+
+  <input id="estado" placeholder="Estado">
+
+  <input id="telefone" placeholder="Telefone">
+
+  <input id="email" type="email" placeholder="E-mail">
+
+  <h3>Contato de emergência</h3>
+
+  <input id="contatoEmergenciaNome" placeholder="Nome do contato de emergência">
+
+  <input id="contatoEmergenciaTelefone" placeholder="Telefone do contato de emergência">
+
+  <input id="contatoEmergenciaParentesco" placeholder="Parentesco">
+
+  <select id="tipo">
+    <option value="Convenio">Convênio</option>
+    <option value="Particular">Particular</option>
+  </select>
+
+  <input type="file" id="foto">
+
+  <button onclick="cadastrar()">Cadastrar</button>
+
 </div>
 
 <script>
-function cadastrar(){
- fetch("http://localhost:3000/atendimento",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body: JSON.stringify({
-    nome: nome.value,
-    cpf: cpf.value,
-    tipo: tipo.value
+function cadastrar() {
+
+  fetch("http://localhost:3000/atendimento", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+
+      nome: document.getElementById("nome").value,
+      documento: document.getElementById("documento").value,
+      dataNascimento: document.getElementById("dataNascimento").value,
+      sexo: document.getElementById("sexo").value,
+      nomeMae: document.getElementById("nomeMae").value,
+      estadoCivil: document.getElementById("estadoCivil").value,
+
+      endereco: {
+        cep: document.getElementById("cep").value,
+        logradouro: document.getElementById("logradouro").value,
+        numero: document.getElementById("numero").value,
+        complemento: document.getElementById("complemento").value,
+        bairro: document.getElementById("bairro").value,
+        cidade: document.getElementById("cidade").value,
+        estado: document.getElementById("estado").value
+      },
+
+      telefone: document.getElementById("telefone").value,
+      email: document.getElementById("email").value,
+
+      contatoEmergencia: {
+        nome: document.getElementById("contatoEmergenciaNome").value,
+        telefone: document.getElementById("contatoEmergenciaTelefone").value,
+        parentesco: document.getElementById("contatoEmergenciaParentesco").value
+      },
+
+      tipo: document.getElementById("tipo").value
+
+    })
   })
- });
- alert("Paciente enviado para triagem");
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Erro ao cadastrar paciente");
+    }
+
+    return response.json();
+  })
+  .then(data => {
+    alert("Paciente enviado para triagem");
+    console.log(data);
+  })
+  .catch(error => {
+    console.error(error);
+    alert("Erro ao enviar paciente para triagem");
+  });
 }
 </script>
+
 </body>
 </html>
