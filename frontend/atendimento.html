@@ -1,136 +1,978 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
+
 <head>
- <link rel="stylesheet" href="./2style.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastro de Paciente</title>
+
+    <style>
+
+        /* =========================
+           RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            padding: 40px 20px;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            max-width: 950px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+
+        /* =========================
+           CABEÇALHO
+        ========================= */
+
+        .cabecalho {
+            background: #2563eb;
+            padding: 35px 45px;
+            color: white;
+        }
+
+        .cabecalho h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .cabecalho p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+
+        /* =========================
+           SEÇÕES
+        ========================= */
+
+        .secao {
+            padding: 35px 45px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+
+        /* =========================
+           TÍTULO DA SEÇÃO
+        ========================= */
+
+        .titulo-secao {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .titulo-secao > span {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .titulo-secao h3 {
+            font-size: 17px;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .titulo-secao p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+
+        /* =========================
+           LINHAS
+        ========================= */
+
+        .linha {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .campo {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .campo-completo {
+            width: 100%;
+            margin-bottom: 18px;
+        }
+
+        .campo.pequeno {
+            flex: 0 0 160px;
+        }
+
+        .campo.grande {
+            flex: 1;
+        }
+
+
+        /* =========================
+           LABEL
+        ========================= */
+
+        label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 7px;
+        }
+
+
+        /* =========================
+           INPUTS
+        ========================= */
+
+        input,
+        select {
+            width: 100%;
+            height: 48px;
+
+            border: 1px solid #d7dee8;
+            border-radius: 8px;
+
+            background: #f8fafc;
+
+            padding: 0 14px;
+
+            font-size: 14px;
+            color: #334155;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        input::placeholder {
+            color: #a1acb9;
+        }
+
+        input:hover,
+        select:hover {
+            border-color: #94a3b8;
+            background: #ffffff;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            background: #ffffff;
+
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+
+        /* =========================
+           SELECT
+        ========================= */
+
+        select {
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           FOTO
+        ========================= */
+
+        input[type="file"] {
+            height: auto;
+            padding: 14px;
+
+            border: 2px dashed #cbd5e1;
+
+            background: #f8fafc;
+
+            cursor: pointer;
+        }
+
+        input[type="file"]:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+
+        /* =========================
+           EMERGÊNCIA
+        ========================= */
+
+        .emergencia {
+            margin: 25px 45px;
+            padding: 28px;
+
+            background: #fffaf0;
+
+            border: 1px solid #f3dfb3;
+            border-radius: 10px;
+        }
+
+        .emergencia .titulo-secao > span {
+            background: #fff1d6;
+            color: #d97706;
+        }
+
+        .emergencia .titulo-secao h3 {
+            color: #92400e;
+        }
+
+
+        /* =========================
+           BOTÃO
+        ========================= */
+
+        .acoes {
+            padding: 30px 45px;
+
+            display: flex;
+            justify-content: flex-end;
+
+            background: #f8fafc;
+        }
+
+        button {
+            min-width: 220px;
+            height: 50px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            box-shadow: 0 5px 12px rgba(37, 99, 235, 0.20);
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button::before {
+            content: "✓";
+            margin-right: 8px;
+        }
+
+
+        /* =========================
+           RESPONSIVO
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .cabecalho {
+                padding: 28px 22px;
+            }
+
+            .cabecalho h2 {
+                font-size: 23px;
+            }
+
+            .secao {
+                padding: 28px 22px;
+            }
+
+            .linha {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .campo.pequeno,
+            .campo.grande {
+                flex: 1;
+                width: 100%;
+            }
+
+            .emergencia {
+                margin: 20px 15px;
+                padding: 22px;
+            }
+
+            .acoes {
+                padding: 22px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+    </style>
+
 </head>
 
+
 <body>
+
 <div class="container">
 
-  <h2>Cadastro de Paciente</h2>
 
-  <input id="nome" placeholder="Nome completo">
+    <!-- CABEÇALHO -->
 
-  <input id="documento" placeholder="CPF / RG ou outro documento">
+    <div class="cabecalho">
 
-  <input id="dataNascimento" type="date" placeholder="Data de nascimento">
+        <h2>Cadastro de Paciente</h2>
 
-  <select id="sexo">
-    <option value="">Selecione o sexo</option>
-    <option value="Masculino">Masculino</option>
-    <option value="Feminino">Feminino</option>
-    <option value="Outro">Outro</option>
-    <option value="Prefiro não informar">Prefiro não informar</option>
-  </select>
+        <p>
+            Preencha os dados do paciente para realizar o cadastro.
+        </p>
 
-  <input id="nomeMae" placeholder="Nome da mãe">
+    </div>
 
-  <select id="estadoCivil">
-    <option value="">Selecione o estado civil</option>
-    <option value="Solteiro(a)">Solteiro(a)</option>
-    <option value="Casado(a)">Casado(a)</option>
-    <option value="Divorciado(a)">Divorciado(a)</option>
-    <option value="Viúvo(a)">Viúvo(a)</option>
-    <option value="União estável">União estável</option>
-  </select>
 
-  <h3>Endereço</h3>
+    <!-- DADOS PESSOAIS -->
 
-  <input id="cep" placeholder="CEP">
+    <div class="secao">
 
-  <input id="logradouro" placeholder="Rua / Avenida">
+        <div class="titulo-secao">
 
-  <input id="numero" placeholder="Número">
+            <span>01</span>
 
-  <input id="complemento" placeholder="Complemento">
+            <div>
 
-  <input id="bairro" placeholder="Bairro">
+                <h3>Dados pessoais</h3>
 
-  <input id="cidade" placeholder="Cidade">
+                <p>Informações básicas do paciente</p>
 
-  <input id="estado" placeholder="Estado">
+            </div>
 
-  <input id="telefone" placeholder="Telefone">
+        </div>
 
-  <input id="email" type="email" placeholder="E-mail">
 
-  <h3>Contato de emergência</h3>
+        <div class="campo campo-completo">
 
-  <input id="contatoEmergenciaNome" placeholder="Nome do contato de emergência">
+            <label>Nome completo</label>
 
-  <input id="contatoEmergenciaTelefone" placeholder="Telefone do contato de emergência">
+            <input
+                id="nome"
+                placeholder="Digite o nome completo"
+            >
 
-  <input id="contatoEmergenciaParentesco" placeholder="Parentesco">
+        </div>
 
-  <select id="tipo">
-    <option value="Convenio">Convênio</option>
-    <option value="Particular">Particular</option>
-  </select>
 
-  <input type="file" id="foto">
+        <div class="linha">
 
-  <button onclick="cadastrar()">Cadastrar</button>
+            <div class="campo">
+
+                <label>CPF / RG / Documento</label>
+
+                <input
+                    id="documento"
+                    placeholder="Digite o documento"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Data de nascimento</label>
+
+                <input
+                    id="dataNascimento"
+                    type="date"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="linha">
+
+            <div class="campo">
+
+                <label>Sexo</label>
+
+                <select id="sexo">
+
+                    <option value="">
+                        Selecione o sexo
+                    </option>
+
+                    <option value="Masculino">
+                        Masculino
+                    </option>
+
+                    <option value="Feminino">
+                        Feminino
+                    </option>
+
+                    <option value="Outro">
+                        Outro
+                    </option>
+
+                    <option value="Prefiro não informar">
+                        Prefiro não informar
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Estado civil</label>
+
+                <select id="estadoCivil">
+
+                    <option value="">
+                        Selecione o estado civil
+                    </option>
+
+                    <option value="Solteiro(a)">
+                        Solteiro(a)
+                    </option>
+
+                    <option value="Casado(a)">
+                        Casado(a)
+                    </option>
+
+                    <option value="Divorciado(a)">
+                        Divorciado(a)
+                    </option>
+
+                    <option value="Viúvo(a)">
+                        Viúvo(a)
+                    </option>
+
+                    <option value="União estável">
+                        União estável
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="campo campo-completo">
+
+            <label>Nome da mãe</label>
+
+            <input
+                id="nomeMae"
+                placeholder="Digite o nome completo da mãe"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- ENDEREÇO -->
+
+    <div class="secao">
+
+        <div class="titulo-secao">
+
+            <span>02</span>
+
+            <div>
+
+                <h3>Endereço</h3>
+
+                <p>
+                    Informações de residência do paciente
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="linha">
+
+            <div class="campo pequeno">
+
+                <label>CEP</label>
+
+                <input
+                    id="cep"
+                    placeholder="00000-000"
+                >
+
+            </div>
+
+
+            <div class="campo grande">
+
+                <label>Rua / Avenida</label>
+
+                <input
+                    id="logradouro"
+                    placeholder="Digite o endereço"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="linha">
+
+            <div class="campo pequeno">
+
+                <label>Número</label>
+
+                <input
+                    id="numero"
+                    placeholder="Nº"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Complemento</label>
+
+                <input
+                    id="complemento"
+                    placeholder="Apartamento, casa, etc."
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Bairro</label>
+
+                <input
+                    id="bairro"
+                    placeholder="Digite o bairro"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="linha">
+
+            <div class="campo">
+
+                <label>Cidade</label>
+
+                <input
+                    id="cidade"
+                    placeholder="Digite a cidade"
+                >
+
+            </div>
+
+
+            <div class="campo pequeno">
+
+                <label>Estado</label>
+
+                <input
+                    id="estado"
+                    placeholder="UF"
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTATO -->
+
+    <div class="secao">
+
+        <div class="titulo-secao">
+
+            <span>03</span>
+
+            <div>
+
+                <h3>Contato</h3>
+
+                <p>
+                    Meios de comunicação com o paciente
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="linha">
+
+            <div class="campo">
+
+                <label>Telefone</label>
+
+                <input
+                    id="telefone"
+                    placeholder="(00) 00000-0000"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>E-mail</label>
+
+                <input
+                    id="email"
+                    type="email"
+                    placeholder="email@exemplo.com"
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- EMERGÊNCIA -->
+
+    <div class="secao emergencia">
+
+        <div class="titulo-secao">
+
+            <span>04</span>
+
+            <div>
+
+                <h3>Contato de emergência</h3>
+
+                <p>
+                    Pessoa que deverá ser contatada em caso de emergência
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="linha">
+
+            <div class="campo">
+
+                <label>Nome</label>
+
+                <input
+                    id="contatoEmergenciaNome"
+                    placeholder="Nome do contato"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Telefone</label>
+
+                <input
+                    id="contatoEmergenciaTelefone"
+                    placeholder="(00) 00000-0000"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="campo campo-completo">
+
+            <label>Parentesco</label>
+
+            <input
+                id="contatoEmergenciaParentesco"
+                placeholder="Ex.: Mãe, Pai, Irmão, Cônjuge..."
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- ATENDIMENTO -->
+
+    <div class="secao">
+
+        <div class="titulo-secao">
+
+            <span>05</span>
+
+            <div>
+
+                <h3>Informações do atendimento</h3>
+
+                <p>
+                    Informações relacionadas ao atendimento
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="linha">
+
+            <div class="campo">
+
+                <label>Tipo de atendimento</label>
+
+                <select id="tipo">
+
+                    <option value="Convenio">
+                        Convênio
+                    </option>
+
+                    <option value="Particular">
+                        Particular
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOTO -->
+
+    <div class="secao">
+
+        <div class="titulo-secao">
+
+            <span>06</span>
+
+            <div>
+
+                <h3>Foto do paciente</h3>
+
+                <p>
+                    Adicione uma foto para identificação
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>Selecionar foto</label>
+
+            <input
+                type="file"
+                id="foto"
+                accept="image/*"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- BOTÃO -->
+
+    <div class="acoes">
+
+        <button onclick="cadastrar()">
+            Cadastrar paciente
+        </button>
+
+    </div>
 
 </div>
 
+
 <script>
+
 function cadastrar() {
 
-  fetch("http://localhost:3000/atendimento", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    fetch("http://localhost:3000/atendimento", {
 
-    body: JSON.stringify({
+        method: "POST",
 
-      nome: document.getElementById("nome").value,
-      documento: document.getElementById("documento").value,
-      dataNascimento: document.getElementById("dataNascimento").value,
-      sexo: document.getElementById("sexo").value,
-      nomeMae: document.getElementById("nomeMae").value,
-      estadoCivil: document.getElementById("estadoCivil").value,
+        headers: {
+            "Content-Type": "application/json"
+        },
 
-      endereco: {
-        cep: document.getElementById("cep").value,
-        logradouro: document.getElementById("logradouro").value,
-        numero: document.getElementById("numero").value,
-        complemento: document.getElementById("complemento").value,
-        bairro: document.getElementById("bairro").value,
-        cidade: document.getElementById("cidade").value,
-        estado: document.getElementById("estado").value
-      },
+        body: JSON.stringify({
 
-      telefone: document.getElementById("telefone").value,
-      email: document.getElementById("email").value,
+            nome: document.getElementById("nome").value,
 
-      contatoEmergencia: {
-        nome: document.getElementById("contatoEmergenciaNome").value,
-        telefone: document.getElementById("contatoEmergenciaTelefone").value,
-        parentesco: document.getElementById("contatoEmergenciaParentesco").value
-      },
+            documento:
+                document.getElementById("documento").value,
 
-      tipo: document.getElementById("tipo").value
+            dataNascimento:
+                document.getElementById("dataNascimento").value,
+
+            sexo:
+                document.getElementById("sexo").value,
+
+            nomeMae:
+                document.getElementById("nomeMae").value,
+
+            estadoCivil:
+                document.getElementById("estadoCivil").value,
+
+
+            endereco: {
+
+                cep:
+                    document.getElementById("cep").value,
+
+                logradouro:
+                    document.getElementById("logradouro").value,
+
+                numero:
+                    document.getElementById("numero").value,
+
+                complemento:
+                    document.getElementById("complemento").value,
+
+                bairro:
+                    document.getElementById("bairro").value,
+
+                cidade:
+                    document.getElementById("cidade").value,
+
+                estado:
+                    document.getElementById("estado").value
+
+            },
+
+
+            telefone:
+                document.getElementById("telefone").value,
+
+            email:
+                document.getElementById("email").value,
+
+
+            contatoEmergencia: {
+
+                nome:
+                    document.getElementById(
+                        "contatoEmergenciaNome"
+                    ).value,
+
+                telefone:
+                    document.getElementById(
+                        "contatoEmergenciaTelefone"
+                    ).value,
+
+                parentesco:
+                    document.getElementById(
+                        "contatoEmergenciaParentesco"
+                    ).value
+
+            },
+
+
+            tipo:
+                document.getElementById("tipo").value
+
+        })
 
     })
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Erro ao cadastrar paciente");
-    }
 
-    return response.json();
-  })
-  .then(data => {
-    alert("Paciente enviado para triagem");
-    console.log(data);
-  })
-  .catch(error => {
-    console.error(error);
-    alert("Erro ao enviar paciente para triagem");
-  });
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Erro ao cadastrar paciente"
+            );
+
+        }
+
+        return response.json();
+
+    })
+
+    .then(data => {
+
+        alert("Paciente enviado para triagem");
+
+        console.log(data);
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        alert(
+            "Erro ao enviar paciente para triagem"
+        );
+
+    });
+
 }
+
 </script>
 
 </body>
+
 </html>
+```
