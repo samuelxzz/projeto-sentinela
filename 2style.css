@@ -1,346 +1,437 @@
-
-/* =========================
+```css
+/* ================================
    RESET
-========================= */
+================================ */
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #eef3f8;
-  color: #1e293b;
-  min-height: 100vh;
-  padding: 40px 20px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f7fb;
+    color: #1e293b;
+    min-height: 100vh;
+    padding: 40px 20px;
 }
 
-/* =========================
-   CONTAINER PRINCIPAL
-========================= */
+
+/* ================================
+   CONTAINER
+================================ */
 
 .container {
-  width: 100%;
-  max-width: 950px;
-  margin: auto;
-  background: #ffffff;
-  border-radius: 18px;
-  box-shadow: 0 15px 45px rgba(15, 23, 42, 0.10);
-  overflow: hidden;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
 }
 
-/* =========================
+
+/* ================================
    CABEÇALHO
-========================= */
+================================ */
 
-.container::before {
-  content: "SISTEMA DE ATENDIMENTO";
-  display: block;
-  background: #2563eb;
-  color: white;
-  padding: 13px 35px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
+.cabecalho {
+    padding: 40px 45px;
+    background: linear-gradient(135deg, #1769e0, #0f4db8);
+    color: white;
 }
 
-h2 {
-  font-size: 28px;
-  color: #0f172a;
-  padding: 32px 40px 10px;
+.cabecalho h2 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-h2::before {
-  content: "＋";
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  margin-right: 10px;
-  border-radius: 10px;
-  background: #dbeafe;
-  color: #2563eb;
-  font-size: 25px;
-  vertical-align: middle;
+.cabecalho h2::before {
+    content: "✚";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-right: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    font-size: 22px;
+    vertical-align: middle;
 }
 
-/* =========================
-   CONTEÚDO
-========================= */
+.cabecalho p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    margin-left: 55px;
+}
+
+
+/* ================================
+   SEÇÕES
+================================ */
+
+.secao {
+    margin: 0 45px;
+    padding: 35px 0;
+    border-bottom: 1px solid #e5eaf0;
+}
+
+.secao:last-of-type {
+    border-bottom: none;
+}
+
+
+/* ================================
+   TÍTULO DA SEÇÃO
+================================ */
+
+.titulo-secao {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 25px;
+}
+
+.titulo-secao > span {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #e8f0ff;
+    color: #1769e0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.titulo-secao h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #172033;
+    margin-bottom: 3px;
+}
+
+.titulo-secao p {
+    color: #8a97a8;
+    font-size: 13px;
+}
+
+
+/* ================================
+   LINHAS
+================================ */
+
+.linha {
+    display: flex;
+    gap: 18px;
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.linha:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ================================
+   CAMPOS
+================================ */
+
+.campo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.campo-completo {
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.campo.pequeno {
+    flex: 0 0 180px;
+}
+
+.campo.grande {
+    flex: 1;
+}
+
+
+/* ================================
+   LABEL
+================================ */
+
+.campo label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+
+/* ================================
+   INPUTS E SELECTS
+================================ */
+
+.campo input,
+.campo select {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: 1px solid #d8e0ea;
+    border-radius: 9px;
+    background: #fafbfd;
+    color: #263548;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.campo input::placeholder {
+    color: #a4afbd;
+}
+
+.campo input:hover,
+.campo select:hover {
+    border-color: #aebdce;
+    background: #ffffff;
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-color: #1769e0;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.10);
+}
+
+
+/* ================================
+   SELECT
+================================ */
+
+.campo select {
+    cursor: pointer;
+}
+
+
+/* ================================
+   DATA
+================================ */
+
+.campo input[type="date"] {
+    cursor: pointer;
+    color: #475569;
+}
+
+
+/* ================================
+   FOTO
+================================ */
+
+.campo input[type="file"] {
+    height: auto;
+    padding: 14px;
+    border: 2px dashed #cbd5e1;
+    background: #f8fafc;
+    cursor: pointer;
+}
+
+.campo input[type="file"]:hover {
+    border-color: #1769e0;
+    background: #f1f6ff;
+}
+
+
+/* ================================
+   CONTATO DE EMERGÊNCIA
+================================ */
+
+.emergencia {
+    background: #fffaf5;
+    border: 1px solid #ffe5c2;
+    border-radius: 12px;
+    padding: 28px;
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+
+.emergencia .titulo-secao > span {
+    background: #fff0d9;
+    color: #e68a00;
+}
+
+.emergencia .titulo-secao h3 {
+    color: #9a5b00;
+}
+
+
+/* ================================
+   ÁREA DO BOTÃO
+================================ */
+
+.acoes {
+    padding: 30px 45px 40px;
+    background: #fafbfd;
+    border-top: 1px solid #e5eaf0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.acoes button {
+    min-width: 230px;
+    height: 52px;
+    padding: 0 25px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1769e0, #0f4db8);
+    color: white;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(23, 105, 224, 0.22);
+    transition: all 0.2s ease;
+}
+
+.acoes button::before {
+    content: "✓";
+    margin-right: 9px;
+    font-size: 16px;
+}
+
+.acoes button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 20px rgba(23, 105, 224, 0.30);
+}
+
+.acoes button:active {
+    transform: translateY(0);
+}
+
+
+/* ================================
+   ANIMAÇÃO
+================================ */
 
 .container {
-  padding-bottom: 35px;
+    animation: aparecer 0.45s ease;
 }
-
-.container > input,
-.container > select,
-.container > h3,
-.container > button {
-  margin-left: 40px;
-  margin-right: 40px;
-  width: calc(100% - 80px);
-}
-
-/* =========================
-   SEÇÕES
-========================= */
-
-h3 {
-  margin-top: 30px !important;
-  margin-bottom: 18px;
-  padding: 13px 15px;
-  width: calc(100% - 80px);
-  background: #f8fafc;
-  border-left: 4px solid #2563eb;
-  border-radius: 6px;
-  color: #1e40af;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-/* =========================
-   CAMPOS
-========================= */
-
-input,
-select {
-  height: 50px;
-  border: 1px solid #d5dde8;
-  border-radius: 9px;
-  padding: 0 15px;
-  margin-bottom: 14px;
-  background: #ffffff;
-  color: #334155;
-  font-size: 14px;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-input::placeholder {
-  color: #94a3b8;
-}
-
-input:hover,
-select:hover {
-  border-color: #94a3b8;
-}
-
-input:focus,
-select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-  background: #ffffff;
-}
-
-/* =========================
-   SELECT
-========================= */
-
-select {
-  cursor: pointer;
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #64748b 50%),
-    linear-gradient(135deg, #64748b 50%, transparent 50%);
-  background-position:
-    calc(100% - 20px) 21px,
-    calc(100% - 14px) 21px;
-  background-size:
-    6px 6px,
-    6px 6px;
-  background-repeat: no-repeat;
-  padding-right: 40px;
-}
-
-/* =========================
-   DATA
-========================= */
-
-input[type="date"] {
-  color: #475569;
-  cursor: pointer;
-}
-
-/* =========================
-   UPLOAD DA FOTO
-========================= */
-
-input[type="file"] {
-  height: auto;
-  padding: 12px 14px;
-  background: #f8fafc;
-  border: 1px dashed #94a3b8;
-  cursor: pointer;
-}
-
-input[type="file"]:hover {
-  border-color: #2563eb;
-  background: #eff6ff;
-}
-
-/* =========================
-   BOTÃO
-========================= */
-
-button {
-  height: 53px;
-  margin-top: 25px !important;
-  border: none;
-  border-radius: 9px;
-  background: #2563eb;
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.25);
-  transition: all 0.2s ease;
-}
-
-button::before {
-  content: "✓";
-  margin-right: 8px;
-  font-size: 16px;
-}
-
-button:hover {
-  background: #1d4ed8;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.30);
-  transform: translateY(-2px);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-/* =========================
-   DESKTOP - ORGANIZAÇÃO
-========================= */
-
-@media (min-width: 750px) {
-
-  /* Dados pessoais */
-  #nome,
-  #documento,
-  #dataNascimento,
-  #sexo,
-  #nomeMae,
-  #estadoCivil {
-    width: calc(50% - 47px);
-  }
-
-  #nome,
-  #dataNascimento,
-  #nomeMae {
-    margin-right: 10px;
-  }
-
-  #documento,
-  #sexo,
-  #estadoCivil {
-    margin-left: 10px;
-  }
-
-  /* Endereço */
-
-  #cep,
-  #numero,
-  #estado {
-    width: calc(25% - 30px);
-  }
-
-  #logradouro,
-  #bairro {
-    width: calc(75% - 50px);
-  }
-
-  #complemento,
-  #cidade {
-    width: calc(50% - 47px);
-  }
-
-  /* Contato */
-
-  #contatoEmergenciaNome,
-  #contatoEmergenciaTelefone,
-  #contatoEmergenciaParentesco {
-    width: calc(33.33% - 34px);
-  }
-
-  /* Tipo */
-
-  #tipo {
-    width: calc(50% - 47px);
-  }
-}
-
-/* =========================
-   RESPONSIVO
-========================= */
-
-@media (max-width: 749px) {
-
-  body {
-    padding: 15px;
-  }
-
-  .container {
-    border-radius: 14px;
-  }
-
-  .container::before {
-    padding: 11px 20px;
-    font-size: 10px;
-  }
-
-  h2 {
-    font-size: 22px;
-    padding: 25px 20px 10px;
-  }
-
-  h2::before {
-    width: 32px;
-    height: 32px;
-    font-size: 20px;
-  }
-
-  .container > input,
-  .container > select,
-  .container > h3,
-  .container > button {
-    margin-left: 20px;
-    margin-right: 20px;
-    width: calc(100% - 40px);
-  }
-
-  input,
-  select {
-    height: 48px;
-  }
-
-  h3 {
-    margin-top: 22px !important;
-  }
-}
-
-/* =========================
-   ANIMAÇÃO
-========================= */
 
 @keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.container {
-  animation: aparecer 0.4s ease;
+
+/* ================================
+   RESPONSIVIDADE
+================================ */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .container {
+        border-radius: 14px;
+    }
+
+    .cabecalho {
+        padding: 30px 25px;
+    }
+
+    .cabecalho h2 {
+        font-size: 23px;
+    }
+
+    .cabecalho p {
+        margin-left: 0;
+        margin-top: 8px;
+    }
+
+    .secao {
+        margin: 0 25px;
+        padding: 28px 0;
+    }
+
+    .linha {
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .campo.pequeno,
+    .campo.grande {
+        flex: 1;
+        width: 100%;
+    }
+
+    .campo-completo {
+        margin-bottom: 15px;
+    }
+
+    .titulo-secao {
+        margin-bottom: 20px;
+    }
+
+    .emergencia {
+        margin-left: 15px;
+        margin-right: 15px;
+        padding: 20px;
+    }
+
+    .acoes {
+        padding: 25px;
+    }
+
+    .acoes button {
+        width: 100%;
+    }
 }
--
+
+
+/* ================================
+   TELAS MUITO PEQUENAS
+================================ */
+
+@media (max-width: 400px) {
+
+    body {
+        padding: 8px;
+    }
+
+    .cabecalho {
+        padding: 25px 18px;
+    }
+
+    .cabecalho h2 {
+        font-size: 20px;
+    }
+
+    .secao {
+        margin: 0 18px;
+    }
+
+    .titulo-secao > span {
+        width: 35px;
+        height: 35px;
+        min-width: 35px;
+        font-size: 12px;
+    }
+}
+```
