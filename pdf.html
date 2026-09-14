@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>Arquivos do Paciente</title>
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    #paciente-nome {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    .arquivo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      margin-bottom: 10px;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .arquivo span {
+      font-weight: bold;
+    }
+
+    .btn {
+      background: #dc3545;
+      color: white;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+    }
+
+    .btn:hover {
+      background: #b02a37;
+    }
+
+    .voltar {
+      display: inline-block;
+      margin-bottom: 20px;
+      background: #17a2b8;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <div class="container">
+
+    <a
+      href="javascript:window.close()"
+      class="voltar">
+
+      ← Voltar
+
+    </a>
+
+
+    <h2>
+      📄 Arquivos do Paciente
+    </h2>
+
+
+    <div id="paciente-nome">
+      Carregando paciente...
+    </div>
+
+
+    <div id="arquivos">
+
+      <p style="text-align:center;">
+        Carregando arquivos...
+      </p>
+
+    </div>
+
+  </div>
+
+
+<script>
+
+  /* Pega o paciente enviado pela página do médico */
+
+  const parametros =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const paciente =
+    parametros.get("paciente");
+
+
+  /* Mostra o nome */
+
+  if (paciente) {
+
+    document.getElementById(
+      "paciente-nome"
+    ).innerHTML =
+      "Paciente: <b>" +
+      paciente +
+      "</b>";
+
+  } else {
+
+    document.getElementById(
+      "paciente-nome"
+    ).textContent =
+      "Nenhum paciente selecionado.";
+
+  }
+
+
+  /* =================================
+     CARREGAR PDFs
+  ================================= */
+
+  function carregarArquivos() {
+
+    if (!paciente) {
+      return;
+    }
+
+
+    /*
+      O backend deverá ter uma rota:
+
+      GET /pdfs?paciente=Nome
+
+      que retorna os arquivos desse paciente.
+    */
+
+    fetch(
+      "/pdfs?paciente=" +
+      encodeURIComponent(paciente)
+    )
+
+    .then(response => response.json())
+
+    .then(arquivos => {
+
+      const div =
+        document.getElementById("arquivos");
+
+
+      div.innerHTML = "";
+
+
+      if (!arquivos || arquivos.length === 0) {
+
+        div.innerHTML = `
+          <p style="text-align:center;color:#888;">
+            📂 Nenhum arquivo PDF encontrado
+            para este paciente.
+          </p>
+        `;
+
+        return;
+
+      }
+
+
+      arquivos.forEach(arquivo => {
+
+        div.innerHTML += `
+
+          <div class="arquivo">
+
+            <span>
+              📄 ${arquivo.nome}
+            </span>
+
+            <a
+              href="${arquivo.url}"
+              target="_blank"
+              class="btn">
+
+              Abrir PDF
+
+            </a>
+
+          </div>
+
+        `;
+
+      });
+
+    })
+
+    .catch(error => {
+
+      console.error(
+        "Erro ao carregar PDFs:",
+        error
+      );
+
+
+      document.getElementById(
+        "arquivos"
+      ).innerHTML = `
+
+        <p style="text-align:center;color:#dc3545;">
+          ❌ Não foi possível carregar os arquivos.
+        </p>
+
+      `;
+
+    });
+
+  }
+
+
+  carregarArquivos();
+
+</script>
+
+</body>
+
+</html>
