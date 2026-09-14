@@ -1556,10 +1556,8 @@ body {
   justify-content: center;
   align-items: center;
 
-  min-height: 100vh;
-  height: auto;
-  overflow-y: auto;
-  overflow-x: hidden;
+  height: 100vh;
+  overflow: hidden;
 }
 
 
@@ -2064,19 +2062,9 @@ h3 + #cep {
 }
 
 
-/* ================================
-   CORREÇÃO DO SCROLL
-   Permite descer a página normalmente
-================================ */
-
-html {
-  min-height: 100%;
-  overflow-y: auto;
-}
-
-body {
-  min-height: 100vh;
-  height: auto;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+/* ===== CORREÇÃO: estilos separados por página ===== */
+html { min-height: 100%; height: auto; overflow-y: auto; overflow-x: hidden; }
+body { min-height: 100vh !important; height: auto !important; overflow-y: auto !important; overflow-x: hidden !important; display: block !important; position: relative !important; }
+body.tv-page { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; display: flex !important; position: relative !important; }
+body.tv-page .container { height: 100vh; }
+#triagens, .consulta-area { max-height: none !important; overflow: visible !important; }
