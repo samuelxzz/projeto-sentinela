@@ -1,258 +1,293 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
 
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-  <title>Arquivos do Paciente</title>
+    <title>Documentos do Paciente</title>
 
-  <style>
+    <link rel="stylesheet"
+          href="css/1style.css">
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f9;
-      margin: 0;
-      padding: 30px;
-    }
+    <style>
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
+        body {
+            min-height: 100vh;
+            height: auto !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
 
-    h2 {
-      text-align: center;
-      color: #333;
-    }
+        .pdf-container {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
 
-    #paciente-nome {
-      text-align: center;
-      font-size: 18px;
-      margin-bottom: 25px;
-      color: #555;
-    }
+        .pdf-card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-    .arquivo {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px;
-      margin-bottom: 10px;
-      background: #f8f9fa;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
+        .pdf-card h3 {
+            margin-top: 0;
+        }
 
-    .arquivo span {
-      font-weight: bold;
-    }
+        .btn-pdf-abrir {
+            display: inline-block;
+            padding: 12px 18px;
+            margin-top: 10px;
+            background: #e91e63;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
 
-    .btn {
-      background: #dc3545;
-      color: white;
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 5px;
-    }
+        .btn-pdf-abrir:hover {
+            background: #c2185b;
+        }
 
-    .btn:hover {
-      background: #b02a37;
-    }
+        .btn-voltar {
+            display: inline-block;
+            padding: 12px 18px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-    .voltar {
-      display: inline-block;
-      margin-bottom: 20px;
-      background: #17a2b8;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 5px;
-      text-decoration: none;
-    }
-
-  </style>
+    </style>
 
 </head>
 
 
 <body>
 
-  <div class="container">
+    <div class="pdf-container">
 
-    <a
-      href="javascript:window.close()"
-      class="voltar">
-
-      ← Voltar
-
-    </a>
-
-
-    <h2>
-      📄 Arquivos do Paciente
-    </h2>
+        <a
+            href="medico.html"
+            class="btn-voltar"
+        >
+            ← Voltar para o Médico
+        </a>
 
 
-    <div id="paciente-nome">
-      Carregando paciente...
+        <div class="pdf-card">
+
+            <h1>
+                📄 Documentos do Paciente
+            </h1>
+
+            <h2 id="nome-paciente">
+                Carregando...
+            </h2>
+
+        </div>
+
+
+        <div id="lista-pdfs">
+
+            <div class="pdf-card">
+
+                <p>
+                    ⏳ Carregando documentos...
+                </p>
+
+            </div>
+
+        </div>
+
     </div>
-
-
-    <div id="arquivos">
-
-      <p style="text-align:center;">
-        Carregando arquivos...
-      </p>
-
-    </div>
-
-  </div>
 
 
 <script>
 
-  /* Pega o paciente enviado pela página do médico */
+    /* =========================
+       PEGAR PACIENTE DA URL
+    ========================= */
 
-  const parametros =
-    new URLSearchParams(
-      window.location.search
-    );
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
 
-
-  const paciente =
-    parametros.get("paciente");
-
-
-  /* Mostra o nome */
-
-  if (paciente) {
-
-    document.getElementById(
-      "paciente-nome"
-    ).innerHTML =
-      "Paciente: <b>" +
-      paciente +
-      "</b>";
-
-  } else {
-
-    document.getElementById(
-      "paciente-nome"
-    ).textContent =
-      "Nenhum paciente selecionado.";
-
-  }
+    const paciente =
+        params.get("paciente");
 
 
-  /* =================================
-     CARREGAR PDFs
-  ================================= */
+    /* =========================
+       MOSTRAR NOME
+    ========================= */
 
-  function carregarArquivos() {
+    const nomePaciente =
+        document.getElementById(
+            "nome-paciente"
+        );
 
-    if (!paciente) {
-      return;
+
+    if (paciente) {
+
+        nomePaciente.textContent =
+            "Paciente: " + paciente;
+
+    } else {
+
+        nomePaciente.textContent =
+            "Paciente não informado";
+
     }
 
 
-    /*
-      O backend deverá ter uma rota:
+    /* =========================
+       CARREGAR PDFs
+    ========================= */
 
-      GET /pdfs?paciente=Nome
+    async function carregarPDFs() {
 
-      que retorna os arquivos desse paciente.
-    */
-
-    fetch(
-      "/pdfs?paciente=" +
-      encodeURIComponent(paciente)
-    )
-
-    .then(response => response.json())
-
-    .then(arquivos => {
-
-      const div =
-        document.getElementById("arquivos");
+        const lista =
+            document.getElementById(
+                "lista-pdfs"
+            );
 
 
-      div.innerHTML = "";
+        if (!paciente) {
+
+            lista.innerHTML = `
+                <div class="pdf-card">
+                    <h3>❌ Nenhum paciente selecionado</h3>
+                </div>
+            `;
+
+            return;
+        }
 
 
-      if (!arquivos || arquivos.length === 0) {
+        try {
 
-        div.innerHTML = `
-          <p style="text-align:center;color:#888;">
-            📂 Nenhum arquivo PDF encontrado
-            para este paciente.
-          </p>
-        `;
-
-        return;
-
-      }
+            const resposta =
+                await fetch(
+                    "http://localhost:3000/pdfs?paciente=" +
+                    encodeURIComponent(paciente)
+                );
 
 
-      arquivos.forEach(arquivo => {
+            if (!resposta.ok) {
 
-        div.innerHTML += `
+                throw new Error(
+                    "Erro na rota /pdfs"
+                );
 
-          <div class="arquivo">
-
-            <span>
-              📄 ${arquivo.nome}
-            </span>
-
-            <a
-              href="${arquivo.url}"
-              target="_blank"
-              class="btn">
-
-              Abrir PDF
-
-            </a>
-
-          </div>
-
-        `;
-
-      });
-
-    })
-
-    .catch(error => {
-
-      console.error(
-        "Erro ao carregar PDFs:",
-        error
-      );
+            }
 
 
-      document.getElementById(
-        "arquivos"
-      ).innerHTML = `
-
-        <p style="text-align:center;color:#dc3545;">
-          ❌ Não foi possível carregar os arquivos.
-        </p>
-
-      `;
-
-    });
-
-  }
+            const pdfs =
+                await resposta.json();
 
 
-  carregarArquivos();
+            if (
+                !pdfs ||
+                pdfs.length === 0
+            ) {
+
+                lista.innerHTML = `
+                    <div class="pdf-card">
+
+                        <h3>
+                            📂 Nenhum PDF encontrado
+                        </h3>
+
+                        <p>
+                            Este paciente não possui
+                            documentos cadastrados.
+                        </p>
+
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            lista.innerHTML = "";
+
+
+            pdfs.forEach(pdf => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+                card.className =
+                    "pdf-card";
+
+
+                card.innerHTML = `
+
+                    <h3>
+                        📄 ${pdf.nome || "Documento"}
+                    </h3>
+
+                    <a
+                        href="${pdf.url}"
+                        target="_blank"
+                        class="btn-pdf-abrir"
+                    >
+                        👁️ Abrir PDF
+                    </a>
+
+                `;
+
+
+                lista.appendChild(card);
+
+            });
+
+
+        } catch (erro) {
+
+            console.error(erro);
+
+
+            lista.innerHTML = `
+
+                <div class="pdf-card">
+
+                    <h3>
+                        ❌ Não foi possível carregar os PDFs
+                    </h3>
+
+                    <p>
+                        O arquivo pdfs.html está funcionando,
+                        mas o servidor ainda precisa possuir
+                        a rota:
+                    </p>
+
+                    <strong>
+                        GET /pdfs?paciente=...
+                    </strong>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    carregarPDFs();
 
 </script>
 
