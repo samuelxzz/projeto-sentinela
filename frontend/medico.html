@@ -729,17 +729,156 @@
     /* =========================
        INICIAR
     ========================= */
+async function carregar() {
 
-    carregar();
+    try {
 
-    carregarMedicacoes();
+        const resposta = await fetch(
+            "http://localhost:3000/triagens"
+        );
 
-    /*
-     * Atualiza a fila a cada 10 segundos
-     */
-    setInterval(carregar, 10000);
+        if (!resposta.ok) {
+            throw new Error("Erro HTTP " + resposta.status);
+        }
 
-</script>
+        triagensCarregadas = await resposta.json();
+
+        console.log(
+            "Triagens recebidas:",
+            triagensCarregadas
+        );
+
+
+        const div =
+            document.getElementById("triagens");
+
+        div.innerHTML = "";
+
+
+        if (
+            !triagensCarregadas ||
+            triagensCarregadas.length === 0
+        ) {
+
+            div.innerHTML = `
+                <div class="triagem-card">
+                    <p>
+                        ✅ Nenhum paciente aguardando atendimento.
+                    </p>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        triagensCarregadas.forEach(
+            (t, index) => {
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "triagem-card";
+
+
+                card.innerHTML = `
+
+                    <h3>
+                        👤 ${t.nome || "Paciente"}
+                    </h3>
+
+                    <p>
+                        <strong>🌡️ Temperatura:</strong>
+                        ${t.temperatura || "Não informada"} °C
+                    </p>
+
+                    <p>
+                        <strong>🩺 Sintoma:</strong>
+                        ${t.sintoma || "Não informado"}
+                    </p>
+
+                    <p>
+                        <strong>⚠️ Risco:</strong>
+                        ${t.risco || "Não informado"}
+                    </p>
+
+                    <p>
+                        <strong>💊 Alergia:</strong>
+                        ${t.alergia || "Nenhuma informada"}
+                    </p>
+
+                    <p>
+                        <strong>📝 Observação:</strong>
+                        ${t.observacao || "Nenhuma"}
+                    </p>
+
+                    <div class="botoes-paciente">
+
+                        <button
+                            class="btn-atender"
+                            onclick="selecionar(${index})"
+                        >
+                            🩺 Atender
+                        </button>
+
+                        <button
+                            class="btn-tv"
+                            onclick="chamarNaTV(
+                                '${String(t.nome || "")
+                                .replace(/'/g, "\\'")}'
+                            )"
+                        >
+                            📺 Chamar na TV
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                div.appendChild(card);
+
+            }
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            "ERRO AO CARREGAR TRIAGENS:",
+            erro
+        );
+
+
+        document.getElementById(
+            "triagens"
+        ).innerHTML = `
+
+            <div class="triagem-card">
+
+                <p>
+                    ❌ Não foi possível carregar os pacientes.
+                </p>
+
+                <p>
+                    Verifique se o servidor está funcionando.
+                </p>
+
+                <p>
+                    <strong>
+                        Erro:
+                    </strong>
+                    ${erro.message}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
 
 </body>
 </html>
