@@ -1,30 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Painel Médico</title>
-
     <link rel="stylesheet" href="css/1style.css">
 
     <style>
-        /* =========================
-           BOTÕES
-        ========================= */
+        html, body {
+            height: auto !important;
+            min-height: 100% !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
+
+        body {
+            min-height: 100vh !important;
+        }
+
+        .lista-pacientes {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0 35px;
+        }
+
+        .paciente-card {
+            background: #fff;
+            border: 1px solid #e0e6ef;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 14px rgba(0,0,0,.07);
+        }
+
+        .paciente-card h3 {
+            margin: 0 0 10px;
+            color: #172033;
+        }
+
+        .paciente-card p {
+            margin: 7px 0;
+        }
+
+        .acoes-paciente {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .acoes-paciente button {
+            width: auto !important;
+            margin-top: 0 !important;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-atender {
+            background: #3498db;
+        }
+
+        .btn-tv {
+            background: #8e44ad;
+        }
 
         .btn-pdf {
             display: none;
             width: 100%;
             margin: 15px 0;
-            padding: 13px;
+            border: 0;
+            border-radius: 10px;
+            padding: 14px;
             background: #e91e63;
             color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
             font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
         }
 
@@ -32,42 +86,36 @@
             background: #c2185b;
         }
 
-        .btn-tv {
-            background: #9b59b6;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 8px;
+        .mensagem {
+            background: #fff;
+            border-radius: 14px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
         }
 
-        .btn-tv:hover {
-            background: #8e44ad;
+        .erro {
+            color: #a61b36;
+            background: #fff1f3;
         }
 
-        .btn-atender {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
-        .btn-atender:hover {
-            background: #2980b9;
+        .select-paciente {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccd7e5;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #f8fafc;
+            margin: 8px 0 18px;
         }
 
         .btn-salvar {
             width: 100%;
-            padding: 13px;
-            margin-top: 15px;
+            border: 0;
+            border-radius: 10px;
+            padding: 14px;
             background: #2ecc71;
             color: white;
-            border: none;
-            border-radius: 10px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -77,808 +125,446 @@
             background: #27ae60;
         }
 
-        .btn-abrir-tv {
-            display: inline-block;
-            padding: 10px 15px;
-            margin-bottom: 20px;
-            background: #e91e63;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .btn-abrir-tv:hover {
-            background: #c2185b;
-        }
-
-        /* =========================
-           CONSULTÓRIO
-        ========================= */
-
-        .consultorio-input {
-            margin-bottom: 20px;
-        }
-
-        .consultorio-input input {
-            max-width: 300px;
-        }
-
-        /* =========================
-           ÁREA DA CONSULTA
-        ========================= */
-
-        .consulta-area {
-            margin-top: 30px;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .consulta-area h2 {
-            margin-bottom: 15px;
-        }
-
-        .consulta-area input,
-        .consulta-area select,
-        .consulta-area textarea {
-            width: 100%;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        .consulta-area textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        /* =========================
-           CARDS DAS TRIAGENS
-        ========================= */
-
-        #triagens {
-            margin-top: 20px;
-        }
-
-        .triagem-card {
-            background: white;
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 15px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .triagem-card h3 {
-            margin-top: 0;
-            color: #333;
-        }
-
-        .triagem-card p {
-            margin: 8px 0;
-        }
-
-        .botoes-paciente {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .botoes-paciente button {
-            width: auto;
-            margin-top: 0;
-        }
-
-        /* =========================
-           CORREÇÃO DO SCROLL
-        ========================= */
-
-        html {
-            min-height: 100%;
-            height: auto !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-        }
-
-        body {
-            min-height: 100vh !important;
-            height: auto !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
+        #arquivo-pdf {
+            display: none;
         }
     </style>
 </head>
 
 <body>
+<div class="container">
 
-    <div class="container">
+    <h1>🩺 Painel Médico</h1>
 
-        <h1>🩺 Painel Médico</h1>
+    <a href="tv.html" target="_blank">📺 Abrir Tela da TV</a>
 
-        <a href="tv.html" target="_blank" class="btn-abrir-tv">
-            📺 Abrir Tela da TV
-        </a>
-
-        <!-- CONSULTÓRIO -->
-        <div class="consultorio-input">
-
-            <label for="consultorio-num">
-                <strong>🏥 Número do consultório:</strong>
-            </label>
-
-            <input
-                type="number"
-                id="consultorio-num"
-                placeholder="Ex: 1"
-                min="1"
-            >
-
-        </div>
-
-        <!-- PACIENTES DA TRIAGEM -->
-        <h2>👥 Pacientes aguardando atendimento</h2>
-
-        <div id="triagens">
-            <p>Carregando pacientes...</p>
-        </div>
-
-        <!-- CONSULTA -->
-        <div class="consulta-area">
-
-            <h2>🩺 Consulta</h2>
-
-            <label for="paciente">
-                <strong>Paciente:</strong>
-            </label>
-
-            <input
-                type="text"
-                id="paciente"
-                readonly
-                placeholder="Selecione um paciente"
-            >
-
-            <!-- BOTÃO PDF -->
-            <button
-                id="btn-pdf"
-                class="btn-pdf"
-                onclick="abrirPDFs()"
-            >
-                📄 Ver PDFs do Paciente
-            </button>
-
-            <label for="diagnostico">
-                <strong>Diagnóstico:</strong>
-            </label>
-
-            <input
-                type="text"
-                id="diagnostico"
-                placeholder="Digite o diagnóstico"
-            >
-
-            <label for="medicacao">
-                <strong>💊 Medicação:</strong>
-            </label>
-
-            <select id="medicacao">
-                <option value="">Selecione uma medicação</option>
-            </select>
-
-            <label for="obs">
-                <strong>📝 Observações:</strong>
-            </label>
-
-            <textarea
-                id="obs"
-                placeholder="Observações da consulta"
-            ></textarea>
-
-            <button
-                class="btn-salvar"
-                onclick="salvar()"
-            >
-                💾 Salvar Consulta
-            </button>
-
-        </div>
-
+    <div class="consultorio-input">
+        <label for="consultorio-num">
+            🏥 <strong>Número do consultório:</strong>
+        </label>
+        <input type="number" id="consultorio-num" placeholder="Ex: 1" min="1">
     </div>
 
+    <h2>🏥 👥 Pacientes aguardando atendimento</h2>
+
+    <div id="triagens" class="lista-pacientes">
+        <div class="mensagem">⏳ Carregando pacientes...</div>
+    </div>
+
+    <div class="consulta-area">
+
+        <h2>🏥 🩺 Consulta</h2>
+
+        <label for="paciente"><strong>Paciente:</strong></label>
+
+        <select id="paciente" class="select-paciente">
+            <option value="">Selecione um paciente</option>
+        </select>
+
+        <!-- Botão para ENVIAR PDF -->
+        <button id="btn-pdf" class="btn-pdf" type="button" onclick="abrirEnvioPDF()">
+            📄 Enviar PDF do Paciente
+        </button>
+
+        <input
+            type="file"
+            id="arquivo-pdf"
+            accept="application/pdf"
+            onchange="enviarPDF()"
+        >
+
+        <label for="diagnostico"><strong>Diagnóstico:</strong></label>
+        <input type="text" id="diagnostico" placeholder="Digite o diagnóstico">
+
+        <label for="medicacao"><strong>💊 Medicação:</strong></label>
+        <select id="medicacao">
+            <option value="">Selecione uma medicação</option>
+        </select>
+
+        <label for="obs"><strong>📝 Observações:</strong></label>
+        <textarea id="obs" placeholder="Observações da consulta"></textarea>
+
+        <button class="btn-salvar" type="button" onclick="salvar()">
+            💾 Salvar Consulta
+        </button>
+
+    </div>
+</div>
 
 <script>
+const API = "http://localhost:3000";
 
-    /* =========================
-       VARIÁVEIS
-    ========================= */
+let triagensCarregadas = [];
+let pacienteSelecionado = "";
 
-    let triagensCarregadas = [];
-
-    let pacienteSelecionado = "";
-
-
-    /* =========================
-       CARREGAR TRIAGENS
-    ========================= */
-
-    async function carregar() {
-
-        try {
-
-            const resposta = await fetch("http://localhost:3000/triagens");
-
-            if (!resposta.ok) {
-                throw new Error("Erro ao buscar triagens");
-            }
-
-            triagensCarregadas = await resposta.json();
-
-            const div = document.getElementById("triagens");
-
-            div.innerHTML = "";
-
-            if (
-                !triagensCarregadas ||
-                triagensCarregadas.length === 0
-            ) {
-
-                div.innerHTML = `
-                    <div class="triagem-card">
-                        <p>✅ Nenhum paciente aguardando atendimento.</p>
-                    </div>
-                `;
-
-                return;
-            }
-
-
-            triagensCarregadas.forEach((t, index) => {
-
-                const card = document.createElement("div");
-
-                card.className = "triagem-card";
-
-                card.innerHTML = `
-
-                    <h3>👤 ${t.nome || "Paciente"}</h3>
-
-                    <p>
-                        <strong>CPF:</strong>
-                        ${t.cpf || "Não informado"}
-                    </p>
-
-                    <p>
-                        <strong>Prioridade:</strong>
-                        ${t.prioridade || "Normal"}
-                    </p>
-
-                    <p>
-                        <strong>Alergias:</strong>
-                        ${t.alergias || "Nenhuma informada"}
-                    </p>
-
-                    <p>
-                        <strong>Observações:</strong>
-                        ${t.observacoes || "Nenhuma"}
-                    </p>
-
-                    <div class="botoes-paciente">
-
-                        <button
-                            class="btn-atender"
-                            onclick="selecionar(${index})"
-                        >
-                            🩺 Atender
-                        </button>
-
-                        <button
-                            class="btn-tv"
-                            onclick="chamarNaTV('${escaparTexto(t.nome)}')"
-                        >
-                            📺 Chamar na TV
-                        </button>
-
-                    </div>
-                `;
-
-                div.appendChild(card);
-
-            });
-
-        } catch (erro) {
-
-            console.error(erro);
-
-            document.getElementById("triagens").innerHTML = `
-                <div class="triagem-card">
-                    <p>❌ Não foi possível carregar os pacientes.</p>
-                    <p>Verifique se o servidor está funcionando.</p>
-                </div>
-            `;
-
-        }
-
-    }
-
-
-    /* =========================
-       ESCAPAR TEXTO
-    ========================= */
-
-    function escaparTexto(texto) {
-
-        if (!texto) {
-            return "";
-        }
-
-        return texto
-            .replace(/\\/g, "\\\\")
-            .replace(/'/g, "\\'")
-            .replace(/"/g, '\\"');
-
-    }
-
-
-    /* =========================
-       SELECIONAR PACIENTE
-    ========================= */
-
-    function selecionar(index) {
-
-        const t = triagensCarregadas[index];
-
-        if (!t) {
-            alert("Paciente não encontrado.");
-            return;
-        }
-
-        pacienteSelecionado = t.nome || "";
-
-        document.getElementById("paciente").value =
-            pacienteSelecionado;
-
-        document.getElementById("obs").value =
-            t.observacoes || "";
-
-        /*
-         * MOSTRA O BOTÃO DE PDF
-         */
-        document.getElementById("btn-pdf").style.display = "block";
-
-        /*
-         * Mostra alergias
-         */
-        if (t.alergias) {
-
-            alert(
-                "⚠️ Atenção!\n\nAlergias do paciente:\n" +
-                t.alergias
-            );
-
-        }
-
-        /*
-         * Leva a tela até a consulta
-         */
-        document.querySelector(".consulta-area").scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-    }
-
-
-    /* =========================
-       ABRIR PDFs
-    ========================= */
-
-    function abrirPDFs() {
-
-        if (!pacienteSelecionado) {
-
-            alert("Selecione um paciente primeiro.");
-
-            return;
-        }
-
-        window.open(
-            "pdfs.html?paciente=" +
-            encodeURIComponent(pacienteSelecionado),
-            "_blank"
-        );
-
-    }
-
-
-    /* =========================
-       CHAMAR PACIENTE NA TV
-    ========================= */
-
-    async function chamarNaTV(nome) {
-
-        const consultorio =
-            document.getElementById("consultorio-num").value;
-
-        if (!consultorio) {
-
-            alert(
-                "Digite o número do consultório antes de chamar o paciente."
-            );
-
-            return;
-        }
-
-        try {
-
-            const resposta = await fetch(
-                "http://localhost:3000/tv/chamar",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        localTipo: "CONSULTÓRIO",
-
-                        localNumero: consultorio,
-
-                        paciente: nome
-
-                    })
-                }
-            );
-
-            if (!resposta.ok) {
-                throw new Error("Erro ao chamar paciente");
-            }
-
-            alert(
-                "📺 Paciente chamado para o consultório " +
-                consultorio
-            );
-
-        } catch (erro) {
-
-            console.error(erro);
-
-            alert(
-                "❌ Não foi possível chamar o paciente na TV."
-            );
-
-        }
-
-    }
-
-
-    /* =========================
-       CARREGAR MEDICAÇÕES
-    ========================= */
-
-    async function carregarMedicacoes() {
-
-        try {
-
-            const resposta = await fetch(
-                "http://localhost:3000/lista-medicacoes"
-            );
-
-            if (!resposta.ok) {
-                throw new Error("Erro ao carregar medicações");
-            }
-
-            const medicamentos = await resposta.json();
-
-            const select =
-                document.getElementById("medicacao");
-
-            select.innerHTML =
-                `<option value="">Selecione uma medicação</option>`;
-
-
-            medicamentos.forEach(med => {
-
-                const option =
-                    document.createElement("option");
-
-                /*
-                 * Aceita tanto string quanto objeto
-                 */
-                if (typeof med === "string") {
-
-                    option.value = med;
-
-                    option.textContent = med;
-
-                } else {
-
-                    option.value =
-                        med.nome || "";
-
-                    option.textContent =
-                        med.nome || "Medicação";
-
-                }
-
-                select.appendChild(option);
-
-            });
-
-        } catch (erro) {
-
-            console.error(erro);
-
-            /*
-             * Se o backend não retornar medicamentos,
-             * não trava o restante da página.
-             */
-
-        }
-
-    }
-
-
-    /* =========================
-       SALVAR CONSULTA
-    ========================= */
-
-    async function salvar() {
-
-        const paciente =
-            document.getElementById("paciente").value;
-
-        const diagnostico =
-            document.getElementById("diagnostico").value;
-
-        const medicacao =
-            document.getElementById("medicacao").value;
-
-        const obs =
-            document.getElementById("obs").value;
-
-
-        if (!paciente) {
-
-            alert("Selecione um paciente.");
-
-            return;
-        }
-
-
-        if (!diagnostico) {
-
-            alert("Digite o diagnóstico.");
-
-            return;
-        }
-
-
-        try {
-
-            const resposta = await fetch(
-                "http://localhost:3000/consulta",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        paciente: paciente,
-
-                        diagnostico: diagnostico,
-
-                        medicacao: medicacao,
-
-                        obs: obs
-
-                    })
-                }
-            );
-
-
-            if (!resposta.ok) {
-
-                throw new Error(
-                    "Erro ao salvar consulta"
-                );
-
-            }
-
-
-            alert(
-                "✅ Consulta salva com sucesso!"
-            );
-
-
-            /*
-             * Limpa os campos
-             */
-
-            document.getElementById(
-                "diagnostico"
-            ).value = "";
-
-            document.getElementById(
-                "medicacao"
-            ).value = "";
-
-        } catch (erro) {
-
-            console.error(erro);
-
-            alert(
-                "❌ Não foi possível salvar a consulta."
-            );
-
-        }
-
-    }
-
-
-    /* =========================
-       INICIAR
-    ========================= */
 async function carregar() {
+    const div = document.getElementById("triagens");
 
     try {
-
-        const resposta = await fetch(
-            "http://localhost:3000/triagens"
-        );
+        const resposta = await fetch(API + "/triagens?_" + Date.now());
 
         if (!resposta.ok) {
             throw new Error("Erro HTTP " + resposta.status);
         }
 
-        triagensCarregadas = await resposta.json();
+        const dados = await resposta.json();
 
-        console.log(
-            "Triagens recebidas:",
-            triagensCarregadas
+        triagensCarregadas = Array.isArray(dados) ? dados : [];
+
+        renderizarPacientes();
+
+    } catch (erro) {
+        console.error(erro);
+
+        div.innerHTML = `
+            <div class="mensagem erro">
+                ❌ Não foi possível carregar os pacientes.<br><br>
+                Verifique se o <b>server.js</b> está ligado na porta 3000.
+                <br><br>
+                Erro: ${escapeHtml(erro.message)}
+                <br><br>
+                <button class="btn-atender" onclick="carregar()">
+                    🔄 Tentar novamente
+                </button>
+            </div>
+        `;
+    }
+}
+
+function renderizarPacientes() {
+    const div = document.getElementById("triagens");
+    const select = document.getElementById("paciente");
+
+    div.innerHTML = "";
+    select.innerHTML = '<option value="">Selecione um paciente</option>';
+
+    if (triagensCarregadas.length === 0) {
+        div.innerHTML = `
+            <div class="mensagem">
+                👥 Nenhum paciente aguardando atendimento.
+            </div>
+        `;
+        document.getElementById("btn-pdf").style.display = "none";
+        return;
+    }
+
+    triagensCarregadas.forEach((p, index) => {
+
+        const nome = p.nome || "Paciente sem nome";
+
+        // Coloca o paciente no SELECT
+        const option = document.createElement("option");
+        option.value = nome;
+        option.textContent = nome;
+        option.dataset.index = index;
+        select.appendChild(option);
+
+        // Cria o card
+        const card = document.createElement("div");
+        card.className = "paciente-card";
+
+        card.innerHTML = `
+            <h3>👤 ${escapeHtml(nome)}</h3>
+
+            <p>
+                <strong>🩺 Sintoma:</strong>
+                ${escapeHtml(p.sintoma || "Não informado")}
+            </p>
+
+            <p>
+                <strong>🌡️ Temperatura:</strong>
+                ${escapeHtml(String(p.temperatura ?? "Não informada"))}
+                ${p.temperatura !== "" ? " °C" : ""}
+            </p>
+
+            <p>
+                <strong>🚦 Risco:</strong>
+                ${escapeHtml(p.risco || "Não informado")}
+            </p>
+
+            <p>
+                <strong>💊 Alergia:</strong>
+                ${escapeHtml(p.alergia || "Nenhuma informada")}
+            </p>
+
+            <p>
+                <strong>📝 Observação:</strong>
+                ${escapeHtml(p.observacao || "Nenhuma")}
+            </p>
+
+            <div class="acoes-paciente">
+                <button class="btn-atender" onclick="selecionar(${index})">
+                    🩺 Atender
+                </button>
+
+                <button class="btn-tv" onclick="chamarNaTV(${index})">
+                    📺 Chamar na TV
+                </button>
+            </div>
+        `;
+
+        div.appendChild(card);
+    });
+}
+
+// Quando escolher no SELECT
+document.getElementById("paciente").addEventListener("change", function() {
+
+    const index = this.options[this.selectedIndex].dataset.index;
+
+    if (index !== undefined) {
+        selecionar(Number(index));
+    }
+});
+
+function selecionar(index) {
+
+    const paciente = triagensCarregadas[index];
+
+    if (!paciente) {
+        alert("Paciente não encontrado.");
+        return;
+    }
+
+    pacienteSelecionado = paciente.nome || "";
+
+    const select = document.getElementById("paciente");
+    select.value = pacienteSelecionado;
+
+    document.getElementById("obs").value =
+        paciente.observacao || "";
+
+    document.getElementById("btn-pdf").style.display = "block";
+
+    if (paciente.alergia) {
+        alert(
+            "⚠️ ATENÇÃO!\n\nAlergia do paciente: " +
+            paciente.alergia
         );
+    }
 
+    document.querySelector(".consulta-area").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
 
-        const div =
-            document.getElementById("triagens");
+// Abre o seletor de arquivo
+function abrirEnvioPDF() {
 
-        div.innerHTML = "";
+    if (!pacienteSelecionado) {
+        alert("Primeiro selecione um paciente.");
+        return;
+    }
 
+    document.getElementById("arquivo-pdf").click();
+}
 
-        if (
-            !triagensCarregadas ||
-            triagensCarregadas.length === 0
-        ) {
+// Envia o PDF para o servidor
+async function enviarPDF() {
 
-            div.innerHTML = `
-                <div class="triagem-card">
-                    <p>
-                        ✅ Nenhum paciente aguardando atendimento.
-                    </p>
-                </div>
-            `;
+    const input = document.getElementById("arquivo-pdf");
+    const arquivo = input.files[0];
 
-            return;
+    if (!arquivo) return;
+
+    if (arquivo.type !== "application/pdf") {
+        alert("Selecione somente um arquivo PDF.");
+        input.value = "";
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("paciente", pacienteSelecionado);
+    formData.append("pdf", arquivo);
+
+    try {
+
+        const resposta = await fetch(API + "/pdfs/upload", {
+            method: "POST",
+            body: formData
+        });
+
+        const resultado = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(resultado.erro || "Erro ao enviar PDF.");
         }
 
+        alert("✅ PDF enviado com sucesso!");
 
-        triagensCarregadas.forEach(
-            (t, index) => {
+        input.value = "";
 
-                const card =
-                    document.createElement("div");
+    } catch (erro) {
 
-                card.className =
-                    "triagem-card";
+        console.error(erro);
 
-
-                card.innerHTML = `
-
-                    <h3>
-                        👤 ${t.nome || "Paciente"}
-                    </h3>
-
-                    <p>
-                        <strong>🌡️ Temperatura:</strong>
-                        ${t.temperatura || "Não informada"} °C
-                    </p>
-
-                    <p>
-                        <strong>🩺 Sintoma:</strong>
-                        ${t.sintoma || "Não informado"}
-                    </p>
-
-                    <p>
-                        <strong>⚠️ Risco:</strong>
-                        ${t.risco || "Não informado"}
-                    </p>
-
-                    <p>
-                        <strong>💊 Alergia:</strong>
-                        ${t.alergia || "Nenhuma informada"}
-                    </p>
-
-                    <p>
-                        <strong>📝 Observação:</strong>
-                        ${t.observacao || "Nenhuma"}
-                    </p>
-
-                    <div class="botoes-paciente">
-
-                        <button
-                            class="btn-atender"
-                            onclick="selecionar(${index})"
-                        >
-                            🩺 Atender
-                        </button>
-
-                        <button
-                            class="btn-tv"
-                            onclick="chamarNaTV(
-                                '${String(t.nome || "")
-                                .replace(/'/g, "\\'")}'
-                            )"
-                        >
-                            📺 Chamar na TV
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                div.appendChild(card);
-
-            }
+        alert(
+            "❌ Não foi possível enviar o PDF.\n\n" +
+            erro.message
         );
 
+    }
+}
+
+async function chamarNaTV(index) {
+
+    const paciente = triagensCarregadas[index];
+
+    if (!paciente) return;
+
+    const consultorio =
+        document.getElementById("consultorio-num").value;
+
+    if (!consultorio) {
+        alert("Digite o número do consultório.");
+        return;
+    }
+
+    try {
+
+        const resposta = await fetch(API + "/tv/chamar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                localTipo: "CONSULTÓRIO",
+                localNumero: consultorio,
+                paciente: paciente.nome
+            })
+        });
+
+        if (!resposta.ok) {
+            throw new Error("Erro HTTP " + resposta.status);
+        }
+
+        alert(
+            "📺 " +
+            paciente.nome +
+            " foi chamado para o consultório " +
+            consultorio + "."
+        );
+
+    } catch (erro) {
+        alert("❌ Não foi possível chamar o paciente na TV.");
+    }
+}
+
+async function carregarMedicacoes() {
+
+    const select = document.getElementById("medicacao");
+
+    try {
+
+        const resposta =
+            await fetch(API + "/lista-medicacoes");
+
+        const medicamentos =
+            await resposta.json();
+
+        medicamentos.forEach(medicamento => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = medicamento;
+            option.textContent = medicamento;
+
+            select.appendChild(option);
+
+        });
 
     } catch (erro) {
 
         console.error(
-            "ERRO AO CARREGAR TRIAGENS:",
+            "Erro ao carregar medicações:",
             erro
         );
 
+    }
+}
 
-        document.getElementById(
-            "triagens"
-        ).innerHTML = `
+async function salvar() {
 
-            <div class="triagem-card">
+    const paciente =
+        document.getElementById("paciente").value;
 
-                <p>
-                    ❌ Não foi possível carregar os pacientes.
-                </p>
+    const diagnostico =
+        document.getElementById("diagnostico").value;
 
-                <p>
-                    Verifique se o servidor está funcionando.
-                </p>
+    const medicacao =
+        document.getElementById("medicacao").value;
 
-                <p>
-                    <strong>
-                        Erro:
-                    </strong>
-                    ${erro.message}
-                </p>
+    const obs =
+        document.getElementById("obs").value;
 
-            </div>
-
-        `;
-
+    if (!paciente) {
+        alert("Selecione um paciente.");
+        return;
     }
 
+    if (!diagnostico) {
+        alert("Digite o diagnóstico.");
+        return;
+    }
+
+    try {
+
+        const resposta =
+            await fetch(API + "/consulta", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    paciente,
+                    diagnostico,
+                    medicacao,
+                    obs
+                })
+            });
+
+        if (!resposta.ok) {
+            throw new Error("Erro HTTP " + resposta.status);
+        }
+
+        alert("✅ Consulta salva com sucesso!");
+
+        document.getElementById("diagnostico").value = "";
+        document.getElementById("medicacao").value = "";
+        document.getElementById("obs").value = "";
+
+        await carregar();
+
+        document.getElementById("paciente").value = "";
+        pacienteSelecionado = "";
+        document.getElementById("btn-pdf").style.display = "none";
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        alert("❌ Não foi possível salvar a consulta.");
+
+    }
 }
+
+function escapeHtml(valor) {
+    return String(valor)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+carregar();
+carregarMedicacoes();
+
+setInterval(carregar, 10000);
+</script>
 
 </body>
 </html>
