@@ -547,7 +547,7 @@ async function salvar() {
         console.error(erro);
 
         alert("❌ Não foi possível salvar a consulta.");
-
+const resposta = await fetch("/triagens?_" + Date.now());
     }
 }
 
