@@ -374,4 +374,327 @@ body {
         transform: translateY(0);
     }
 }
+/* =====================================================
+   ESTILO NOVO - PAINEL MÉDICO
+   SOMENTE VISUAL - NÃO ALTERA FUNCIONALIDADES
+===================================================== */
 
+/* Página */
+body {
+    background: linear-gradient(135deg, #eef4ff, #f9fbff) !important;
+    color: #172033;
+}
+
+/* Container principal */
+.container {
+    width: 94% !important;
+    max-width: 1100px !important;
+    margin: 30px auto !important;
+    padding: 35px !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 15px 45px rgba(35, 70, 120, 0.12) !important;
+}
+
+/* Título principal */
+.container > h1 {
+    text-align: center !important;
+    font-size: 42px !important;
+    font-weight: 800 !important;
+    color: #172033 !important;
+    margin-bottom: 20px !important;
+}
+
+/* Link TV */
+.container > a {
+    display: block !important;
+    width: fit-content !important;
+    margin: 0 auto 35px !important;
+    padding: 12px 22px !important;
+    border-radius: 12px !important;
+    background: #eef5ff !important;
+    color: #2467c9 !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+    transition: 0.2s !important;
+}
+
+.container > a:hover {
+    background: #dceaff !important;
+    transform: translateY(-2px);
+}
+
+/* Número do consultório */
+.consultorio-input {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+    padding: 25px !important;
+    margin-bottom: 35px !important;
+    background: #f8fbff !important;
+    border: 1px solid #dce6f3 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 5px 20px rgba(40, 80, 130, 0.06) !important;
+}
+
+.consultorio-input label {
+    font-size: 18px !important;
+    color: #263850 !important;
+}
+
+.consultorio-input input {
+    width: 90px !important;
+    margin: 0 !important;
+    text-align: center !important;
+    font-weight: 700 !important;
+    font-size: 18px !important;
+}
+
+/* Títulos das seções */
+.container h2 {
+    text-align: center !important;
+    color: #172033 !important;
+    font-weight: 800 !important;
+    margin: 30px 0 !important;
+}
+
+/* Lista de pacientes */
+#triagens {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+    margin-bottom: 40px !important;
+}
+
+/* Card do paciente */
+#triagens .paciente-card,
+#triagens .card {
+    background: #ffffff !important;
+    border: 1px solid #dfe7f2 !important;
+    border-radius: 18px !important;
+    padding: 24px !important;
+    box-shadow: 0 8px 25px rgba(35, 65, 110, 0.08) !important;
+    transition: 0.25s !important;
+}
+
+#triagens .paciente-card:hover,
+#triagens .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(35, 65, 110, 0.13) !important;
+}
+
+/* Nome do paciente */
+#triagens h3 {
+    color: #172033 !important;
+    font-size: 22px !important;
+    margin-bottom: 15px !important;
+}
+
+/* Informações */
+#triagens p {
+    color: #4a5870 !important;
+    margin: 8px 0 !important;
+    font-size: 16px !important;
+}
+
+#triagens strong {
+    color: #263850 !important;
+}
+
+/* Área dos botões do paciente */
+#triagens .acoes-paciente {
+    display: flex !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+    margin-top: 20px !important;
+}
+
+/* Botões */
+#triagens button {
+    width: auto !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 11px !important;
+    padding: 12px 20px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: 0.2s !important;
+}
+
+#triagens button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+/* Botão Atender */
+#triagens .btn-atender {
+    background: linear-gradient(135deg, #3498db, #287dcc) !important;
+    color: white !important;
+}
+
+/* Botão TV */
+#triagens .btn-tv {
+    background: linear-gradient(135deg, #8e44ad, #70358d) !important;
+    color: white !important;
+}
+
+/* Mensagem */
+#triagens .mensagem {
+    padding: 30px !important;
+    border-radius: 18px !important;
+    background: #f8fbff !important;
+    border: 1px solid #dfe7f2 !important;
+    color: #4a5870 !important;
+    text-align: center !important;
+    font-size: 18px !important;
+}
+
+/* Erro */
+#triagens .mensagem.erro {
+    background: #fff4f5 !important;
+    border-color: #ffd5da !important;
+    color: #c62d45 !important;
+}
+
+/* Área da consulta */
+.consulta-area {
+    background: #ffffff !important;
+    border: 1px solid #e0e7f0 !important;
+    border-radius: 22px !important;
+    padding: 30px !important;
+    margin-top: 35px !important;
+    box-shadow: 0 10px 30px rgba(35, 65, 110, 0.08) !important;
+}
+
+/* Título consulta */
+.consulta-area h2 {
+    font-size: 30px !important;
+    margin-top: 0 !important;
+    margin-bottom: 30px !important;
+}
+
+/* Labels */
+.consulta-area label {
+    display: block !important;
+    text-align: center !important;
+    color: #263850 !important;
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    margin-top: 20px !important;
+    margin-bottom: 8px !important;
+}
+
+/* Campos */
+.consulta-area input,
+.consulta-area select,
+.consulta-area textarea {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border: 1px solid #d3deeb !important;
+    background: #f8fafc !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    font-size: 16px !important;
+    color: #263850 !important;
+    outline: none !important;
+    transition: 0.2s !important;
+}
+
+/* Foco */
+.consulta-area input:focus,
+.consulta-area select:focus,
+.consulta-area textarea:focus {
+    border-color: #5294e2 !important;
+    box-shadow: 0 0 0 3px rgba(82, 148, 226, 0.12) !important;
+    background: white !important;
+}
+
+/* Paciente selecionado */
+#paciente {
+    font-weight: 600 !important;
+}
+
+/* Observações */
+.consulta-area textarea {
+    min-height: 130px !important;
+    resize: vertical !important;
+}
+
+/* Botão PDF */
+#btn-pdf {
+    width: 100% !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    margin: 15px 0 !important;
+    background: linear-gradient(135deg, #e91e63, #c2185b) !important;
+    color: white !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 6px 18px rgba(233, 30, 99, 0.18) !important;
+    transition: 0.2s !important;
+}
+
+#btn-pdf:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+/* Botão salvar */
+.consulta-area button.btn-salvar,
+.consulta-area button[onclick="salvar()"] {
+    width: 100% !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin-top: 25px !important;
+    background: linear-gradient(135deg, #2ecc71, #20b864) !important;
+    color: white !important;
+    font-size: 17px !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    box-shadow: 0 8px 20px rgba(46, 204, 113, 0.18) !important;
+    transition: 0.2s !important;
+}
+
+.consulta-area button.btn-salvar:hover,
+.consulta-area button[onclick="salvar()"]:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+/* Responsividade */
+@media (max-width: 700px) {
+
+    .container {
+        width: 95% !important;
+        padding: 20px !important;
+    }
+
+    .container > h1 {
+        font-size: 30px !important;
+    }
+
+    .consultorio-input {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        text-align: center !important;
+    }
+
+    .consultorio-input input {
+        width: 100% !important;
+    }
+
+    .acoes-paciente {
+        flex-direction: column !important;
+    }
+
+    #triagens button {
+        width: 100% !important;
+    }
+
+    .consulta-area {
+        padding: 20px !important;
+    }
+}
