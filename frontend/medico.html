@@ -236,6 +236,62 @@
             font-weight: bold;
         }
 
+        /* LISTA DE PACIENTES INTERNADOS */
+
+        .lista-internados {
+            display: none;
+            background: #ffffff;
+            border: 1px solid #dbe5ef;
+            border-radius: 14px;
+            padding: 20px;
+            margin: 20px 0 35px;
+            box-shadow: 0 4px 14px rgba(0,0,0,.07);
+        }
+
+        .lista-internados h2 {
+            margin-top: 0;
+            color: #172033;
+        }
+
+        .paciente-internado {
+            background: #f8fafc;
+            border: 1px solid #dfe6ee;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .paciente-internado:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-internado {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #2ecc71;
+            color: #fff;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .btn-fechar-internados {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 15px;
+            background: #e74c3c;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-fechar-internados:hover {
+            background: #c0392b;
+        }
+
     </style>
 </head>
 
@@ -269,6 +325,27 @@
         <div class="mensagem">
             ⏳ Carregando pacientes...
         </div>
+
+    </div>
+
+
+    <!-- LISTA DE PACIENTES INTERNADOS -->
+
+    <div id="lista-internados" class="lista-internados">
+
+        <h2>🏥 Pacientes Internados</h2>
+
+        <div id="pacientes-internados">
+            <div class="mensagem">⏳ Carregando pacientes internados...</div>
+        </div>
+
+        <button
+            type="button"
+            class="btn-fechar-internados"
+            onclick="fecharListaInternados()"
+        >
+            ❌ Fechar lista
+        </button>
 
     </div>
 
@@ -1153,6 +1230,8 @@ async function internarPaciente(index) {
 
         await carregar();
 
+        await abrirListaInternados();
+
     }
 
     catch (erro) {
@@ -1166,6 +1245,117 @@ async function internarPaciente(index) {
 
     }
 
+}
+
+
+/* ABRIR LISTA DE PACIENTES INTERNADOS */
+
+async function abrirListaInternados() {
+
+    const lista =
+        document.getElementById("lista-internados");
+
+    const container =
+        document.getElementById("pacientes-internados");
+
+    lista.style.display = "block";
+
+    container.innerHTML = `
+        <div class="mensagem">
+            ⏳ Carregando pacientes internados...
+        </div>
+    `;
+
+    lista.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+    try {
+
+        const resposta =
+            await fetch(
+                API + "/internacoes?_=" + Date.now()
+            );
+
+        if (!resposta.ok) {
+            throw new Error(
+                "Erro HTTP " + resposta.status
+            );
+        }
+
+        const internacoes =
+            await resposta.json();
+
+        if (
+            !Array.isArray(internacoes) ||
+            internacoes.length === 0
+        ) {
+            container.innerHTML = `
+                <div class="mensagem">
+                    🏥 Nenhum paciente internado.
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = "";
+
+        internacoes.forEach(internacao => {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "paciente-internado";
+
+            const data = internacao.createdAt
+                ? new Date(internacao.createdAt)
+                    .toLocaleString("pt-BR")
+                : "Data não informada";
+
+            card.innerHTML = `
+                <strong>👤 ${escapeHtml(
+                    internacao.paciente ||
+                    "Paciente sem nome"
+                )}</strong>
+                <br>
+                <span class="status-internado">
+                    🟢 ${escapeHtml(
+                        internacao.status || "internado"
+                    )}
+                </span>
+                <br><br>
+                <small>📅 ${escapeHtml(data)}</small>
+            `;
+
+            container.appendChild(card);
+        });
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar internações:",
+            erro
+        );
+
+        container.innerHTML = `
+            <div class="mensagem erro">
+                ❌ Não foi possível carregar os pacientes internados.
+                <br><br>
+                ${escapeHtml(erro.message)}
+            </div>
+        `;
+    }
+}
+
+
+/* FECHAR LISTA DE INTERNADOS */
+
+function fecharListaInternados() {
+
+    document.getElementById(
+        "lista-internados"
+    ).style.display = "none";
 }
 
 
@@ -1514,4 +1704,3 @@ setInterval(
 
 </body>
 </html>
-```
