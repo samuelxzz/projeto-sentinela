@@ -5,13 +5,13 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <title>Documentos do Paciente</title>
+    <title>Alta e Documentos do Paciente</title>
 
-    <link rel="stylesheet"
-          href="css/1style.css">
+    <link rel="stylesheet" href="css/1style.css">
 
     <style>
 
@@ -20,6 +20,7 @@
             height: auto !important;
             overflow-y: auto !important;
             overflow-x: hidden !important;
+            background: #f4f6f9;
         }
 
         .pdf-container {
@@ -30,14 +31,65 @@
 
         .pdf-card {
             background: white;
-            padding: 20px;
+            padding: 25px;
             margin: 15px 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.10);
         }
 
-        .pdf-card h3 {
+        .pdf-card h1 {
             margin-top: 0;
+            color: #e91e63;
+        }
+
+        .pdf-card h2 {
+            color: #555;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        select,
+        textarea,
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 9px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .btn-alta {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 9px;
+            background: #e91e63;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-alta:hover {
+            background: #c2185b;
+        }
+
+        .btn-alta:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .btn-pdf-abrir {
@@ -55,6 +107,22 @@
             background: #c2185b;
         }
 
+        .btn-pdf-baixar {
+            display: inline-block;
+            padding: 12px 18px;
+            margin-top: 10px;
+            margin-left: 5px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .btn-pdf-baixar:hover {
+            background: #2980b9;
+        }
+
         .btn-voltar {
             display: inline-block;
             padding: 12px 18px;
@@ -66,126 +134,615 @@
             margin-bottom: 20px;
         }
 
+        .mensagem {
+            display: none;
+            margin-top: 15px;
+            padding: 14px;
+            border-radius: 9px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .sucesso {
+            display: block;
+            background: #d9f8e4;
+            color: #19733b;
+        }
+
+        .erro {
+            display: block;
+            background: #ffe0e0;
+            color: #a50000;
+        }
+
+        .carregando {
+            color: #777;
+        }
+
     </style>
 
 </head>
 
-
 <body>
 
-    <div class="pdf-container">
+<div class="pdf-container">
 
-        <a
-            href="medico.html"
-            class="btn-voltar"
-        >
-            ← Voltar para o Médico
-        </a>
-
-
-        <div class="pdf-card">
-
-            <h1>
-                📄 Documentos do Paciente
-            </h1>
-
-            <h2 id="nome-paciente">
-                Carregando...
-            </h2>
-
-        </div>
+    <a
+        href="medico.html"
+        class="btn-voltar">
+        ← Voltar para o Médico
+    </a>
 
 
-        <div id="lista-pdfs">
+    <!-- ==============================
+         ALTA
+    =============================== -->
 
-            <div class="pdf-card">
+    <div class="pdf-card">
 
-                <p>
-                    ⏳ Carregando documentos...
-                </p>
+        <h1>
+            🏥 Alta do Paciente
+        </h1>
 
-            </div>
+        <p>
+            Selecione o paciente e registre as informações da alta.
+        </p>
 
+
+        <label for="paciente">
+            Paciente
+        </label>
+
+        <select id="paciente">
+
+            <option value="">
+                Carregando pacientes...
+            </option>
+
+        </select>
+
+
+        <label for="tipoAlta">
+            Tipo de Alta
+        </label>
+
+        <select id="tipoAlta">
+
+            <option value="Alta médica">
+                Alta médica
+            </option>
+
+            <option value="Alta administrativa">
+                Alta administrativa
+            </option>
+
+            <option value="Alta a pedido">
+                Alta a pedido
+            </option>
+
+            <option value="Transferência">
+                Transferência
+            </option>
+
+        </select>
+
+
+        <label for="motivo">
+            Motivo da Alta
+        </label>
+
+        <textarea
+            id="motivo"
+            placeholder="Informe o motivo da alta..."></textarea>
+
+
+        <label for="orientacoes">
+            Orientações
+        </label>
+
+        <textarea
+            id="orientacoes"
+            placeholder="Digite as orientações para o paciente..."></textarea>
+
+
+        <label for="observacoes">
+            Observações
+        </label>
+
+        <textarea
+            id="observacoes"
+            placeholder="Digite alguma observação..."></textarea>
+
+
+        <button
+            id="btnAlta"
+            class="btn-alta"
+            onclick="registrarAlta()">
+
+            📄 Registrar Alta e Baixar PDF
+
+        </button>
+
+
+        <div
+            id="mensagem"
+            class="mensagem">
         </div>
 
     </div>
 
 
+    <!-- ==============================
+         DOCUMENTOS
+    =============================== -->
+
+    <div class="pdf-card">
+
+        <h1>
+            📄 Documentos do Paciente
+        </h1>
+
+        <h2 id="nome-paciente">
+            Selecione um paciente
+        </h2>
+
+    </div>
+
+
+    <div id="lista-pdfs">
+
+        <div class="pdf-card">
+
+            <p class="carregando">
+                Selecione um paciente para visualizar os documentos.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
 
-    /* =========================
-       PEGAR PACIENTE DA URL
-    ========================= */
+    // ==================================================
+    // ELEMENTOS
+    // ==================================================
+
+    const selectPaciente =
+        document.getElementById("paciente");
+
+    const nomePaciente =
+        document.getElementById("nome-paciente");
+
+    const lista =
+        document.getElementById("lista-pdfs");
+
+    const mensagem =
+        document.getElementById("mensagem");
+
+    const btnAlta =
+        document.getElementById("btnAlta");
+
+
+    // ==================================================
+    // PACIENTE PELA URL
+    // ==================================================
 
     const params =
         new URLSearchParams(
             window.location.search
         );
 
-    const paciente =
+    const pacienteURL =
         params.get("paciente");
 
 
-    /* =========================
-       MOSTRAR NOME
-    ========================= */
+    // ==================================================
+    // MENSAGEM
+    // ==================================================
 
-    const nomePaciente =
-        document.getElementById(
-            "nome-paciente"
-        );
+    function mostrarMensagem(texto, tipo) {
+
+        mensagem.textContent = texto;
+
+        mensagem.className =
+            "mensagem " + tipo;
+    }
 
 
-    if (paciente) {
+    // ==================================================
+    // CARREGAR PACIENTES
+    // ==================================================
 
-        nomePaciente.textContent =
-            "Paciente: " + paciente;
+    async function carregarPacientes() {
 
-    } else {
+        try {
 
-        nomePaciente.textContent =
-            "Paciente não informado";
+            const resposta =
+                await fetch("/pacientes");
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    "Erro HTTP " +
+                    resposta.status
+                );
+
+            }
+
+            const pacientes =
+                await resposta.json();
+
+            selectPaciente.innerHTML = "";
+
+            if (
+                !Array.isArray(pacientes) ||
+                pacientes.length === 0
+            ) {
+
+                selectPaciente.innerHTML = `
+                    <option value="">
+                        Nenhum paciente cadastrado
+                    </option>
+                `;
+
+                return;
+            }
+
+
+            const primeiraOpcao =
+                document.createElement("option");
+
+            primeiraOpcao.value = "";
+
+            primeiraOpcao.textContent =
+                "Selecione um paciente";
+
+            selectPaciente.appendChild(
+                primeiraOpcao
+            );
+
+
+            pacientes.forEach(paciente => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    paciente.nome || "";
+
+                option.textContent =
+                    paciente.nome || "Paciente";
+
+                selectPaciente.appendChild(
+                    option
+                );
+
+            });
+
+
+            // Se veio paciente pela URL
+            if (pacienteURL) {
+
+                const encontrado =
+                    pacientes.find(p =>
+                        String(p.nome)
+                            .toLowerCase()
+                            ===
+                        String(pacienteURL)
+                            .toLowerCase()
+                    );
+
+                if (encontrado) {
+
+                    selectPaciente.value =
+                        encontrado.nome;
+
+                    nomePaciente.textContent =
+                        "Paciente: " +
+                        encontrado.nome;
+
+                    carregarPDFs(
+                        encontrado.nome
+                    );
+                }
+            }
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            selectPaciente.innerHTML = `
+                <option value="">
+                    Erro ao carregar pacientes
+                </option>
+            `;
+
+            mostrarMensagem(
+                "❌ Não foi possível carregar os pacientes.",
+                "erro"
+            );
+        }
+    }
+
+
+    // ==================================================
+    // QUANDO SELECIONAR PACIENTE
+    // ==================================================
+
+    selectPaciente.addEventListener(
+        "change",
+        function() {
+
+            const paciente =
+                this.value;
+
+            if (!paciente) {
+
+                nomePaciente.textContent =
+                    "Selecione um paciente";
+
+                lista.innerHTML = `
+                    <div class="pdf-card">
+                        <p>
+                            Selecione um paciente para
+                            visualizar os documentos.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            nomePaciente.textContent =
+                "Paciente: " + paciente;
+
+
+            carregarPDFs(paciente);
+
+        }
+    );
+
+
+    // ==================================================
+    // REGISTRAR ALTA
+    // ==================================================
+
+    async function registrarAlta() {
+
+        const paciente =
+            selectPaciente.value;
+
+        const tipoAlta =
+            document.getElementById(
+                "tipoAlta"
+            ).value;
+
+        const motivo =
+            document.getElementById(
+                "motivo"
+            ).value;
+
+        const orientacoes =
+            document.getElementById(
+                "orientacoes"
+            ).value;
+
+        const observacoes =
+            document.getElementById(
+                "observacoes"
+            ).value;
+
+
+        // ----------------------------------------------
+        // VALIDAR
+        // ----------------------------------------------
+
+        if (!paciente) {
+
+            mostrarMensagem(
+                "❌ Selecione um paciente.",
+                "erro"
+            );
+
+            return;
+        }
+
+
+        // ----------------------------------------------
+        // BLOQUEAR BOTÃO
+        // ----------------------------------------------
+
+        btnAlta.disabled = true;
+
+        btnAlta.textContent =
+            "Gerando PDF...";
+
+
+        try {
+
+            // ------------------------------------------
+            // ENVIAR PARA SERVIDOR
+            // ------------------------------------------
+
+            const resposta =
+                await fetch(
+                    "/alta",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                paciente:
+                                    paciente,
+
+                                tipoAlta:
+                                    tipoAlta,
+
+                                motivo:
+                                    motivo,
+
+                                orientacoes:
+                                    orientacoes,
+
+                                observacoes:
+                                    observacoes
+                            })
+                    }
+                );
+
+
+            // ------------------------------------------
+            // RESPOSTA
+            // ------------------------------------------
+
+            const dados =
+                await resposta.json();
+
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    dados.erro ||
+                    "Erro HTTP " +
+                    resposta.status
+                );
+            }
+
+
+            // ------------------------------------------
+            // SUCESSO
+            // ------------------------------------------
+
+            mostrarMensagem(
+                "✅ Alta registrada! Baixando PDF...",
+                "sucesso"
+            );
+
+
+            // ------------------------------------------
+            // BAIXAR PDF
+            // ------------------------------------------
+
+            const link =
+                document.createElement("a");
+
+            link.href =
+                dados.pdf;
+
+            link.download =
+                dados.arquivo ||
+                "alta-paciente.pdf";
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+
+
+            // ------------------------------------------
+            // LIMPAR CAMPOS
+            // ------------------------------------------
+
+            document.getElementById(
+                "motivo"
+            ).value = "";
+
+            document.getElementById(
+                "orientacoes"
+            ).value = "";
+
+            document.getElementById(
+                "observacoes"
+            ).value = "";
+
+
+            // ------------------------------------------
+            // ATUALIZAR LISTA
+            // ------------------------------------------
+
+            setTimeout(
+                function() {
+
+                    carregarPDFs(
+                        paciente
+                    );
+
+                },
+                800
+            );
+
+
+        } catch (erro) {
+
+            console.error(
+                "Erro na alta:",
+                erro
+            );
+
+            mostrarMensagem(
+                "❌ Não foi possível registrar a alta. " +
+                erro.message,
+                "erro"
+            );
+
+        } finally {
+
+            btnAlta.disabled = false;
+
+            btnAlta.textContent =
+                "📄 Registrar Alta e Baixar PDF";
+        }
 
     }
 
 
-    /* =========================
-       CARREGAR PDFs
-    ========================= */
+    // ==================================================
+    // CARREGAR PDFs
+    // ==================================================
 
-    async function carregarPDFs() {
-
-        const lista =
-            document.getElementById(
-                "lista-pdfs"
-            );
-
+    async function carregarPDFs(paciente) {
 
         if (!paciente) {
-
-            lista.innerHTML = `
-                <div class="pdf-card">
-                    <h3>❌ Nenhum paciente selecionado</h3>
-                </div>
-            `;
-
             return;
         }
+
+
+        lista.innerHTML = `
+            <div class="pdf-card">
+                <p>
+                    ⏳ Carregando documentos...
+                </p>
+            </div>
+        `;
 
 
         try {
 
             const resposta =
                 await fetch(
-                    "http://localhost:3000/pdfs?paciente=" +
-                    encodeURIComponent(paciente)
+                    "/pdfs?paciente=" +
+                    encodeURIComponent(
+                        paciente
+                    )
                 );
 
 
             if (!resposta.ok) {
 
                 throw new Error(
-                    "Erro na rota /pdfs"
+                    "Erro HTTP " +
+                    resposta.status
                 );
 
             }
@@ -195,8 +752,12 @@
                 await resposta.json();
 
 
+            // ------------------------------------------
+            // NENHUM PDF
+            // ------------------------------------------
+
             if (
-                !pdfs ||
+                !Array.isArray(pdfs) ||
                 pdfs.length === 0
             ) {
 
@@ -208,8 +769,8 @@
                         </h3>
 
                         <p>
-                            Este paciente não possui
-                            documentos cadastrados.
+                            Este paciente ainda não possui
+                            documentos de alta.
                         </p>
 
                     </div>
@@ -218,6 +779,10 @@
                 return;
             }
 
+
+            // ------------------------------------------
+            // MOSTRAR PDFs
+            // ------------------------------------------
 
             lista.innerHTML = "";
 
@@ -242,23 +807,33 @@
                     <a
                         href="${pdf.url}"
                         target="_blank"
-                        class="btn-pdf-abrir"
-                    >
+                        class="btn-pdf-abrir">
+
                         👁️ Abrir PDF
+
+                    </a>
+
+                    <a
+                        href="${pdf.url}"
+                        download
+                        class="btn-pdf-baixar">
+
+                        ⬇️ Baixar PDF
+
                     </a>
 
                 `;
 
 
-                lista.appendChild(card);
+                lista.appendChild(
+                    card
+                );
 
             });
-
 
         } catch (erro) {
 
             console.error(erro);
-
 
             lista.innerHTML = `
 
@@ -269,25 +844,22 @@
                     </h3>
 
                     <p>
-                        O arquivo pdfs.html está funcionando,
-                        mas o servidor ainda precisa possuir
-                        a rota:
+                        Verifique se o servidor está funcionando
+                        e se a rota <strong>/pdfs</strong> existe.
                     </p>
-
-                    <strong>
-                        GET /pdfs?paciente=...
-                    </strong>
 
                 </div>
 
             `;
-
         }
-
     }
 
 
-    carregarPDFs();
+    // ==================================================
+    // INICIAR
+    // ==================================================
+
+    carregarPacientes();
 
 </script>
 
