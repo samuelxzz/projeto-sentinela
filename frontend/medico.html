@@ -1,9 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Painel Médico</title>
@@ -214,10 +215,6 @@
             background: #2980b9;
         }
 
-        #arquivo-pdf {
-            display: none;
-        }
-
         .alta-sucesso {
             display: none;
             background: #eafaf1;
@@ -231,6 +228,7 @@
         }
 
     </style>
+
 </head>
 
 <body>
@@ -239,7 +237,9 @@
 
     <h1>🩺 Painel Médico</h1>
 
-    <a href="tv.html" target="_blank">📺 Abrir Tela da TV</a>
+    <a href="tv.html" target="_blank">
+        📺 Abrir Tela da TV
+    </a>
 
     <div class="consultorio-input">
 
@@ -379,23 +379,16 @@
         </div>
 
 
-        <!-- BOTÃO PDF -->
+        <!-- GERAR PDF DO PACIENTE -->
 
         <button
             id="btn-pdf"
             class="btn-pdf"
             type="button"
-            onclick="abrirEnvioPDF()"
+            onclick="gerarPDFPaciente()"
         >
-            📄 Enviar PDF da Alta
+            📄 Gerar PDF do Paciente
         </button>
-
-        <input
-            type="file"
-            id="arquivo-pdf"
-            accept="application/pdf"
-            onchange="enviarPDF()"
-        >
 
 
         <label for="diagnostico">
@@ -458,7 +451,8 @@ let altaConfirmada = false;
 
 async function carregar() {
 
-    const div = document.getElementById("triagens");
+    const div =
+        document.getElementById("triagens");
 
     try {
 
@@ -961,7 +955,7 @@ async function confirmarAlta() {
             "block";
 
 
-        /* PDF SÓ APARECE DEPOIS DA ALTA */
+        /* MOSTRA BOTÃO DE GERAR PDF */
 
         document.getElementById(
             "btn-pdf"
@@ -989,14 +983,16 @@ async function confirmarAlta() {
 }
 
 
-/* ABRIR PDF */
+/* ========================================
+   GERAR PDF DO PACIENTE
+======================================== */
 
-function abrirEnvioPDF() {
+async function gerarPDFPaciente() {
 
     if (!pacienteSelecionado) {
 
         alert(
-            "Primeiro selecione um paciente."
+            "⚠️ Primeiro selecione um paciente."
         );
 
         return;
@@ -1007,114 +1003,93 @@ function abrirEnvioPDF() {
     if (!altaConfirmada) {
 
         alert(
-            "Primeiro confirme a alta do paciente."
+            "⚠️ Primeiro confirme a alta do paciente."
         );
 
         return;
 
     }
-
-
-    document
-        .getElementById(
-            "arquivo-pdf"
-        )
-        .click();
-
-}
-
-
-/* ENVIAR PDF */
-
-async function enviarPDF() {
-
-    const input =
-        document.getElementById(
-            "arquivo-pdf"
-        );
-
-
-    const arquivo =
-        input.files[0];
-
-
-    if (!arquivo) return;
-
-
-    if (
-        arquivo.type !==
-        "application/pdf"
-    ) {
-
-        alert(
-            "Selecione somente um arquivo PDF."
-        );
-
-        input.value = "";
-
-        return;
-
-    }
-
-
-    const formData =
-        new FormData();
-
-
-    formData.append(
-        "paciente",
-        pacienteSelecionado
-    );
-
-
-    formData.append(
-        "pdf",
-        arquivo
-    );
 
 
     try {
 
         const resposta =
             await fetch(
-                API + "/pdfs/upload",
-                {
-                    method: "POST",
-                    body: formData
-                }
+                API +
+                "/pdfs?paciente=" +
+                encodeURIComponent(
+                    pacienteSelecionado
+                )
             );
-
-
-        const resultado =
-            await resposta.json();
 
 
         if (!resposta.ok) {
 
             throw new Error(
-                resultado.erro ||
-                "Erro ao enviar PDF."
+                "Erro HTTP " +
+                resposta.status
             );
 
         }
 
 
-        alert(
-            "✅ PDF enviado com sucesso!"
-        );
+        const pdfs =
+            await resposta.json();
 
 
-        input.value = "";
+        if (
+            !Array.isArray(pdfs) ||
+            pdfs.length === 0
+        ) {
+
+            alert(
+                "❌ Nenhum PDF encontrado para este paciente."
+            );
+
+            return;
+
+        }
+
+
+        const pdf =
+            pdfs[0];
+
+
+        /* DOWNLOAD */
+
+        const link =
+            document.createElement("a");
+
+
+        link.href =
+            pdf.url;
+
+
+        link.download =
+            pdf.nome ||
+            "pdf_paciente.pdf";
+
+
+        document.body.appendChild(link);
+
+
+        link.click();
+
+
+        document.body.removeChild(link);
+
 
     }
 
     catch (erro) {
 
-        console.error(erro);
+        console.error(
+            "Erro ao baixar PDF:",
+            erro
+        );
 
         alert(
-            "❌ Não foi possível enviar o PDF.\n\n" +
-            erro.message
+            "❌ Não foi possível baixar o PDF do paciente."
         );
 
     }
@@ -1466,5 +1441,5 @@ setInterval(
 </script>
 
 </body>
+
 </html>
-```
