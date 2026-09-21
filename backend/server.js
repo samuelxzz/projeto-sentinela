@@ -55,7 +55,6 @@ function readDB() {
         db.consultas = [];
     }
 
-    // NOVO: banco de altas
     if (!Array.isArray(db.altas)) {
         db.altas = [];
     }
@@ -215,7 +214,6 @@ app.post("/triagem", (req, res) => {
 
     db.triagens.push(triagem);
 
-    // Atualiza o paciente cadastrado
     const paciente =
         db.pacientes.find(
             p => p.nome === triagem.nome
@@ -382,7 +380,6 @@ app.post("/consulta", (req, res) => {
         consulta
     );
 
-    // Marca a triagem como atendida
     const triagem =
         db.triagens.find(t =>
             t.nome === consulta.paciente &&
@@ -398,7 +395,6 @@ app.post("/consulta", (req, res) => {
             "atendido";
     }
 
-    // Marca paciente como atendido
     const paciente =
         db.pacientes.find(
             p => p.nome === consulta.paciente
@@ -438,7 +434,9 @@ app.get("/medicacoes", (req, res) => {
 // =====================================================
 
 app.post("/alta", (req, res) => {
+
     try {
+
         const db = readDB();
 
         const pacienteNome = String(
@@ -464,51 +462,61 @@ app.post("/alta", (req, res) => {
         ).trim();
 
         if (!pacienteNome) {
+
             return res.status(400).json({
                 erro: "Paciente não informado."
             });
         }
 
         if (!tipoAlta) {
+
             return res.status(400).json({
                 erro: "Tipo de alta não informado."
             });
         }
 
         if (!motivo) {
+
             return res.status(400).json({
                 erro: "Motivo da alta não informado."
             });
         }
 
-        // Procura o paciente ignorando maiúsculas,
-        // minúsculas e espaços extras
+        // Procura o paciente sem diferenciar
+        // letras maiúsculas/minúsculas e espaços
         const paciente = db.pacientes.find(p => {
-            const nomeBanco = String(p.nome || "")
-                .trim()
-                .toLowerCase();
 
-            const nomeInformado = pacienteNome
-                .trim()
-                .toLowerCase();
+            const nomeBanco =
+                String(p.nome || "")
+                    .trim()
+                    .toLowerCase();
+
+            const nomeInformado =
+                pacienteNome
+                    .trim()
+                    .toLowerCase();
 
             return nomeBanco === nomeInformado;
         });
 
         if (!paciente) {
+
             return res.status(404).json({
                 erro: "Paciente não encontrado."
             });
         }
 
         const triagem = db.triagens.find(t => {
-            const nomeTriagem = String(t.nome || "")
-                .trim()
-                .toLowerCase();
 
-            const nomePaciente = pacienteNome
-                .trim()
-                .toLowerCase();
+            const nomeTriagem =
+                String(t.nome || "")
+                    .trim()
+                    .toLowerCase();
+
+            const nomePaciente =
+                pacienteNome
+                    .trim()
+                    .toLowerCase();
 
             return (
                 nomeTriagem === nomePaciente &&
@@ -521,22 +529,41 @@ app.post("/alta", (req, res) => {
         });
 
         const alta = {
-            id: Date.now(),
-            paciente: paciente.nome,
-            tipoAlta: tipoAlta,
-            motivo: motivo,
-            orientacoes: orientacoes,
-            observacoes: observacoes,
-            createdAt: new Date()
+
+            id:
+                Date.now(),
+
+            paciente:
+                paciente.nome,
+
+            tipoAlta:
+                tipoAlta,
+
+            motivo:
+                motivo,
+
+            orientacoes:
+                orientacoes,
+
+            observacoes:
+                observacoes,
+
+            createdAt:
+                new Date()
         };
 
-        db.altas.push(alta);
+        db.altas.push(
+            alta
+        );
 
         if (triagem) {
-            triagem.status = "alta";
+
+            triagem.status =
+                "alta";
         }
 
-        paciente.status = "alta";
+        paciente.status =
+            "alta";
 
         writeDB(db);
 
@@ -546,87 +573,30 @@ app.post("/alta", (req, res) => {
         );
 
         res.status(200).json({
-            sucesso: true,
-            mensagem: "Alta registrada com sucesso!",
-            alta: alta
+
+            sucesso:
+                true,
+
+            mensagem:
+                "Alta registrada com sucesso!",
+
+            alta:
+                alta
         });
 
     } catch (erro) {
-        console.error("❌ ERRO NA ALTA:", erro);
+
+        console.error(
+            "❌ ERRO NA ALTA:",
+            erro
+        );
 
         res.status(500).json({
-            erro: "Erro interno ao registrar a alta."
+
+            erro:
+                "Erro interno ao registrar a alta."
         });
     }
-});
-
-    // Cria a alta
-    const alta = {
-
-        id:
-            Date.now(),
-
-        paciente:
-            pacienteNome,
-
-        tipoAlta:
-            tipoAlta,
-
-        motivo:
-            motivo,
-
-        orientacoes:
-            orientacoes,
-
-        observacoes:
-            observacoes,
-
-        createdAt:
-            new Date()
-    };
-
-
-    // Salva no banco
-    db.altas.push(
-        alta
-    );
-
-
-    // Atualiza triagem
-    if (triagem) {
-
-        triagem.status =
-            "alta";
-    }
-
-
-    // Atualiza paciente
-    paciente.status =
-        "alta";
-
-
-    writeDB(db);
-
-
-    console.log(
-        "🟢 Alta registrada:",
-        pacienteNome
-    );
-
-
-    res.json({
-
-        sucesso:
-            true,
-
-        mensagem:
-            "Alta registrada com sucesso!",
-
-        alta:
-            alta
-
-    });
-
 });
 
 // =====================================================
@@ -655,23 +625,19 @@ app.get("/alta", (req, res) => {
             req.query.paciente || ""
         ).trim();
 
-
     if (!paciente) {
 
         return res.status(400).json({
 
             erro:
                 "Informe o paciente."
-
         });
     }
-
 
     const altas =
         db.altas.filter(
             a => a.paciente === paciente
         );
-
 
     res.json(
         altas
@@ -688,7 +654,6 @@ const PDF_FOLDER =
         "pdfs"
     );
 
-
 if (!fs.existsSync(PDF_FOLDER)) {
 
     fs.mkdirSync(
@@ -698,7 +663,6 @@ if (!fs.existsSync(PDF_FOLDER)) {
         }
     );
 }
-
 
 // Permite abrir os PDFs pelo navegador
 app.use(
@@ -746,7 +710,6 @@ app.post("/pdfs/upload", (req, res) => {
     const contentType =
         req.headers["content-type"] || "";
 
-
     if (
         !contentType.includes(
             "multipart/form-data"
@@ -761,12 +724,10 @@ app.post("/pdfs/upload", (req, res) => {
         });
     }
 
-
     const boundaryMatch =
         contentType.match(
             /boundary=(?:"([^"]+)"|([^;]+))/
         );
-
 
     if (!boundaryMatch) {
 
@@ -778,14 +739,11 @@ app.post("/pdfs/upload", (req, res) => {
         });
     }
 
-
     const boundary =
         boundaryMatch[1] ||
         boundaryMatch[2];
 
-
     const partes = [];
-
 
     req.on("data", parte => {
 
@@ -794,7 +752,6 @@ app.post("/pdfs/upload", (req, res) => {
         );
 
     });
-
 
     req.on("end", () => {
 
@@ -805,17 +762,14 @@ app.post("/pdfs/upload", (req, res) => {
                     partes
                 );
 
-
             const marcador =
                 Buffer.from(
                     "--" + boundary
                 );
 
-
             const campos = [];
 
             let inicio = 0;
-
 
             while (true) {
 
@@ -825,12 +779,10 @@ app.post("/pdfs/upload", (req, res) => {
                         inicio
                     );
 
-
                 if (posicao === -1) {
 
                     break;
                 }
-
 
                 if (posicao !== inicio) {
 
@@ -839,7 +791,6 @@ app.post("/pdfs/upload", (req, res) => {
                             inicio,
                             posicao
                         );
-
 
                     if (
                         parte.length >= 2 &&
@@ -851,7 +802,6 @@ app.post("/pdfs/upload", (req, res) => {
                             parte.slice(2);
                     }
 
-
                     if (parte.length > 0) {
 
                         campos.push(
@@ -860,19 +810,16 @@ app.post("/pdfs/upload", (req, res) => {
                     }
                 }
 
-
                 inicio =
                     posicao +
                     marcador.length;
             }
-
 
             let paciente =
                 "paciente";
 
             let arquivoPDF =
                 null;
-
 
             for (
                 const parte of campos
@@ -883,12 +830,10 @@ app.post("/pdfs/upload", (req, res) => {
                         "\r\n\r\n"
                     );
 
-
                 const cabecalhoFim =
                     parte.indexOf(
                         separador
                     );
-
 
                 if (
                     cabecalhoFim === -1
@@ -896,7 +841,6 @@ app.post("/pdfs/upload", (req, res) => {
 
                     continue;
                 }
-
 
                 const cabecalho =
                     parte
@@ -908,13 +852,11 @@ app.post("/pdfs/upload", (req, res) => {
                             "utf8"
                         );
 
-
                 let conteudo =
                     parte.slice(
                         cabecalhoFim +
                         separador.length
                     );
-
 
                 // Remove CRLF final
                 if (
@@ -934,28 +876,23 @@ app.post("/pdfs/upload", (req, res) => {
                         );
                 }
 
-
                 const nomeMatch =
                     cabecalho.match(
                         /name="([^"]+)"/i
                     );
-
 
                 if (!nomeMatch) {
 
                     continue;
                 }
 
-
                 const nomeCampo =
                     nomeMatch[1];
-
 
                 const arquivoMatch =
                     cabecalho.match(
                         /filename="([^"]*)"/i
                     );
-
 
                 if (
                     nomeCampo ===
@@ -967,7 +904,6 @@ app.post("/pdfs/upload", (req, res) => {
                             "utf8"
                         );
                 }
-
 
                 if (
                     nomeCampo === "pdf" &&
@@ -986,7 +922,6 @@ app.post("/pdfs/upload", (req, res) => {
                 }
             }
 
-
             if (!arquivoPDF) {
 
                 return res.status(400).json({
@@ -997,12 +932,10 @@ app.post("/pdfs/upload", (req, res) => {
                 });
             }
 
-
             const extensao =
                 path.extname(
                     arquivoPDF.nome
                 ).toLowerCase();
-
 
             if (
                 extensao !== ".pdf"
@@ -1016,12 +949,10 @@ app.post("/pdfs/upload", (req, res) => {
                 });
             }
 
-
             const nomePaciente =
                 limparNome(
                     paciente
                 );
-
 
             const nomeArquivo =
                 limparNome(
@@ -1031,10 +962,8 @@ app.post("/pdfs/upload", (req, res) => {
                     )
                 );
 
-
             const arquivoFinal =
                 `${nomePaciente}_${Date.now()}_${nomeArquivo}.pdf`;
-
 
             const caminho =
                 path.join(
@@ -1042,18 +971,15 @@ app.post("/pdfs/upload", (req, res) => {
                     arquivoFinal
                 );
 
-
             fs.writeFileSync(
                 caminho,
                 arquivoPDF.conteudo
             );
 
-
             console.log(
                 "📄 PDF recebido:",
                 arquivoFinal
             );
-
 
             res.json({
 
@@ -1074,14 +1000,12 @@ app.post("/pdfs/upload", (req, res) => {
 
             });
 
-
         } catch (erro) {
 
             console.error(
                 "Erro ao salvar PDF:",
                 erro
             );
-
 
             res.status(500).json({
 
@@ -1092,14 +1016,12 @@ app.post("/pdfs/upload", (req, res) => {
         }
     });
 
-
     req.on("error", erro => {
 
         console.error(
             "Erro no upload:",
             erro
         );
-
 
         if (!res.headersSent) {
 
@@ -1127,14 +1049,12 @@ app.get("/pdfs", (req, res) => {
         .trim()
         .toLowerCase();
 
-
     try {
 
         const arquivos =
             fs.readdirSync(
                 PDF_FOLDER
             );
-
 
         const resultado =
             arquivos
@@ -1154,12 +1074,10 @@ app.get("/pdfs", (req, res) => {
                             return true;
                         }
 
-
                         const nomeBusca =
                             limparNome(
                                 paciente
                             ).toLowerCase();
-
 
                         return arquivo
                             .toLowerCase()
@@ -1185,18 +1103,15 @@ app.get("/pdfs", (req, res) => {
                     })
                 );
 
-
         res.json(
             resultado
         );
-
 
     } catch (erro) {
 
         console.error(
             erro
         );
-
 
         res.status(500).json({
 
@@ -1230,7 +1145,6 @@ app.get("/teste", (req, res) => {
 
 const PORT =
     process.env.PORT || 3000;
-
 
 app.listen(
     PORT,
