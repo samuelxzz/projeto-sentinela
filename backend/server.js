@@ -438,90 +438,127 @@ app.get("/medicacoes", (req, res) => {
 // =====================================================
 
 app.post("/alta", (req, res) => {
+    try {
+        const db = readDB();
 
-    const db = readDB();
+        const pacienteNome = String(
+            req.body.paciente ||
+            req.body.nome ||
+            ""
+        ).trim();
 
-    const pacienteNome =
-        req.body.paciente || "";
+        const tipoAlta = String(
+            req.body.tipoAlta || ""
+        ).trim();
 
-    const tipoAlta =
-        req.body.tipoAlta || "";
+        const motivo = String(
+            req.body.motivo || ""
+        ).trim();
 
-    const motivo =
-        req.body.motivo || "";
+        const orientacoes = String(
+            req.body.orientacoes || ""
+        ).trim();
 
-    const orientacoes =
-        req.body.orientacoes || "";
+        const observacoes = String(
+            req.body.observacoes || ""
+        ).trim();
 
-    const observacoes =
-        req.body.observacoes || "";
+        if (!pacienteNome) {
+            return res.status(400).json({
+                erro: "Paciente não informado."
+            });
+        }
 
+        if (!tipoAlta) {
+            return res.status(400).json({
+                erro: "Tipo de alta não informado."
+            });
+        }
 
-    // Verifica paciente
-    if (!pacienteNome.trim()) {
+        if (!motivo) {
+            return res.status(400).json({
+                erro: "Motivo da alta não informado."
+            });
+        }
 
-        return res.status(400).json({
+        // Procura o paciente ignorando maiúsculas,
+        // minúsculas e espaços extras
+        const paciente = db.pacientes.find(p => {
+            const nomeBanco = String(p.nome || "")
+                .trim()
+                .toLowerCase();
 
-            erro:
-                "Paciente não informado."
+            const nomeInformado = pacienteNome
+                .trim()
+                .toLowerCase();
 
+            return nomeBanco === nomeInformado;
         });
-    }
 
+        if (!paciente) {
+            return res.status(404).json({
+                erro: "Paciente não encontrado."
+            });
+        }
 
-    // Verifica tipo de alta
-    if (!tipoAlta.trim()) {
+        const triagem = db.triagens.find(t => {
+            const nomeTriagem = String(t.nome || "")
+                .trim()
+                .toLowerCase();
 
-        return res.status(400).json({
+            const nomePaciente = pacienteNome
+                .trim()
+                .toLowerCase();
 
-            erro:
-                "Tipo de alta não informado."
-
+            return (
+                nomeTriagem === nomePaciente &&
+                (
+                    !t.status ||
+                    t.status === "aguardando_medico" ||
+                    t.status === "atendido"
+                )
+            );
         });
-    }
 
+        const alta = {
+            id: Date.now(),
+            paciente: paciente.nome,
+            tipoAlta: tipoAlta,
+            motivo: motivo,
+            orientacoes: orientacoes,
+            observacoes: observacoes,
+            createdAt: new Date()
+        };
 
-    // Verifica motivo
-    if (!motivo.trim()) {
+        db.altas.push(alta);
 
-        return res.status(400).json({
+        if (triagem) {
+            triagem.status = "alta";
+        }
 
-            erro:
-                "Motivo da alta não informado."
+        paciente.status = "alta";
 
-        });
-    }
+        writeDB(db);
 
-
-    // Procura o paciente
-    const paciente =
-        db.pacientes.find(
-            p => p.nome === pacienteNome
+        console.log(
+            "🟢 Alta registrada:",
+            paciente.nome
         );
 
+        res.status(200).json({
+            sucesso: true,
+            mensagem: "Alta registrada com sucesso!",
+            alta: alta
+        });
 
-    if (!paciente) {
+    } catch (erro) {
+        console.error("❌ ERRO NA ALTA:", erro);
 
-        return res.status(404).json({
-
-            erro:
-                "Paciente não encontrado."
-
+        res.status(500).json({
+            erro: "Erro interno ao registrar a alta."
         });
     }
-
-
-    // Procura a triagem
-    const triagem =
-        db.triagens.find(t =>
-            t.nome === pacienteNome &&
-            (
-                !t.status ||
-                t.status === "aguardando_medico" ||
-                t.status === "atendido"
-            )
-        );
-
+});
 
     // Cria a alta
     const alta = {
