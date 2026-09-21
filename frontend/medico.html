@@ -1,10 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Painel Médico</title>
@@ -72,6 +71,16 @@
 
         .btn-tv {
             background: #8e44ad;
+        }
+
+        /* BOTÃO INTERNAR */
+
+        .btn-internar {
+            background: #3498db;
+        }
+
+        .btn-internar:hover {
+            background: #2980b9;
         }
 
         /* BOTÃO DAR ALTA */
@@ -228,7 +237,6 @@
         }
 
     </style>
-
 </head>
 
 <body>
@@ -237,9 +245,7 @@
 
     <h1>🩺 Painel Médico</h1>
 
-    <a href="tv.html" target="_blank">
-        📺 Abrir Tela da TV
-    </a>
+    <a href="tv.html" target="_blank">📺 Abrir Tela da TV</a>
 
     <div class="consultorio-input">
 
@@ -379,7 +385,7 @@
         </div>
 
 
-        <!-- GERAR PDF DO PACIENTE -->
+        <!-- BOTÃO PDF -->
 
         <button
             id="btn-pdf"
@@ -451,8 +457,7 @@ let altaConfirmada = false;
 
 async function carregar() {
 
-    const div =
-        document.getElementById("triagens");
+    const div = document.getElementById("triagens");
 
     try {
 
@@ -648,6 +653,14 @@ function renderizarPacientes() {
                     onclick="abrirFormularioAlta(${index})"
                 >
                     🟢 Dar Alta
+                </button>
+
+
+                <button
+                    class="btn-internar"
+                    onclick="internarPaciente(${index})"
+                >
+                    🏥 Internar
                 </button>
 
             </div>
@@ -955,7 +968,7 @@ async function confirmarAlta() {
             "block";
 
 
-        /* MOSTRA BOTÃO DE GERAR PDF */
+        /* PDF SÓ APARECE DEPOIS DA ALTA */
 
         document.getElementById(
             "btn-pdf"
@@ -983,9 +996,7 @@ async function confirmarAlta() {
 }
 
 
-/* ========================================
-   GERAR PDF DO PACIENTE
-======================================== */
+/* GERAR PDF DO PACIENTE */
 
 async function gerarPDFPaciente() {
 
@@ -1015,81 +1026,142 @@ async function gerarPDFPaciente() {
 
         const resposta =
             await fetch(
-                API +
-                "/pdfs?paciente=" +
+                API + "/gerar-pdf?paciente=" +
                 encodeURIComponent(
                     pacienteSelecionado
                 )
             );
 
 
-        if (!resposta.ok) {
-
-            throw new Error(
-                "Erro HTTP " +
-                resposta.status
-            );
-
-        }
-
-
-        const pdfs =
+        const resultado =
             await resposta.json();
 
 
-        if (
-            !Array.isArray(pdfs) ||
-            pdfs.length === 0
-        ) {
+        if (!resposta.ok) {
 
-            alert(
-                "❌ Nenhum PDF encontrado para este paciente."
+            throw new Error(
+                resultado.erro ||
+                "Erro ao gerar o PDF."
             );
-
-            return;
 
         }
 
-
-        const pdf =
-            pdfs[0];
-
-
-        /* DOWNLOAD */
 
         const link =
             document.createElement("a");
 
-
-        link.href =
-            pdf.url;
-
+        link.href = resultado.url;
 
         link.download =
-            pdf.nome ||
-            "pdf_paciente.pdf";
-
+            resultado.nome ||
+            "paciente.pdf";
 
         document.body.appendChild(link);
 
-
         link.click();
-
 
         document.body.removeChild(link);
 
+        alert(
+            "✅ PDF do paciente gerado e baixado!"
+        );
 
     }
 
     catch (erro) {
 
-        console.error(
-            "Erro ao baixar PDF:",
-            erro
-        );
+        console.error(erro);
 
         alert(
-            "❌ Não foi possível baixar o PDF do paciente."
+            "❌ Não foi possível gerar o PDF.\n\n" +
+            erro.message
+        );
+
+    }
+
+}
+
+
+/* INTERNAR PACIENTE */
+
+async function internarPaciente(index) {
+
+    const paciente =
+        triagensCarregadas[index];
+
+
+    if (!paciente) {
+
+        alert(
+            "❌ Paciente não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    const confirmar = confirm(
+        "🏥 Deseja internar o paciente " +
+        paciente.nome +
+        "?"
+    );
+
+
+    if (!confirmar) return;
+
+
+    try {
+
+        const resposta =
+            await fetch(
+                API + "/internacao",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        paciente: paciente.nome
+                    })
+                }
+            );
+
+
+        const resultado =
+            await resposta.json();
+
+
+        if (!resposta.ok) {
+
+            throw new Error(
+                resultado.erro ||
+                "Erro ao realizar a internação."
+            );
+
+        }
+
+
+        alert(
+            "✅ Paciente " +
+            paciente.nome +
+            " internado com sucesso!"
+        );
+
+        await carregar();
+
+    }
+
+    catch (erro) {
+
+        console.error(erro);
+
+        alert(
+            "❌ Não foi possível realizar a internação.\n\n" +
+            erro.message
         );
 
     }
@@ -1441,5 +1513,5 @@ setInterval(
 </script>
 
 </body>
-
 </html>
+```
