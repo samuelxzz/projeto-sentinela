@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internação - Hospital Pro</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #172033;
+        }
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.10);
+        }
+        h1 {
+            text-align: center;
+            margin-top: 0;
+        }
+        .subtitulo {
+            text-align: center;
+            color: #667085;
+            margin-bottom: 25px;
+        }
+        .internado {
+            background: #f8fafc;
+            border: 1px solid #dfe6ee;
+            border-left: 6px solid #3498db;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+        .nome {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .leito {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .status {
+            color: #1e8449;
+            font-weight: bold;
+        }
+        .vazio, .erro {
+            text-align: center;
+            padding: 25px;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+        .erro { color: #c0392b; }
+        .voltar {
+            width: 100%;
+            padding: 13px;
+            margin-top: 15px;
+            border: 0;
+            border-radius: 9px;
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏥 Pacientes Internados</h1>
+    <p class="subtitulo">Controle de internação e leitos</p>
+
+    <div id="lista">
+        <div class="vazio">⏳ Carregando...</div>
+    </div>
+
+    <button class="voltar" onclick="window.close()">
+        ❌ Fechar esta aba
+    </button>
+</div>
+
+<script>
+const API = "";
+
+function escapeHtml(valor) {
+    return String(valor ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+async function carregarInternacoes() {
+    const lista = document.getElementById("lista");
+
+    try {
+        const resposta = await fetch(
+            API + "/internacoes?_=" + Date.now()
+        );
+
+        if (!resposta.ok) {
+            throw new Error("Erro HTTP " + resposta.status);
+        }
+
+        const internacoes = await resposta.json();
+
+        if (!Array.isArray(internacoes) || internacoes.length === 0) {
+            lista.innerHTML = `
+                <div class="vazio">
+                    🏥 Nenhum paciente internado.
+                </div>
+            `;
+            return;
+        }
+
+        lista.innerHTML = "";
+
+        internacoes.forEach(internacao => {
+            const data = internacao.createdAt
+                ? new Date(internacao.createdAt).toLocaleString("pt-BR")
+                : "Data não informada";
+
+            const card = document.createElement("div");
+            card.className = "internado";
+
+            card.innerHTML = `
+                <div class="nome">👤 ${escapeHtml(internacao.paciente || "Paciente")}</div>
+                <div class="leito">🛏️ Leito ${escapeHtml(internacao.leito || "Não informado")}</div>
+                <div class="status">🟢 Internado</div>
+                <div>📅 ${escapeHtml(data)}</div>
+            `;
+
+            lista.appendChild(card);
+        });
+
+    } catch (erro) {
+        console.error(erro);
+        lista.innerHTML = `
+            <div class="erro">
+                ❌ Não foi possível carregar as internações.<br><br>
+                ${escapeHtml(erro.message)}
+            </div>
+        `;
+    }
+}
+
+carregarInternacoes();
+setInterval(carregarInternacoes, 5000);
+</script>
+
+</body>
+</html>
