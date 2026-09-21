@@ -44,8 +44,14 @@ function readDB() {
     if (!Array.isArray(db.consultas)) db.consultas = [];
     if (!Array.isArray(db.altas)) db.altas = [];
     if (!Array.isArray(db.internacoes)) db.internacoes = [];
-    if (!("tv_chamada" in db)) db.tv_chamada = null;
-    if (!Array.isArray(db.tv_historico)) db.tv_historico = [];
+
+    if (!("tv_chamada" in db)) {
+        db.tv_chamada = null;
+    }
+
+    if (!Array.isArray(db.tv_historico)) {
+        db.tv_historico = [];
+    }
 
     return db;
 }
@@ -123,8 +129,9 @@ app.post("/triagem", (req, res) => {
 
     const db = readDB();
 
-    const temperatura =
-        Number(req.body.temperatura);
+    const temperatura = Number(
+        req.body.temperatura
+    );
 
     let risco = req.body.risco;
 
@@ -146,7 +153,7 @@ app.post("/triagem", (req, res) => {
                 : "",
         alergia: req.body.alergia || "",
         observacao: req.body.observacao || "",
-        risco,
+        risco: risco,
         status: "aguardando_medico",
         createdAt: new Date()
     };
@@ -174,11 +181,10 @@ app.get("/triagens", (req, res) => {
 
     const db = readDB();
 
-    const triagens =
-        db.triagens.filter(t =>
-            !t.status ||
-            t.status === "aguardando_medico"
-        );
+    const triagens = db.triagens.filter(t =>
+        !t.status ||
+        t.status === "aguardando_medico"
+    );
 
     res.json(triagens);
 });
@@ -229,7 +235,7 @@ app.get("/tv/chamada", (req, res) => {
 });
 
 // ===============================
-// MEDICAÇÕES
+// LISTA DE MEDICAÇÕES
 // ===============================
 
 app.get("/lista-medicacoes", (req, res) => {
@@ -292,6 +298,10 @@ app.post("/consulta", (req, res) => {
     res.json(consulta);
 });
 
+// ===============================
+// MEDICAÇÕES / CONSULTAS
+// ===============================
+
 app.get("/medicacoes", (req, res) => {
 
     const db = readDB();
@@ -309,32 +319,27 @@ app.post("/alta", (req, res) => {
 
         const db = readDB();
 
-        const pacienteNome =
-            String(
-                req.body.paciente ||
-                req.body.nome ||
-                ""
-            ).trim();
+        const pacienteNome = String(
+            req.body.paciente ||
+            req.body.nome ||
+            ""
+        ).trim();
 
-        const tipoAlta =
-            String(
-                req.body.tipoAlta || ""
-            ).trim();
+        const tipoAlta = String(
+            req.body.tipoAlta || ""
+        ).trim();
 
-        const motivo =
-            String(
-                req.body.motivo || ""
-            ).trim();
+        const motivo = String(
+            req.body.motivo || ""
+        ).trim();
 
-        const orientacoes =
-            String(
-                req.body.orientacoes || ""
-            ).trim();
+        const orientacoes = String(
+            req.body.orientacoes || ""
+        ).trim();
 
-        const observacoes =
-            String(
-                req.body.observacoes || ""
-            ).trim();
+        const observacoes = String(
+            req.body.observacoes || ""
+        ).trim();
 
         if (!pacienteNome) {
             return res.status(400).json({
@@ -354,13 +359,12 @@ app.post("/alta", (req, res) => {
             });
         }
 
-        const paciente =
-            db.pacientes.find(p =>
-                String(p.nome || "")
-                    .trim()
-                    .toLowerCase() ===
-                pacienteNome.toLowerCase()
-            );
+        const paciente = db.pacientes.find(p =>
+            String(p.nome || "")
+                .trim()
+                .toLowerCase() ===
+            pacienteNome.toLowerCase()
+        );
 
         if (!paciente) {
             return res.status(404).json({
@@ -368,21 +372,20 @@ app.post("/alta", (req, res) => {
             });
         }
 
-        const triagem =
-            db.triagens.find(t =>
-                String(t.nome || "")
-                    .trim()
-                    .toLowerCase() ===
-                pacienteNome.toLowerCase()
-            );
+        const triagem = db.triagens.find(t =>
+            String(t.nome || "")
+                .trim()
+                .toLowerCase() ===
+            pacienteNome.toLowerCase()
+        );
 
         const alta = {
             id: Date.now(),
             paciente: paciente.nome,
-            tipoAlta,
-            motivo,
-            orientacoes,
-            observacoes,
+            tipoAlta: tipoAlta,
+            motivo: motivo,
+            orientacoes: orientacoes,
+            observacoes: observacoes,
             createdAt: new Date()
         };
 
@@ -398,9 +401,8 @@ app.post("/alta", (req, res) => {
 
         res.json({
             sucesso: true,
-            mensagem:
-                "Alta registrada com sucesso!",
-            alta
+            mensagem: "Alta registrada com sucesso!",
+            alta: alta
         });
 
     } catch (erro) {
@@ -408,8 +410,7 @@ app.post("/alta", (req, res) => {
         console.error(erro);
 
         res.status(500).json({
-            erro:
-                "Erro interno ao registrar a alta."
+            erro: "Erro interno ao registrar a alta."
         });
     }
 });
@@ -426,17 +427,16 @@ app.get("/altas", (req, res) => {
 });
 
 // ===============================
-// BUSCAR ALTA
+// BUSCAR ALTA DO PACIENTE
 // ===============================
 
 app.get("/alta", (req, res) => {
 
     const db = readDB();
 
-    const paciente =
-        String(
-            req.query.paciente || ""
-        ).trim();
+    const paciente = String(
+        req.query.paciente || ""
+    ).trim();
 
     if (!paciente) {
         return res.status(400).json({
@@ -444,11 +444,11 @@ app.get("/alta", (req, res) => {
         });
     }
 
-    res.json(
-        db.altas.filter(
-            a => a.paciente === paciente
-        )
+    const resultado = db.altas.filter(
+        a => a.paciente === paciente
     );
+
+    res.json(resultado);
 });
 
 // ===============================
@@ -461,12 +461,17 @@ app.post("/internacao", (req, res) => {
 
         const db = readDB();
 
-        const nome =
-            String(
-                req.body.paciente ||
-                req.body.nome ||
-                ""
-            ).trim();
+        const nome = String(
+            req.body.paciente ||
+            req.body.nome ||
+            ""
+        ).trim();
+
+        const leito = String(
+            req.body.leito ||
+            req.body.numeroLeito ||
+            ""
+        ).trim();
 
         if (!nome) {
             return res.status(400).json({
@@ -474,13 +479,18 @@ app.post("/internacao", (req, res) => {
             });
         }
 
-        const paciente =
-            db.pacientes.find(p =>
-                String(p.nome || "")
-                    .trim()
-                    .toLowerCase() ===
-                nome.toLowerCase()
-            );
+        if (!leito) {
+            return res.status(400).json({
+                erro: "Número do leito não informado."
+            });
+        }
+
+        const paciente = db.pacientes.find(p =>
+            String(p.nome || "")
+                .trim()
+                .toLowerCase() ===
+            nome.toLowerCase()
+        );
 
         if (!paciente) {
             return res.status(404).json({
@@ -488,9 +498,41 @@ app.post("/internacao", (req, res) => {
             });
         }
 
+        const leitoOcupado =
+            db.internacoes.find(i =>
+                String(i.leito) === leito &&
+                i.status === "internado"
+            );
+
+        if (leitoOcupado) {
+            return res.status(400).json({
+                erro:
+                    "Este leito já está ocupado pelo paciente " +
+                    leitoOcupado.paciente + "."
+            });
+        }
+
+        const jaInternado =
+            db.internacoes.find(i =>
+                String(i.paciente || "")
+                    .trim()
+                    .toLowerCase() ===
+                nome.toLowerCase() &&
+                i.status === "internado"
+            );
+
+        if (jaInternado) {
+            return res.status(400).json({
+                erro:
+                    "Este paciente já está internado no leito " +
+                    jaInternado.leito + "."
+            });
+        }
+
         const internacao = {
             id: Date.now(),
             paciente: paciente.nome,
+            leito: leito,
             status: "internado",
             createdAt: new Date()
         };
@@ -498,17 +540,18 @@ app.post("/internacao", (req, res) => {
         db.internacoes.push(internacao);
 
         paciente.status = "internado";
+        paciente.leito = leito;
 
-        const triagem =
-            db.triagens.find(t =>
-                String(t.nome || "")
-                    .trim()
-                    .toLowerCase() ===
-                nome.toLowerCase()
-            );
+        const triagem = db.triagens.find(t =>
+            String(t.nome || "")
+                .trim()
+                .toLowerCase() ===
+            nome.toLowerCase()
+        );
 
         if (triagem) {
             triagem.status = "internado";
+            triagem.leito = leito;
         }
 
         writeDB(db);
@@ -517,7 +560,7 @@ app.post("/internacao", (req, res) => {
             sucesso: true,
             mensagem:
                 "Paciente internado com sucesso.",
-            internacao
+            internacao: internacao
         });
 
     } catch (erro) {
@@ -535,28 +578,98 @@ app.post("/internacao", (req, res) => {
 });
 
 // ===============================
-// LISTAR INTERNAÇÕES
+// LISTAR PACIENTES INTERNADOS
 // ===============================
 
 app.get("/internacoes", (req, res) => {
 
-    const db = readDB();
+    try {
 
-    res.json(db.internacoes);
+        const db = readDB();
+
+        const internados =
+            db.internacoes.filter(
+                i => i.status === "internado"
+            );
+
+        res.json(internados);
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        res.status(500).json({
+            erro:
+                "Erro ao carregar pacientes internados."
+        });
+    }
 });
 
 // ===============================
-// PDFs
+// ALTA DA INTERNAÇÃO
+// ===============================
+
+app.post("/internacao/alta", (req, res) => {
+
+    try {
+
+        const db = readDB();
+
+        const id = Number(req.body.id);
+
+        const internacao =
+            db.internacoes.find(
+                i => i.id === id
+            );
+
+        if (!internacao) {
+            return res.status(404).json({
+                erro:
+                    "Internação não encontrada."
+            });
+        }
+
+        internacao.status = "alta";
+        internacao.dataAlta = new Date();
+
+        const paciente =
+            db.pacientes.find(
+                p => p.nome === internacao.paciente
+            );
+
+        if (paciente) {
+            paciente.status = "alta";
+            paciente.leito = "";
+        }
+
+        writeDB(db);
+
+        res.json({
+            sucesso: true,
+            mensagem:
+                "Alta da internação registrada.",
+            internacao: internacao
+        });
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        res.status(500).json({
+            erro:
+                "Erro ao registrar alta da internação."
+        });
+    }
+});
+
+// ===============================
+// PASTA DE PDFs
 // ===============================
 
 const PDF_FOLDER =
-    path.join(
-        __dirname,
-        "pdfs"
-    );
+    path.join(__dirname, "pdfs");
 
 if (!fs.existsSync(PDF_FOLDER)) {
-
     fs.mkdirSync(
         PDF_FOLDER,
         {
@@ -599,7 +712,7 @@ function limparNome(nome) {
 }
 
 // ===============================
-// GERAR PDF
+// GERAR PDF DO PACIENTE
 // ===============================
 
 app.get("/gerar-pdf", (req, res) => {
@@ -608,10 +721,9 @@ app.get("/gerar-pdf", (req, res) => {
 
         const db = readDB();
 
-        const nome =
-            String(
-                req.query.paciente || ""
-            ).trim();
+        const nome = String(
+            req.query.paciente || ""
+        ).trim();
 
         if (!nome) {
             return res.status(400).json({
@@ -669,10 +781,10 @@ app.get("/gerar-pdf", (req, res) => {
                 ? consultas[consultas.length - 1]
                 : null;
 
-        const data =
-            new Date().toLocaleString(
-                "pt-BR"
-            );
+        const ultimaInternacao =
+            internacoes.length
+                ? internacoes[internacoes.length - 1]
+                : null;
 
         const linhas = [
             "HOSPITAL PRO",
@@ -680,45 +792,71 @@ app.get("/gerar-pdf", (req, res) => {
             "DOCUMENTO DO PACIENTE",
             "",
             "Nome: " + paciente.nome,
-            "CPF: " + (paciente.cpf || "Não informado"),
-            "Tipo: " + (paciente.tipo || "Não informado"),
-            "Status: " + (paciente.status || "Não informado"),
+            "CPF: " +
+                (paciente.cpf || "Não informado"),
+            "Tipo: " +
+                (paciente.tipo || "Não informado"),
+            "Status: " +
+                (paciente.status || "Não informado"),
+            "Leito: " +
+                (paciente.leito || "Não informado"),
             "",
-            "DATA: " + data,
+            "DATA: " +
+                new Date().toLocaleString(
+                    "pt-BR"
+                ),
             "",
             "CONSULTA",
             "Diagnóstico: " +
-                (ultimaConsulta?.diagnostico ||
-                 "Não informado"),
+                (
+                    ultimaConsulta?.diagnostico ||
+                    "Não informado"
+                ),
             "Medicação: " +
-                (ultimaConsulta?.medicacao ||
-                 "Não informado"),
+                (
+                    ultimaConsulta?.medicacao ||
+                    "Não informado"
+                ),
             "Observações: " +
-                (ultimaConsulta?.obs ||
-                 "Não informado"),
+                (
+                    ultimaConsulta?.obs ||
+                    "Não informado"
+                ),
             "",
             "ALTA",
             "Tipo: " +
-                (ultimaAlta?.tipoAlta ||
-                 "Não registrada"),
+                (
+                    ultimaAlta?.tipoAlta ||
+                    "Não registrada"
+                ),
             "Motivo: " +
-                (ultimaAlta?.motivo ||
-                 "Não informado"),
+                (
+                    ultimaAlta?.motivo ||
+                    "Não informado"
+                ),
             "Orientações: " +
-                (ultimaAlta?.orientacoes ||
-                 "Não informado"),
+                (
+                    ultimaAlta?.orientacoes ||
+                    "Não informado"
+                ),
             "Observações: " +
-                (ultimaAlta?.observacoes ||
-                 "Não informado"),
+                (
+                    ultimaAlta?.observacoes ||
+                    "Não informado"
+                ),
             "",
             "INTERNAÇÃO",
-            "Internações registradas: " +
-                internacoes.length,
-            ""
+            "Leito: " +
+                (
+                    ultimaInternacao?.leito ||
+                    "Não informado"
+                ),
+            "Status: " +
+                (
+                    ultimaInternacao?.status ||
+                    "Não informado"
+                )
         ];
-
-        const texto =
-            linhas.join("\n");
 
         const escapePDF = valor =>
             String(valor)
@@ -727,23 +865,21 @@ app.get("/gerar-pdf", (req, res) => {
                 .replace(/\)/g, "\\)")
                 .replace(/\r/g, "");
 
-        const conteudo =
-            linhas
-                .map(
-                    linha =>
-                        "(" +
-                        escapePDF(linha) +
-                        ") Tj"
-                )
-                .join("\n");
-
-        const stream =
+        let stream =
 `BT
 /F1 11 Tf
-50 750 Td
+50 780 Td
 14 TL
-${conteudo}
-ET`;
+`;
+
+        linhas.forEach(linha => {
+            stream +=
+                "(" +
+                escapePDF(linha) +
+                ") Tj\nT*\n";
+        });
+
+        stream += "ET";
 
         const objetos = [];
 
@@ -765,7 +901,11 @@ endobj`
 /Type /Page
 /Parent 2 0 R
 /MediaBox [0 0 595 842]
-/Resources << /Font << /F1 4 0 R >> >>
+/Resources <<
+/Font <<
+/F1 4 0 R
+>>
+>>
 /Contents 5 0 R
 >>
 endobj`
@@ -784,7 +924,10 @@ endobj`
         objetos.push(
 `5 0 obj
 <<
-/Length ${Buffer.byteLength(stream, "utf8")}
+/Length ${Buffer.byteLength(
+    stream,
+    "utf8"
+)}
 >>
 stream
 ${stream}
@@ -824,7 +967,11 @@ endobj`
         pdf +=
             "0000000000 65535 f \n";
 
-        for (let i = 1; i < offsets.length; i++) {
+        for (
+            let i = 1;
+            i < offsets.length;
+            i++
+        ) {
 
             pdf +=
                 String(offsets[i])
@@ -856,7 +1003,10 @@ endobj`
 
         fs.writeFileSync(
             caminho,
-            Buffer.from(pdf, "utf8")
+            Buffer.from(
+                pdf,
+                "utf8"
+            )
         );
 
         res.json({
@@ -905,11 +1055,10 @@ app.get("/pdfs", (req, res) => {
 
         const resultado =
             arquivos
-                .filter(
-                    arquivo =>
-                        arquivo
-                            .toLowerCase()
-                            .endsWith(".pdf")
+                .filter(arquivo =>
+                    arquivo
+                        .toLowerCase()
+                        .endsWith(".pdf")
                 )
                 .filter(arquivo => {
 
@@ -949,7 +1098,7 @@ app.get("/pdfs", (req, res) => {
 });
 
 // ===============================
-// SERVIDOR
+// INICIAR SERVIDOR
 // ===============================
 
 const PORT =
