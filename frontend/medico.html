@@ -1163,20 +1163,12 @@ async function gerarPDFPaciente() {
 
 async function internarPaciente(index) {
 
-    const paciente =
-        triagensCarregadas[index];
-
+    const paciente = triagensCarregadas[index];
 
     if (!paciente) {
-
-        alert(
-            "❌ Paciente não encontrado."
-        );
-
+        alert("❌ Paciente não encontrado.");
         return;
-
     }
-
 
     const confirmar = confirm(
         "🏥 Deseja internar o paciente " +
@@ -1184,57 +1176,67 @@ async function internarPaciente(index) {
         "?"
     );
 
-
     if (!confirmar) return;
 
+    // Abre a nova aba imediatamente para evitar bloqueio do navegador.
+    const novaAba = window.open("internacao.html", "_blank");
+
+    const leito = prompt(
+        "🛏️ Digite o número do leito para " +
+        paciente.nome + ":"
+    );
+
+    if (leito === null || !String(leito).trim()) {
+        if (novaAba && !novaAba.closed) novaAba.close();
+        alert("⚠️ Informe o número do leito para realizar a internação.");
+        return;
+    }
 
     try {
 
-        const resposta =
-            await fetch(
-                API + "/internacao",
-                {
-                    method: "POST",
+        const resposta = await fetch(
+            API + "/internacao",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    paciente: paciente.nome,
+                    leito: String(leito).trim()
+                })
+            }
+        );
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        paciente: paciente.nome
-                    })
-                }
-            );
-
-
-        const resultado =
-            await resposta.json();
-
+        const resultado = await resposta.json();
 
         if (!resposta.ok) {
-
+            if (novaAba && !novaAba.closed) novaAba.close();
             throw new Error(
                 resultado.erro ||
                 "Erro ao realizar a internação."
             );
-
         }
 
-
-        alert(
-            "✅ Paciente " +
-            paciente.nome +
-            " internado com sucesso!"
-        );
+        if (novaAba && !novaAba.closed) {
+            novaAba.location.href =
+                "internacao.html?paciente=" +
+                encodeURIComponent(paciente.nome) +
+                "&leito=" +
+                encodeURIComponent(String(leito).trim());
+        } else {
+            window.open(
+                "internacao.html?paciente=" +
+                encodeURIComponent(paciente.nome) +
+                "&leito=" +
+                encodeURIComponent(String(leito).trim()),
+                "_blank"
+            );
+        }
 
         await carregar();
 
-        await abrirListaInternados();
-
-    }
-
-    catch (erro) {
+    } catch (erro) {
 
         console.error(erro);
 
@@ -1242,9 +1244,7 @@ async function internarPaciente(index) {
             "❌ Não foi possível realizar a internação.\n\n" +
             erro.message
         );
-
     }
-
 }
 
 
@@ -1704,3 +1704,4 @@ setInterval(
 
 </body>
 </html>
+```
