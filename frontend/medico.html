@@ -2,296 +2,590 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Painel Médico</title>
 
-    <link rel="stylesheet" href="css/1style.css">
+    <link
+        rel="stylesheet"
+        href="css/1style.css"
+    >
 
     <style>
 
-        html, body {
+        html,
+        body {
+
             height: auto !important;
+
             min-height: 100% !important;
+
             overflow-y: auto !important;
+
             overflow-x: hidden !important;
+
         }
 
         body {
+
             min-height: 100vh !important;
+
         }
 
         .lista-pacientes {
+
             display: flex;
+
             flex-direction: column;
+
             gap: 15px;
+
             margin: 20px 0 35px;
+
         }
 
         .paciente-card {
+
             background: #fff;
+
             border: 1px solid #e0e6ef;
+
             border-radius: 14px;
+
             padding: 20px;
-            box-shadow: 0 4px 14px rgba(0,0,0,.07);
+
+            box-shadow:
+                0 4px 14px rgba(0,0,0,.07);
+
         }
 
         .paciente-card h3 {
+
             margin: 0 0 10px;
+
             color: #172033;
+
         }
 
         .paciente-card p {
+
             margin: 7px 0;
+
         }
 
         .acoes-paciente {
+
             display: flex;
+
             flex-wrap: wrap;
+
             gap: 10px;
+
             margin-top: 15px;
+
         }
 
         .acoes-paciente button {
+
             width: auto !important;
+
             margin-top: 0 !important;
+
             border: 0;
+
             border-radius: 10px;
+
             padding: 12px 16px;
+
             color: #fff;
+
             font-weight: bold;
+
             cursor: pointer;
+
         }
 
         .btn-atender {
+
             background: #3498db;
+
         }
 
         .btn-tv {
+
             background: #8e44ad;
+
         }
 
-        /* BOTÃO INTERNAR */
-
         .btn-internar {
+
             background: #3498db;
+
         }
 
         .btn-internar:hover {
+
             background: #2980b9;
+
         }
 
-        /* BOTÃO DAR ALTA */
-
         .btn-alta {
+
             background: #2ecc71;
+
         }
 
         .btn-alta:hover {
+
             background: #27ae60;
+
         }
 
-        /* FORMULÁRIO DE ALTA */
-
         .form-alta {
+
             display: none;
+
             background: #f8fafc;
+
             border: 1px solid #dfe6ee;
+
             border-radius: 14px;
+
             padding: 20px;
+
             margin: 20px 0;
+
         }
 
         .form-alta h3 {
+
             margin-top: 0;
+
             color: #172033;
+
         }
 
         .form-alta label {
+
             display: block;
+
             margin-top: 12px;
+
             font-weight: bold;
+
         }
 
         .form-alta input,
         .form-alta textarea,
         .form-alta select {
+
             width: 100%;
+
             box-sizing: border-box;
+
             padding: 12px;
+
             margin-top: 7px;
+
             border: 1px solid #ccd7e5;
+
             border-radius: 9px;
+
             font-size: 15px;
+
         }
 
         .form-alta textarea {
+
             min-height: 100px;
+
             resize: vertical;
+
         }
 
         .btn-confirmar-alta {
-            width: 100%;
-            border: 0;
-            border-radius: 10px;
-            padding: 14px;
-            margin-top: 18px;
-            background: #2ecc71;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
 
-        .btn-confirmar-alta:hover {
-            background: #27ae60;
+            width: 100%;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            margin-top: 18px;
+
+            background: #2ecc71;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
         }
 
         .btn-cancelar-alta {
+
             width: 100%;
+
             border: 0;
+
             border-radius: 10px;
+
             padding: 12px;
+
             margin-top: 10px;
+
             background: #e74c3c;
+
             color: white;
+
             font-weight: bold;
+
             cursor: pointer;
-        }
 
-        .btn-cancelar-alta:hover {
-            background: #c0392b;
         }
-
-        /* BOTÃO PDF */
 
         .btn-pdf {
-            display: none;
-            width: 100%;
-            margin: 15px 0;
-            border: 0;
-            border-radius: 10px;
-            padding: 14px;
-            background: #e91e63;
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-        }
 
-        .btn-pdf:hover {
-            background: #c2185b;
+            display: none;
+
+            width: 100%;
+
+            margin: 15px 0;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            background: #e91e63;
+
+            color: white;
+
+            font-weight: bold;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
         }
 
         .mensagem {
+
             background: #fff;
+
             border-radius: 14px;
+
             padding: 25px;
+
             text-align: center;
-            box-shadow: 0 3px 12px rgba(0,0,0,.06);
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,.06);
+
         }
 
         .erro {
+
             color: #a61b36;
+
             background: #fff1f3;
+
         }
 
         .select-paciente {
+
             width: 100%;
+
             padding: 14px;
+
             border: 1px solid #ccd7e5;
+
             border-radius: 10px;
+
             font-size: 16px;
+
             background: #f8fafc;
+
             margin: 8px 0 18px;
+
         }
 
         .btn-salvar {
-            width: 100%;
-            border: 0;
-            border-radius: 10px;
-            padding: 14px;
-            background: #3498db;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
 
-        .btn-salvar:hover {
-            background: #2980b9;
+            width: 100%;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            background: #3498db;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
         }
 
         .alta-sucesso {
+
             display: none;
+
             background: #eafaf1;
+
             color: #1e8449;
+
             border: 1px solid #a9dfbf;
+
             border-radius: 10px;
+
             padding: 15px;
+
             margin: 15px 0;
+
             text-align: center;
+
             font-weight: bold;
+
         }
 
-        /* LISTA DE PACIENTES INTERNADOS */
-
         .lista-internados {
+
             display: none;
+
             background: #ffffff;
+
             border: 1px solid #dbe5ef;
+
             border-radius: 14px;
+
             padding: 20px;
+
             margin: 20px 0 35px;
-            box-shadow: 0 4px 14px rgba(0,0,0,.07);
+
+            box-shadow:
+                0 4px 14px rgba(0,0,0,.07);
+
         }
 
         .lista-internados h2 {
+
             margin-top: 0;
+
             color: #172033;
+
         }
 
         .paciente-internado {
-            background: #f8fafc;
-            border: 1px solid #dfe6ee;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 12px;
-        }
 
-        .paciente-internado:last-child {
-            margin-bottom: 0;
+            background: #f8fafc;
+
+            border: 1px solid #dfe6ee;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            margin-bottom: 12px;
+
         }
 
         .status-internado {
+
             display: inline-block;
+
             margin-top: 8px;
+
             padding: 5px 10px;
+
             border-radius: 20px;
+
             background: #2ecc71;
+
             color: #fff;
+
             font-size: 13px;
+
             font-weight: bold;
+
         }
 
         .btn-fechar-internados {
+
             width: 100%;
+
             border: 0;
+
             border-radius: 10px;
+
             padding: 12px;
+
             margin-top: 15px;
+
             background: #e74c3c;
+
             color: #fff;
+
             font-weight: bold;
+
             cursor: pointer;
+
         }
 
-        .btn-fechar-internados:hover {
-            background: #c0392b;
+
+        /* =================================
+           MODAL DO LEITO
+        ================================= */
+
+        .modal-leito {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0, 0, 0, 0.55);
+
+            z-index: 9999;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+        }
+
+        .caixa-leito {
+
+            width: 100%;
+
+            max-width: 450px;
+
+            background: #ffffff;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 10px 35px rgba(0,0,0,.25);
+
+        }
+
+        .caixa-leito h2 {
+
+            margin-top: 0;
+
+            text-align: center;
+
+            color: #172033;
+
+        }
+
+        .caixa-leito p {
+
+            margin: 15px 0;
+
+            font-size: 16px;
+
+        }
+
+        .caixa-leito label {
+
+            display: block;
+
+            margin-top: 15px;
+
+            font-weight: bold;
+
+        }
+
+        .caixa-leito input {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 8px;
+
+            border: 1px solid #ccd7e5;
+
+            border-radius: 10px;
+
+            font-size: 17px;
+
+            box-sizing: border-box;
+
+        }
+
+        .btn-confirmar-leito {
+
+            width: 100%;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            margin-top: 18px;
+
+            background: #2ecc71;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+        .btn-cancelar-leito {
+
+            width: 100%;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            padding: 12px;
+
+            margin-top: 10px;
+
+            background: #e74c3c;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
         }
 
     </style>
+
 </head>
 
 <body>
@@ -300,7 +594,12 @@
 
     <h1>🩺 Painel Médico</h1>
 
-    <a href="tv.html" target="_blank">📺 Abrir Tela da TV</a>
+    <a
+        href="tv.html"
+        target="_blank"
+    >
+        📺 Abrir Tela da TV
+    </a>
 
     <div class="consultorio-input">
 
@@ -317,9 +616,14 @@
 
     </div>
 
-    <h2>🏥 👥 Pacientes aguardando atendimento</h2>
+    <h2>
+        🏥 👥 Pacientes aguardando atendimento
+    </h2>
 
-    <div id="triagens" class="lista-pacientes">
+    <div
+        id="triagens"
+        class="lista-pacientes"
+    >
 
         <div class="mensagem">
             ⏳ Carregando pacientes...
@@ -330,12 +634,21 @@
 
     <!-- LISTA DE PACIENTES INTERNADOS -->
 
-    <div id="lista-internados" class="lista-internados">
+    <div
+        id="lista-internados"
+        class="lista-internados"
+    >
 
-        <h2>🏥 Pacientes Internados</h2>
+        <h2>
+            🏥 Pacientes Internados
+        </h2>
 
         <div id="pacientes-internados">
-            <div class="mensagem">⏳ Carregando pacientes internados...</div>
+
+            <div class="mensagem">
+                ⏳ Carregando pacientes internados...
+            </div>
+
         </div>
 
         <button
@@ -351,13 +664,18 @@
 
     <div class="consulta-area">
 
-        <h2>🏥 🩺 Consulta</h2>
+        <h2>
+            🏥 🩺 Consulta
+        </h2>
 
         <label for="paciente">
             <strong>Paciente:</strong>
         </label>
 
-        <select id="paciente" class="select-paciente">
+        <select
+            id="paciente"
+            class="select-paciente"
+        >
 
             <option value="">
                 Selecione um paciente
@@ -368,13 +686,21 @@
 
         <!-- FORMULÁRIO DE ALTA -->
 
-        <div id="form-alta" class="form-alta">
+        <div
+            id="form-alta"
+            class="form-alta"
+        >
 
-            <h3>🟢 Formulário de Alta</h3>
+            <h3>
+                🟢 Formulário de Alta
+            </h3>
 
             <p>
+
                 <strong>Paciente:</strong>
+
                 <span id="nome-alta"></span>
+
             </p>
 
             <label for="tipo-alta">
@@ -401,7 +727,6 @@
 
             </select>
 
-
             <label for="motivo-alta">
                 Motivo da alta:
             </label>
@@ -412,7 +737,6 @@
                 placeholder="Digite o motivo da alta"
             >
 
-
             <label for="orientacoes-alta">
                 Orientações ao paciente:
             </label>
@@ -422,7 +746,6 @@
                 placeholder="Digite as orientações para o paciente"
             ></textarea>
 
-
             <label for="observacoes-alta">
                 Observações:
             </label>
@@ -431,7 +754,6 @@
                 id="observacoes-alta"
                 placeholder="Digite outras observações"
             ></textarea>
-
 
             <button
                 class="btn-confirmar-alta"
@@ -452,16 +774,13 @@
         </div>
 
 
-        <!-- MENSAGEM DE ALTA -->
-
-        <div id="alta-sucesso" class="alta-sucesso">
-
+        <div
+            id="alta-sucesso"
+            class="alta-sucesso"
+        >
             ✅ Alta registrada com sucesso!
-
         </div>
 
-
-        <!-- BOTÃO PDF -->
 
         <button
             id="btn-pdf"
@@ -520,33 +839,101 @@
 </div>
 
 
+<!-- =================================
+     JANELA PARA INFORMAR O LEITO
+================================= -->
+
+<div
+    id="modal-leito"
+    class="modal-leito"
+>
+
+    <div class="caixa-leito">
+
+        <h2>
+            🏥 Internar Paciente
+        </h2>
+
+        <p>
+
+            <strong>Paciente:</strong>
+
+            <span
+                id="nome-paciente-leito"
+            ></span>
+
+        </p>
+
+        <label for="numero-leito">
+            🛏️ Número do leito:
+        </label>
+
+        <input
+            type="text"
+            id="numero-leito"
+            placeholder="Digite o número do leito"
+            autocomplete="off"
+        >
+
+        <button
+            type="button"
+            class="btn-confirmar-leito"
+            onclick="confirmarInternacao()"
+        >
+            ✅ Confirmar Internação
+        </button>
+
+        <button
+            type="button"
+            class="btn-cancelar-leito"
+            onclick="cancelarInternacao()"
+        >
+            ❌ Cancelar
+        </button>
+
+    </div>
+
+</div>
+
+
 <script>
 
 const API = "";
 
 let triagensCarregadas = [];
+
 let pacienteSelecionado = "";
+
 let altaConfirmada = false;
 
-/* URL do PDF gerado pelo servidor */
-let pdfDownloadUrl = "";
+let pacienteParaInternar = null;
 
 
-/* CARREGAR PACIENTES */
+/* ===============================
+   CARREGAR PACIENTES
+================================ */
 
 async function carregar() {
 
-    const div = document.getElementById("triagens");
+    const div =
+        document.getElementById(
+            "triagens"
+        );
 
     try {
 
         const resposta =
-            await fetch(API + "/triagens?_" + Date.now());
+            await fetch(
+                API +
+                "/triagens?_" +
+                Date.now()
+            );
 
         if (!resposta.ok) {
 
             throw new Error(
-                "Erro HTTP " + resposta.status
+                "Erro HTTP " +
+                resposta.status
             );
 
         }
@@ -555,7 +942,9 @@ async function carregar() {
             await resposta.json();
 
         triagensCarregadas =
-            Array.isArray(dados) ? dados : [];
+            Array.isArray(dados)
+                ? dados
+                : [];
 
         renderizarPacientes();
 
@@ -599,23 +988,30 @@ async function carregar() {
 }
 
 
-/* MOSTRAR PACIENTES */
+/* ===============================
+   MOSTRAR PACIENTES
+================================ */
 
 function renderizarPacientes() {
 
     const div =
-        document.getElementById("triagens");
+        document.getElementById(
+            "triagens"
+        );
 
     const select =
-        document.getElementById("paciente");
+        document.getElementById(
+            "paciente"
+        );
 
     div.innerHTML = "";
 
     select.innerHTML =
         '<option value="">Selecione um paciente</option>';
 
-
-    if (triagensCarregadas.length === 0) {
+    if (
+        triagensCarregadas.length === 0
+    ) {
 
         div.innerHTML = `
 
@@ -631,32 +1027,37 @@ function renderizarPacientes() {
 
     }
 
-
     triagensCarregadas.forEach(
         (p, index) => {
 
         const nome =
-            p.nome || "Paciente sem nome";
+            p.nome ||
+            "Paciente sem nome";
 
-
-        /* SELECT */
 
         const option =
-            document.createElement("option");
+            document.createElement(
+                "option"
+            );
 
-        option.value = nome;
+        option.value =
+            nome;
 
-        option.textContent = nome;
+        option.textContent =
+            nome;
 
-        option.dataset.index = index;
+        option.dataset.index =
+            index;
 
-        select.appendChild(option);
+        select.appendChild(
+            option
+        );
 
-
-        /* CARD */
 
         const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         card.className =
             "paciente-card";
@@ -671,7 +1072,8 @@ function renderizarPacientes() {
             <p>
                 <strong>🩺 Sintoma:</strong>
                 ${escapeHtml(
-                    p.sintoma || "Não informado"
+                    p.sintoma ||
+                    "Não informado"
                 )}
             </p>
 
@@ -689,7 +1091,8 @@ function renderizarPacientes() {
             <p>
                 <strong>🚦 Risco:</strong>
                 ${escapeHtml(
-                    p.risco || "Não informado"
+                    p.risco ||
+                    "Não informado"
                 )}
             </p>
 
@@ -704,10 +1107,10 @@ function renderizarPacientes() {
             <p>
                 <strong>📝 Observação:</strong>
                 ${escapeHtml(
-                    p.observacao || "Nenhuma"
+                    p.observacao ||
+                    "Nenhuma"
                 )}
             </p>
-
 
             <div class="acoes-paciente">
 
@@ -718,7 +1121,6 @@ function renderizarPacientes() {
                     🩺 Atender
                 </button>
 
-
                 <button
                     class="btn-tv"
                     onclick="chamarNaTV(${index})"
@@ -726,14 +1128,12 @@ function renderizarPacientes() {
                     📺 Chamar na TV
                 </button>
 
-
                 <button
                     class="btn-alta"
                     onclick="abrirFormularioAlta(${index})"
                 >
                     🟢 Dar Alta
                 </button>
-
 
                 <button
                     class="btn-internar"
@@ -746,15 +1146,18 @@ function renderizarPacientes() {
 
         `;
 
-
-        div.appendChild(card);
+        div.appendChild(
+            card
+        );
 
     });
 
 }
 
 
-/* SELECT */
+/* ===============================
+   SELECT
+================================ */
 
 document
     .getElementById("paciente")
@@ -767,7 +1170,9 @@ document
                 this.selectedIndex
             ].dataset.index;
 
-        if (index !== undefined) {
+        if (
+            index !== undefined
+        ) {
 
             selecionar(
                 Number(index)
@@ -778,13 +1183,14 @@ document
     });
 
 
-/* SELECIONAR PACIENTE */
+/* ===============================
+   SELECIONAR PACIENTE
+================================ */
 
 function selecionar(index) {
 
     const paciente =
         triagensCarregadas[index];
-
 
     if (!paciente) {
 
@@ -796,10 +1202,8 @@ function selecionar(index) {
 
     }
 
-
     pacienteSelecionado =
         paciente.nome || "";
-
 
     const select =
         document.getElementById(
@@ -809,12 +1213,10 @@ function selecionar(index) {
     select.value =
         pacienteSelecionado;
 
-
     document.getElementById(
         "obs"
     ).value =
         paciente.observacao || "";
-
 
     if (paciente.alergia) {
 
@@ -830,29 +1232,31 @@ function selecionar(index) {
 
     }
 
-
     document
         .querySelector(
             ".consulta-area"
         )
         .scrollIntoView({
 
-            behavior: "smooth",
+            behavior:
+                "smooth",
 
-            block: "start"
+            block:
+                "start"
 
         });
 
 }
 
 
-/* ABRIR FORMULÁRIO DE ALTA */
+/* ===============================
+   FORMULÁRIO DE ALTA
+================================ */
 
 function abrirFormularioAlta(index) {
 
     const paciente =
         triagensCarregadas[index];
-
 
     if (!paciente) {
 
@@ -864,61 +1268,52 @@ function abrirFormularioAlta(index) {
 
     }
 
-
     pacienteSelecionado =
         paciente.nome || "";
-
 
     document.getElementById(
         "paciente"
     ).value =
         pacienteSelecionado;
 
-
     document.getElementById(
         "nome-alta"
     ).textContent =
         pacienteSelecionado;
-
 
     document.getElementById(
         "form-alta"
     ).style.display =
         "block";
 
-
     document.getElementById(
         "alta-sucesso"
     ).style.display =
         "none";
-
 
     document.getElementById(
         "btn-pdf"
     ).style.display =
         "none";
 
-    /* Limpa o PDF anterior */
-    pdfDownloadUrl = "";
-    altaConfirmada = false;
+    document.getElementById(
+        "form-alta"
+    ).scrollIntoView({
 
+        behavior:
+            "smooth",
 
-    document
-        .getElementById(
-            "form-alta"
-        )
-        .scrollIntoView({
+        block:
+            "start"
 
-            behavior: "smooth",
-
-            block: "start"
-
-        });
+    });
 
 }
 
 
-/* CANCELAR ALTA */
+/* ===============================
+   CANCELAR ALTA
+================================ */
 
 function cancelarAlta() {
 
@@ -930,7 +1325,9 @@ function cancelarAlta() {
 }
 
 
-/* CONFIRMAR ALTA */
+/* ===============================
+   CONFIRMAR ALTA
+================================ */
 
 async function confirmarAlta() {
 
@@ -944,30 +1341,25 @@ async function confirmarAlta() {
 
     }
 
-
     const tipoAlta =
         document.getElementById(
             "tipo-alta"
         ).value;
-
 
     const motivo =
         document.getElementById(
             "motivo-alta"
         ).value;
 
-
     const orientacoes =
         document.getElementById(
             "orientacoes-alta"
         ).value;
 
-
     const observacoes =
         document.getElementById(
             "observacoes-alta"
         ).value;
-
 
     if (!tipoAlta) {
 
@@ -979,7 +1371,6 @@ async function confirmarAlta() {
 
     }
 
-
     if (!motivo.trim()) {
 
         alert(
@@ -990,124 +1381,72 @@ async function confirmarAlta() {
 
     }
 
-
     try {
 
         const resposta =
             await fetch(
                 API + "/alta",
                 {
-                    method: "POST",
+
+                    method:
+                        "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        paciente:
-                            pacienteSelecionado,
+                            paciente:
+                                pacienteSelecionado,
 
-                        tipoAlta:
-                            tipoAlta,
+                            tipoAlta:
+                                tipoAlta,
 
-                        motivo:
-                            motivo,
+                            motivo:
+                                motivo,
 
-                        orientacoes:
-                            orientacoes,
+                            orientacoes:
+                                orientacoes,
 
-                        observacoes:
-                            observacoes
+                            observacoes:
+                                observacoes
 
-                    })
+                        })
+
                 }
             );
-
-
-        /*
-         * O SERVER.JS JÁ DEVOLVE JSON AQUI.
-         * Guardamos a resposta para pegar
-         * o endereço correto do PDF.
-         */
-
-        let resultado = {};
-
-        try {
-
-            resultado =
-                await resposta.json();
-
-        } catch (erroJson) {
-
-            throw new Error(
-                "O servidor não retornou uma resposta JSON válida."
-            );
-
-        }
-
 
         if (!resposta.ok) {
 
             throw new Error(
-                resultado.erro ||
                 "Erro HTTP " +
                 resposta.status
             );
 
         }
 
-
-        if (!resultado.sucesso) {
-
-            throw new Error(
-                resultado.erro ||
-                "Erro ao registrar a alta."
-            );
-
-        }
-
-
-        /*
-         * PEGA EXATAMENTE O DOWNLOAD
-         * ENVIADO PELO SEU SERVER.JS
-         */
-        pdfDownloadUrl =
-            resultado.download || "";
-
-
-        if (!pdfDownloadUrl) {
-
-            throw new Error(
-                "A alta foi registrada, mas o servidor não informou o PDF."
-            );
-
-        }
-
-
-        altaConfirmada = true;
-
+        altaConfirmada =
+            true;
 
         document.getElementById(
             "form-alta"
         ).style.display =
             "none";
 
-
         document.getElementById(
             "alta-sucesso"
         ).style.display =
             "block";
 
-
-        /* PDF SÓ APARECE DEPOIS DA ALTA */
-
         document.getElementById(
             "btn-pdf"
         ).style.display =
             "block";
-
 
         alert(
             "✅ Alta registrada com sucesso!"
@@ -1129,9 +1468,11 @@ async function confirmarAlta() {
 }
 
 
-/* GERAR PDF DO PACIENTE */
+/* ===============================
+   PDF
+================================ */
 
-function gerarPDFPaciente() {
+async function gerarPDFPaciente() {
 
     if (!pacienteSelecionado) {
 
@@ -1143,7 +1484,6 @@ function gerarPDFPaciente() {
 
     }
 
-
     if (!altaConfirmada) {
 
         alert(
@@ -1154,43 +1494,50 @@ function gerarPDFPaciente() {
 
     }
 
-
-    if (!pdfDownloadUrl) {
-
-        alert(
-            "❌ O PDF da alta não foi encontrado."
-        );
-
-        return;
-
-    }
-
-
     try {
 
-        /*
-         * O server.js já criou o PDF na confirmação
-         * da alta. Aqui apenas fazemos o download.
-         */
+        const resposta =
+            await fetch(
+                API +
+                "/gerar-pdf?paciente=" +
+                encodeURIComponent(
+                    pacienteSelecionado
+                )
+            );
+
+        const resultado =
+            await resposta.json();
+
+        if (!resposta.ok) {
+
+            throw new Error(
+                resultado.erro ||
+                "Erro ao gerar o PDF."
+            );
+
+        }
 
         const link =
-            document.createElement("a");
+            document.createElement(
+                "a"
+            );
 
         link.href =
-            pdfDownloadUrl;
+            resultado.url;
 
         link.download =
-            "alta_" +
-            pacienteSelecionado
-                .replace(/[^a-zA-Z0-9]/g, "_")
-                .toLowerCase() +
-            ".pdf";
+            resultado.nome ||
+            "paciente.pdf";
 
-        document.body.appendChild(link);
+        document.body.appendChild(
+            link
+        );
 
         link.click();
 
-        document.body.removeChild(link);
+        document.body.removeChild(
+            link
+        );
 
         alert(
             "✅ PDF do paciente gerado e baixado!"
@@ -1203,7 +1550,7 @@ function gerarPDFPaciente() {
         console.error(erro);
 
         alert(
-            "❌ Não foi possível baixar o PDF.\n\n" +
+            "❌ Não foi possível gerar o PDF.\n\n" +
             erro.message
         );
 
@@ -1212,129 +1559,250 @@ function gerarPDFPaciente() {
 }
 
 
-/* INTERNAR PACIENTE */
+/* ===============================
+   INTERNAR PACIENTE
+================================ */
 
-async function internarPaciente(index) {
+function internarPaciente(index) {
 
-    const paciente = triagensCarregadas[index];
+    const paciente =
+        triagensCarregadas[index];
 
     if (!paciente) {
-        alert("❌ Paciente não encontrado.");
+
+        alert(
+            "❌ Paciente não encontrado."
+        );
+
         return;
+
     }
 
-    const confirmar = confirm(
-        "🏥 Deseja internar o paciente " +
-        paciente.nome +
-        "?"
-    );
+    pacienteParaInternar =
+        paciente;
 
-    if (!confirmar) return;
+    document.getElementById(
+        "nome-paciente-leito"
+    ).textContent =
+        paciente.nome ||
+        "Paciente";
 
-    // Abre a nova aba imediatamente para evitar bloqueio do navegador.
-    const novaAba = window.open("internacao.html", "_blank");
+    document.getElementById(
+        "numero-leito"
+    ).value =
+        "";
 
-    const leito = prompt(
-        "🛏️ Digite o número do leito para " +
-        paciente.nome + ":"
-    );
+    document.getElementById(
+        "modal-leito"
+    ).style.display =
+        "flex";
 
-    if (leito === null || !String(leito).trim()) {
-        if (novaAba && !novaAba.closed) novaAba.close();
-        alert("⚠️ Informe o número do leito para realizar a internação.");
+    setTimeout(
+        () => {
+
+        document.getElementById(
+            "numero-leito"
+        ).focus();
+
+    }, 100);
+
+}
+
+
+/* ===============================
+   CONFIRMAR INTERNAÇÃO
+================================ */
+
+async function confirmarInternacao() {
+
+    if (!pacienteParaInternar) {
+
+        alert(
+            "❌ Paciente não selecionado."
+        );
+
         return;
+
+    }
+
+    const campoLeito =
+        document.getElementById(
+            "numero-leito"
+        );
+
+    const leito =
+        campoLeito.value.trim();
+
+    if (!leito) {
+
+        alert(
+            "⚠️ Informe o número do leito."
+        );
+
+        campoLeito.focus();
+
+        return;
+
     }
 
     try {
 
-        const resposta = await fetch(
-            API + "/internacao",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    paciente: paciente.nome,
-                    leito: String(leito).trim()
-                })
-            }
-        );
+        const resposta =
+            await fetch(
+                API + "/internacao",
+                {
 
-        const resultado = await resposta.json();
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            paciente:
+                                pacienteParaInternar.nome,
+
+                            leito:
+                                leito
+
+                        })
+
+                }
+            );
+
+        const resultado =
+            await resposta.json();
 
         if (!resposta.ok) {
-            if (novaAba && !novaAba.closed) novaAba.close();
+
             throw new Error(
                 resultado.erro ||
                 "Erro ao realizar a internação."
             );
+
         }
 
-        if (novaAba && !novaAba.closed) {
-            novaAba.location.href =
-                "internacao.html?paciente=" +
-                encodeURIComponent(paciente.nome) +
-                "&leito=" +
-                encodeURIComponent(String(leito).trim());
-        } else {
-            window.open(
-                "internacao.html?paciente=" +
-                encodeURIComponent(paciente.nome) +
-                "&leito=" +
-                encodeURIComponent(String(leito).trim()),
-                "_blank"
-            );
-        }
+        document.getElementById(
+            "modal-leito"
+        ).style.display =
+            "none";
+
+        alert(
+
+            "✅ Paciente internado com sucesso!\n\n" +
+
+            "👤 Paciente: " +
+            pacienteParaInternar.nome +
+
+            "\n🛏️ Leito: " +
+            leito
+
+        );
+
+        pacienteParaInternar =
+            null;
 
         await carregar();
 
-    } catch (erro) {
+        abrirListaInternados();
+
+    }
+
+    catch (erro) {
 
         console.error(erro);
 
         alert(
+
             "❌ Não foi possível realizar a internação.\n\n" +
+
             erro.message
+
         );
+
     }
+
 }
 
 
-/* ABRIR LISTA DE PACIENTES INTERNADOS */
+/* ===============================
+   CANCELAR INTERNAÇÃO
+================================ */
+
+function cancelarInternacao() {
+
+    document.getElementById(
+        "modal-leito"
+    ).style.display =
+        "none";
+
+    pacienteParaInternar =
+        null;
+
+}
+
+
+/* ===============================
+   LISTA DE INTERNADOS
+================================ */
 
 async function abrirListaInternados() {
 
     const lista =
-        document.getElementById("lista-internados");
+        document.getElementById(
+            "lista-internados"
+        );
 
     const container =
-        document.getElementById("pacientes-internados");
+        document.getElementById(
+            "pacientes-internados"
+        );
 
-    lista.style.display = "block";
+    lista.style.display =
+        "block";
 
     container.innerHTML = `
+
         <div class="mensagem">
+
             ⏳ Carregando pacientes internados...
+
         </div>
+
     `;
 
     lista.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+
+        behavior:
+            "smooth",
+
+        block:
+            "start"
+
     });
 
     try {
 
         const resposta =
             await fetch(
-                API + "/internacoes?_=" + Date.now()
+                API +
+                "/internacoes?_=" +
+                Date.now()
             );
 
         if (!resposta.ok) {
+
             throw new Error(
-                "Erro HTTP " + resposta.status
+                "Erro HTTP " +
+                resposta.status
             );
+
         }
 
         const internacoes =
@@ -1344,47 +1812,94 @@ async function abrirListaInternados() {
             !Array.isArray(internacoes) ||
             internacoes.length === 0
         ) {
+
             container.innerHTML = `
+
                 <div class="mensagem">
+
                     🏥 Nenhum paciente internado.
+
                 </div>
+
             `;
+
             return;
+
         }
 
-        container.innerHTML = "";
+        container.innerHTML =
+            "";
 
-        internacoes.forEach(internacao => {
+        internacoes.forEach(
+            internacao => {
 
             const card =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            card.className = "paciente-internado";
+            card.className =
+                "paciente-internado";
 
-            const data = internacao.createdAt
-                ? new Date(internacao.createdAt)
-                    .toLocaleString("pt-BR")
-                : "Data não informada";
+            const data =
+                internacao.createdAt
+
+                    ? new Date(
+                        internacao.createdAt
+                    ).toLocaleString(
+                        "pt-BR"
+                    )
+
+                    : "Data não informada";
 
             card.innerHTML = `
-                <strong>👤 ${escapeHtml(
-                    internacao.paciente ||
-                    "Paciente sem nome"
-                )}</strong>
-                <br>
-                <span class="status-internado">
-                    🟢 ${escapeHtml(
-                        internacao.status || "internado"
+
+                <strong>
+                    👤 ${escapeHtml(
+                        internacao.paciente ||
+                        "Paciente sem nome"
                     )}
-                </span>
+                </strong>
+
                 <br><br>
-                <small>📅 ${escapeHtml(data)}</small>
+
+                <strong>
+                    🛏️ Leito:
+                </strong>
+
+                ${escapeHtml(
+                    internacao.leito ||
+                    "Não informado"
+                )}
+
+                <br>
+
+                <span class="status-internado">
+
+                    🟢 ${escapeHtml(
+                        internacao.status ||
+                        "internado"
+                    )}
+
+                </span>
+
+                <br><br>
+
+                <small>
+                    📅 ${escapeHtml(data)}
+                </small>
+
             `;
 
-            container.appendChild(card);
+            container.appendChild(
+                card
+            );
+
         });
 
-    } catch (erro) {
+    }
+
+    catch (erro) {
 
         console.error(
             "Erro ao carregar internações:",
@@ -1392,42 +1907,57 @@ async function abrirListaInternados() {
         );
 
         container.innerHTML = `
+
             <div class="mensagem erro">
-                ❌ Não foi possível carregar os pacientes internados.
+
+                ❌ Não foi possível carregar
+                os pacientes internados.
+
                 <br><br>
-                ${escapeHtml(erro.message)}
+
+                ${escapeHtml(
+                    erro.message
+                )}
+
             </div>
+
         `;
+
     }
+
 }
 
 
-/* FECHAR LISTA DE INTERNADOS */
+/* ===============================
+   FECHAR LISTA
+================================ */
 
 function fecharListaInternados() {
 
     document.getElementById(
         "lista-internados"
-    ).style.display = "none";
+    ).style.display =
+        "none";
+
 }
 
 
-/* CHAMAR NA TV */
+/* ===============================
+   TV
+================================ */
 
 async function chamarNaTV(index) {
 
     const paciente =
         triagensCarregadas[index];
 
-
-    if (!paciente) return;
-
+    if (!paciente)
+        return;
 
     const consultorio =
         document.getElementById(
             "consultorio-num"
         ).value;
-
 
     if (!consultorio) {
 
@@ -1439,36 +1969,39 @@ async function chamarNaTV(index) {
 
     }
 
-
     try {
 
         const resposta =
             await fetch(
                 API + "/tv/chamar",
                 {
-                    method: "POST",
+
+                    method:
+                        "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        localTipo:
-                            "CONSULTÓRIO",
+                            localTipo:
+                                "CONSULTÓRIO",
 
-                        localNumero:
-                            consultorio,
+                            localNumero:
+                                consultorio,
 
-                        paciente:
-                            paciente.nome
+                            paciente:
+                                paciente.nome
 
-                    })
+                        })
 
                 }
             );
-
 
         if (!resposta.ok) {
 
@@ -1479,17 +2012,12 @@ async function chamarNaTV(index) {
 
         }
 
-
         alert(
 
             "📺 " +
-
             paciente.nome +
-
             " foi chamado para o consultório " +
-
             consultorio +
-
             "."
 
         );
@@ -1507,7 +2035,9 @@ async function chamarNaTV(index) {
 }
 
 
-/* CARREGAR MEDICAÇÕES */
+/* ===============================
+   MEDICAÇÕES
+================================ */
 
 async function carregarMedicacoes() {
 
@@ -1516,18 +2046,16 @@ async function carregarMedicacoes() {
             "medicacao"
         );
 
-
     try {
 
         const resposta =
             await fetch(
-                API + "/lista-medicacoes"
+                API +
+                "/lista-medicacoes"
             );
-
 
         const medicamentos =
             await resposta.json();
-
 
         medicamentos.forEach(
             medicamento => {
@@ -1537,14 +2065,11 @@ async function carregarMedicacoes() {
                     "option"
                 );
 
-
             option.value =
                 medicamento;
 
-
             option.textContent =
                 medicamento;
-
 
             select.appendChild(
                 option
@@ -1566,7 +2091,9 @@ async function carregarMedicacoes() {
 }
 
 
-/* SALVAR CONSULTA */
+/* ===============================
+   SALVAR CONSULTA
+================================ */
 
 async function salvar() {
 
@@ -1575,24 +2102,20 @@ async function salvar() {
             "paciente"
         ).value;
 
-
     const diagnostico =
         document.getElementById(
             "diagnostico"
         ).value;
-
 
     const medicacao =
         document.getElementById(
             "medicacao"
         ).value;
 
-
     const obs =
         document.getElementById(
             "obs"
         ).value;
-
 
     if (!paciente) {
 
@@ -1604,7 +2127,6 @@ async function salvar() {
 
     }
 
-
     if (!diagnostico) {
 
         alert(
@@ -1615,35 +2137,38 @@ async function salvar() {
 
     }
 
-
     try {
 
         const resposta =
             await fetch(
                 API + "/consulta",
                 {
-                    method: "POST",
+
+                    method:
+                        "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        paciente,
+                            paciente,
 
-                        diagnostico,
+                            diagnostico,
 
-                        medicacao,
+                            medicacao,
 
-                        obs
+                            obs
 
-                    })
+                        })
 
                 }
             );
-
 
         if (!resposta.ok) {
 
@@ -1654,41 +2179,37 @@ async function salvar() {
 
         }
 
-
         alert(
             "✅ Consulta salva com sucesso!"
         );
 
-
         document.getElementById(
             "diagnostico"
-        ).value = "";
-
+        ).value =
+            "";
 
         document.getElementById(
             "medicacao"
-        ).value = "";
-
+        ).value =
+            "";
 
         document.getElementById(
             "obs"
-        ).value = "";
-
+        ).value =
+            "";
 
         await carregar();
 
-
         document.getElementById(
             "paciente"
-        ).value = "";
+        ).value =
+            "";
 
+        pacienteSelecionado =
+            "";
 
-        pacienteSelecionado = "";
-
-        altaConfirmada = false;
-
-        pdfDownloadUrl = "";
-
+        altaConfirmada =
+            false;
 
         document.getElementById(
             "btn-pdf"
@@ -1710,11 +2231,13 @@ async function salvar() {
 }
 
 
-/* SEGURANÇA */
+/* ===============================
+   SEGURANÇA
+================================ */
 
 function escapeHtml(valor) {
 
-    return String(valor)
+    return String(valor ?? "")
 
         .replaceAll(
             "&",
@@ -1744,7 +2267,9 @@ function escapeHtml(valor) {
 }
 
 
-/* INICIAR */
+/* ===============================
+   INICIAR
+================================ */
 
 carregar();
 
@@ -1758,4 +2283,5 @@ setInterval(
 </script>
 
 </body>
+
 </html>
