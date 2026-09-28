@@ -1,1229 +1,1110 @@
-const express = require("express"); 
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const cors = require("cors");
 
-const fs = require("fs"); 
+const app = express();
 
-const path = require("path"); 
+const PORT = process.env.PORT || 3000;
 
-const cors = require("cors"); 
+app.use(express.json());
+app.use(cors());
 
- 
+// ===============================
+// FRONTEND
+// ===============================
 
-const app = express(); 
+app.use(express.static(path.join(__dirname, "../frontend")));
 
- 
+// ===============================
+// BANCO DE DADOS
+// ===============================
 
-const PORT = process.env.PORT || 3000; 
+const DB_FILE = path.join(__dirname, "db.json");
 
- 
+function readDB() {
 
-app.use(express.json()); 
+    if (!fs.existsSync(DB_FILE)) {
 
-app.use(cors()); 
+        const bancoInicial = {
+            usuarios: [],
+            pacientes: [],
+            triagens: [],
+            consultas: [],
+            altas: [],
+            internacoes: [],
+            tv_chamada: null,
+            tv_historico: []
+        };
 
- 
+        fs.writeFileSync(
+            DB_FILE,
+            JSON.stringify(bancoInicial, null, 2)
+        );
 
-// =============================== 
+        return bancoInicial;
+    }
 
-// FRONTEND 
+    const db = JSON.parse(
+        fs.readFileSync(DB_FILE, "utf8")
+    );
 
-// =============================== 
+    if (!db.usuarios) db.usuarios = [];
+    if (!db.pacientes) db.pacientes = [];
+    if (!db.triagens) db.triagens = [];
+    if (!db.consultas) db.consultas = [];
+    if (!db.altas) db.altas = [];
+    if (!db.internacoes) db.internacoes = [];
+    if (!db.tv_chamada) db.tv_chamada = null;
+    if (!db.tv_historico) db.tv_historico = [];
 
- 
+    return db;
+}
 
-app.use(express.static(path.join(__dirname, "../frontend"))); 
+function writeDB(data) {
 
- 
+    fs.writeFileSync(
+        DB_FILE,
+        JSON.stringify(data, null, 2)
+    );
+}
 
-// =============================== 
+// ===============================
+// PASTA DOS PDFs
+// ===============================
 
-// BANCO DE DADOS 
+const PDF_FOLDER = path.join(__dirname, "pdfs");
 
-// =============================== 
+if (!fs.existsSync(PDF_FOLDER)) {
+    fs.mkdirSync(PDF_FOLDER, {
+        recursive: true
+    });
+}
 
- 
+app.use(
+    "/arquivos-pdf",
+    express.static(PDF_FOLDER)
+);
 
-const DB_FILE = path.join(__dirname, "db.json"); 
+// ===============================
+// LOGIN
+// ===============================
 
- 
+app.post("/login", (req, res) => {
 
-function readDB() { 
+    const db = readDB();
 
-    if (!fs.existsSync(DB_FILE)) { 
+    const user = db.usuarios.find(
+        u =>
+            u.usuario === req.body.usuario &&
+            u.senha === req.body.senha
+    );
 
-        const bancoInicial = { 
+    if (!user) {
 
-            usuarios: [], 
+        return res.status(401).json({
+            erro: "Login inválido"
+        });
 
-            pacientes: [], 
+    }
 
-            triagens: [], 
+    res.json(user);
+});
 
-            consultas: [], 
+// ===============================
+// ATENDIMENTO
+// ===============================
 
-            altas: [], 
+app.post("/atendimento", (req, res) => {
 
-            tv_chamada: null, 
+    const db = readDB();
 
-            tv_historico: [] 
+    const paciente = {
 
-        }; 
+        id: Date.now(),
 
- 
+        nome: req.body.nome,
 
-        fs.writeFileSync( 
+        cpf: req.body.cpf,
 
-            DB_FILE, 
+        tipo: req.body.tipo,
 
-            JSON.stringify(bancoInicial, null, 2) 
+        status: "triagem",
 
-        ); 
+        createdAt: new Date()
 
- 
+    };
 
-        return bancoInicial; 
+    db.pacientes.push(paciente);
 
-    } 
+    writeDB(db);
 
- 
+    res.json(paciente);
+});
 
-    const db = JSON.parse(fs.readFileSync(DB_FILE, "utf8")); 
+// ===============================
+// LISTAR PACIENTES
+// ===============================
 
- 
+app.get("/pacientes", (req, res) => {
 
-    if (!db.usuarios) db.usuarios = []; 
+    const db = readDB();
 
-    if (!db.pacientes) db.pacientes = []; 
+    res.json(db.pacientes);
+});
 
-    if (!db.triagens) db.triagens = []; 
+// ===============================
+// TRIAGEM
+// ===============================
 
-    if (!db.consultas) db.consultas = []; 
+app.post("/triagem", (req, res) => {
 
-    if (!db.altas) db.altas = []; 
+    const db = readDB();
 
-    if (!db.tv_chamada) db.tv_chamada = null; 
+    let risco = req.body.risco;
 
-    if (!db.tv_historico) db.tv_historico = []; 
+    if (req.body.temperatura >= 39) {
 
- 
+        risco = "vermelho";
 
-    return db; 
+    } else if (req.body.temperatura >= 38) {
 
-} 
+        risco = "amarelo";
 
- 
+    } else if (!risco) {
 
-function writeDB(data) { 
+        risco = "verde";
 
-    fs.writeFileSync( 
+    }
 
-        DB_FILE, 
+    const triagem = {
 
-        JSON.stringify(data, null, 2) 
+        id: Date.now(),
 
-    ); 
+        nome: req.body.nome,
 
-} 
+        sintoma: req.body.sintoma,
 
- 
+        temperatura: req.body.temperatura,
 
-// =============================== 
+        alergia: req.body.alergia,
 
-// PASTA DOS PDFs 
+        observacao: req.body.observacao,
 
-// =============================== 
+        risco: risco,
 
- 
+        status: "aguardando_medico",
 
-const PDF_FOLDER = path.join(__dirname, "pdfs"); 
+        createdAt: new Date()
 
- 
+    };
 
-if (!fs.existsSync(PDF_FOLDER)) { 
+    db.triagens.push(triagem);
 
-    fs.mkdirSync(PDF_FOLDER, { recursive: true }); 
+    writeDB(db);
 
-} 
+    res.json(triagem);
+});
 
- 
+// ===============================
+// LISTAR TRIAGENS
+// ===============================
 
-app.use( 
+app.get("/triagens", (req, res) => {
 
-    "/arquivos-pdf", 
+    const db = readDB();
 
-    express.static(PDF_FOLDER) 
+    res.json(db.triagens);
+});
 
-); 
+// ===============================
+// INTERNAÇÃO
+// ===============================
 
- 
+app.post("/internacao", (req, res) => {
 
-// =============================== 
+    try {
 
-// LOGIN 
+        const db = readDB();
 
-// =============================== 
+        const pacienteNome =
+            String(req.body.paciente || "").trim();
 
- 
+        const leito =
+            String(req.body.leito || "").trim();
 
-app.post("/login", (req, res) => { 
+        if (!pacienteNome) {
 
-    const db = readDB(); 
+            return res.status(400).json({
+                erro: "Paciente não informado."
+            });
 
- 
+        }
 
-    const user = db.usuarios.find( 
+        if (!leito) {
 
-        u => 
+            return res.status(400).json({
+                erro: "Número do leito não informado."
+            });
 
-            u.usuario === req.body.usuario && 
+        }
 
-            u.senha === req.body.senha 
+        if (!db.internacoes) {
+            db.internacoes = [];
+        }
 
-    ); 
+        // Verifica se o leito já está ocupado
+        const leitoOcupado =
+            db.internacoes.find(
+                internacao =>
+                    String(internacao.leito).toLowerCase() ===
+                    leito.toLowerCase() &&
+                    internacao.status === "internado"
+            );
 
- 
+        if (leitoOcupado) {
 
-    if (!user) { 
+            return res.status(400).json({
+                erro:
+                    "Este leito já está ocupado pelo paciente " +
+                    leitoOcupado.paciente +
+                    "."
+            });
 
-        return res.status(401).json({ 
+        }
 
-            erro: "Login inválido" 
+        // Verifica se o paciente já está internado
+        const pacienteJaInternado =
+            db.internacoes.find(
+                internacao =>
+                    String(internacao.paciente).toLowerCase() ===
+                    pacienteNome.toLowerCase() &&
+                    internacao.status === "internado"
+            );
 
-        }); 
+        if (pacienteJaInternado) {
 
-    } 
+            return res.status(400).json({
+                erro:
+                    "Este paciente já está internado no leito " +
+                    pacienteJaInternado.leito +
+                    "."
+            });
 
- 
+        }
 
-    res.json(user); 
+        const paciente =
+            db.pacientes.find(
+                p =>
+                    String(p.nome).toLowerCase() ===
+                    pacienteNome.toLowerCase()
+            );
 
-}); 
+        const internacao = {
 
- 
+            id: Date.now(),
 
-// =============================== 
+            paciente:
+                pacienteNome,
 
-// ATENDIMENTO 
+            pacienteId:
+                paciente ? paciente.id : null,
 
-// =============================== 
+            leito:
+                leito,
 
- 
+            status:
+                "internado",
 
-app.post("/atendimento", (req, res) => { 
+            createdAt:
+                new Date()
 
-    const db = readDB(); 
+        };
 
- 
+        db.internacoes.push(internacao);
 
-    const paciente = { 
+        // Atualiza paciente
+        if (paciente) {
 
-        id: Date.now(), 
+            paciente.status =
+                "internado";
 
-        nome: req.body.nome, 
+        }
 
-        cpf: req.body.cpf, 
+        // Atualiza triagem
+        db.triagens.forEach(triagem => {
 
-        tipo: req.body.tipo, 
+            if (
+                String(triagem.nome).toLowerCase() ===
+                pacienteNome.toLowerCase()
+            ) {
 
-        status: "triagem", 
+                triagem.status =
+                    "internado";
 
-        createdAt: new Date() 
+            }
 
-    }; 
+        });
 
- 
+        writeDB(db);
 
-    db.pacientes.push(paciente); 
+        res.json({
 
- 
+            sucesso: true,
 
-    writeDB(db); 
+            mensagem:
+                "Paciente internado com sucesso.",
 
- 
+            internacao:
+                internacao
 
-    res.json(paciente); 
+        });
 
-}); 
+    } catch (erro) {
 
- 
+        console.error(
+            "ERRO NA INTERNAÇÃO:",
+            erro
+        );
 
-// =============================== 
+        res.status(500).json({
 
-// LISTAR PACIENTES 
+            erro:
+                "Erro ao realizar a internação."
 
-// =============================== 
+        });
 
- 
+    }
 
-app.get("/pacientes", (req, res) => { 
+});
 
-    const db = readDB(); 
+// ===============================
+// LISTAR INTERNAÇÕES
+// ===============================
 
- 
+app.get("/internacoes", (req, res) => {
 
-    res.json(db.pacientes); 
+    try {
 
-}); 
+        const db = readDB();
 
- 
+        if (!db.internacoes) {
+            db.internacoes = [];
+        }
 
-// =============================== 
+        res.json(db.internacoes);
 
-// TRIAGEM 
+    } catch (erro) {
 
-// =============================== 
+        console.error(
+            "ERRO AO LISTAR INTERNAÇÕES:",
+            erro
+        );
 
- 
+        res.status(500).json({
 
-app.post("/triagem", (req, res) => { 
+            erro:
+                "Erro ao carregar as internações."
 
-    const db = readDB(); 
+        });
 
- 
+    }
 
-    let risco = req.body.risco; 
+});
 
- 
+// ===============================
+// TV
+// ===============================
 
-    if (req.body.temperatura >= 39) { 
+app.post("/tv/chamar", (req, res) => {
 
-        risco = "vermelho"; 
+    const db = readDB();
 
-    } else if (req.body.temperatura >= 38) { 
+    const chamada = {
 
-        risco = "amarelo"; 
+        id:
+            Date.now().toString(),
 
-    } else if (!risco) { 
+        localTipo:
+            req.body.localTipo,
 
-        risco = "verde"; 
+        localNumero:
+            req.body.localNumero,
 
-    } 
+        paciente:
+            req.body.paciente,
 
- 
+        hora:
+            new Date().toLocaleTimeString(
+                "pt-BR",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            )
 
-    const triagem = { 
+    };
 
-        id: Date.now(), 
+    db.tv_chamada =
+        chamada;
 
-        nome: req.body.nome, 
+    db.tv_historico.unshift(
+        chamada
+    );
 
-        sintoma: req.body.sintoma, 
+    if (db.tv_historico.length > 5) {
+        db.tv_historico.pop();
+    }
 
-        temperatura: req.body.temperatura, 
+    writeDB(db);
 
-        alergia: req.body.alergia, 
+    res.json(chamada);
+});
 
-        observacao: req.body.observacao, 
+app.get("/tv/chamada", (req, res) => {
 
-        risco: risco, 
+    const db = readDB();
 
-        status: "aguardando_medico", 
+    res.json({
 
-        createdAt: new Date() 
+        chamada:
+            db.tv_chamada,
 
-    }; 
+        historico:
+            db.tv_historico
 
- 
+    });
+});
 
-    db.triagens.push(triagem); 
+// ===============================
+// LISTA DE MEDICAÇÕES
+// ===============================
 
- 
+app.get("/lista-medicacoes", (req, res) => {
 
-    writeDB(db); 
+    res.json([
 
- 
+        "Dipirona",
+        "Paracetamol",
+        "Ibuprofeno",
+        "Amoxicilina",
+        "Azitromicina",
+        "Loratadina",
+        "Omeprazol",
+        "Buscopan",
+        "Dramin",
+        "Soro fisiológico"
 
-    res.json(triagem); 
+    ]);
+});
 
-}); 
+// ===============================
+// CONSULTA
+// ===============================
 
- 
+app.post("/consulta", (req, res) => {
 
-// =============================== 
+    const db = readDB();
 
-// LISTAR TRIAGENS 
+    const consulta = {
 
-// =============================== 
+        id:
+            Date.now(),
 
- 
+        paciente:
+            req.body.paciente,
 
-app.get("/triagens", (req, res) => { 
+        diagnostico:
+            req.body.diagnostico,
 
-    const db = readDB(); 
+        medicacao:
+            req.body.medicacao,
 
- 
+        obs:
+            req.body.obs,
 
-    res.json(db.triagens); 
+        createdAt:
+            new Date()
 
-}); 
+    };
 
- 
+    db.consultas.push(
+        consulta
+    );
 
-// =============================== 
+    writeDB(db);
 
-// TV 
+    res.json(consulta);
+});
 
-// =============================== 
+// ===============================
+// MEDICAÇÕES
+// ===============================
 
- 
+app.get("/medicacoes", (req, res) => {
 
-app.post("/tv/chamar", (req, res) => { 
+    const db = readDB();
 
-    const db = readDB(); 
+    res.json(db.consultas);
+});
 
- 
+// ===============================
+// FUNÇÃO PARA LIMPAR NOME
+// ===============================
 
-    const chamada = { 
+function limparNome(nome) {
 
-        id: Date.now().toString(), 
+    return String(nome || "paciente")
 
-        localTipo: req.body.localTipo, 
+        .normalize("NFD")
 
-        localNumero: req.body.localNumero, 
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
 
-        paciente: req.body.paciente, 
+        .replace(
+            /[^a-zA-Z0-9]/g,
+            "_"
+        )
 
-        hora: new Date().toLocaleTimeString( 
+        .replace(
+            /_+/g,
+            "_"
+        )
 
-            "pt-BR", 
+        .replace(
+            /^_+|_+$/g,
+            ""
+        )
 
-            { 
+        .toLowerCase();
+}
 
-                hour: "2-digit", 
+// ===============================
+// CRIAR PDF
+// ===============================
 
-                minute: "2-digit" 
+function criarPDF(paciente, alta) {
 
-            } 
+    const nomeArquivo =
+        `alta_${limparNome(paciente.nome)}_${paciente.id}.pdf`;
 
-        ) 
+    const caminhoArquivo =
+        path.join(
+            PDF_FOLDER,
+            nomeArquivo
+        );
 
-    }; 
+    const nome =
+        paciente.nome ||
+        "Não informado";
 
- 
+    const cpf =
+        paciente.cpf ||
+        "Não informado";
 
-    db.tv_chamada = chamada; 
+    const tipo =
+        paciente.tipo ||
+        "Não informado";
 
- 
+    const motivo =
+        alta.motivo ||
+        "Alta hospitalar";
 
-    db.tv_historico.unshift(chamada); 
+    const observacoes =
+        alta.observacoes ||
+        "Nenhuma observação.";
 
- 
+    const data =
+        new Date().toLocaleString(
+            "pt-BR"
+        );
 
-    if (db.tv_historico.length > 5) { 
+    function escapar(texto) {
 
-        db.tv_historico.pop(); 
+        return String(texto)
 
-    } 
+            .replace(
+                /\\/g,
+                "\\\\"
+            )
 
- 
+            .replace(
+                /\(/g,
+                "\\("
+            )
 
-    writeDB(db); 
+            .replace(
+                /\)/g,
+                "\\)"
+            );
+    }
 
- 
+    const linhas = [
 
-    res.json(chamada); 
+        "HOSPITAL PRO",
 
-}); 
+        "DOCUMENTO DE ALTA DO PACIENTE",
 
- 
+        "",
 
-app.get("/tv/chamada", (req, res) => { 
+        `Paciente: ${nome}`,
 
-    const db = readDB(); 
+        `CPF: ${cpf}`,
 
- 
+        `Tipo: ${tipo}`,
 
-    res.json({ 
+        "",
 
-        chamada: db.tv_chamada, 
+        `Data da alta: ${data}`,
 
-        historico: db.tv_historico 
+        `Motivo: ${motivo}`,
 
-    }); 
+        "",
 
-}); 
+        `Observacoes: ${observacoes}`,
 
- 
+        "",
 
-// =============================== 
+        "Alta registrada pelo sistema hospitalar."
 
-// LISTA DE MEDICAÇÕES 
+    ];
 
-// =============================== 
+    let conteudo =
+        "BT\n";
 
- 
+    conteudo +=
+        "/F1 12 Tf\n";
 
-app.get("/lista-medicacoes", (req, res) => { 
+    conteudo +=
+        "50 750 Td\n";
 
-    res.json([ 
+    linhas.forEach(
+        (linha, index) => {
 
-        "Dipirona", 
+        if (index === 0) {
 
-        "Paracetamol", 
+            conteudo +=
+                "/F1 18 Tf\n";
 
-        "Ibuprofeno", 
+        } else if (index === 1) {
 
-        "Amoxicilina", 
+            conteudo +=
+                "/F1 14 Tf\n";
 
-        "Azitromicina", 
+        } else {
 
-        "Loratadina", 
+            conteudo +=
+                "/F1 12 Tf\n";
 
-        "Omeprazol", 
+        }
 
-        "Buscopan", 
+        conteudo +=
+            `(${escapar(linha)}) Tj\n`;
 
-        "Dramin", 
+        conteudo +=
+            "0 -25 Td\n";
 
-        "Soro fisiológico" 
+    });
 
-    ]); 
+    conteudo +=
+        "ET";
 
-}); 
+    const objetos = [];
 
- 
+    objetos.push(
+        "<< /Type /Catalog /Pages 2 0 R >>"
+    );
 
-// =============================== 
+    objetos.push(
+        "<< /Type /Pages /Kids [3 0 R] /Count 1 >>"
+    );
 
-// CONSULTA 
+    objetos.push(
+        "<< /Type /Page /Parent 2 0 R " +
+        "/MediaBox [0 0 595 842] " +
+        "/Contents 4 0 R " +
+        "/Resources << /Font << /F1 5 0 R >> >> >>"
+    );
 
-// =============================== 
+    objetos.push(
+        `<< /Length ${Buffer.byteLength(
+            conteudo,
+            "utf8"
+        )} >>\nstream\n${conteudo}\nendstream`
+    );
 
- 
+    objetos.push(
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"
+    );
 
-app.post("/consulta", (req, res) => { 
+    let pdf =
+        "%PDF-1.4\n";
 
-    const db = readDB(); 
+    const offsets = [];
 
- 
+    objetos.forEach(
+        (objeto, index) => {
 
-    const consulta = { 
+        offsets[index + 1] =
+            Buffer.byteLength(
+                pdf,
+                "utf8"
+            );
 
-        id: Date.now(), 
+        pdf +=
+            `${index + 1} 0 obj\n`;
 
-        paciente: req.body.paciente, 
+        pdf +=
+            objeto;
 
-        diagnostico: req.body.diagnostico, 
+        pdf +=
+            "\nendobj\n";
 
-        medicacao: req.body.medicacao, 
+    });
 
-        obs: req.body.obs, 
+    const inicioXref =
+        Buffer.byteLength(
+            pdf,
+            "utf8"
+        );
 
-        createdAt: new Date() 
+    pdf +=
+        "xref\n";
 
-    }; 
+    pdf +=
+        `0 ${objetos.length + 1}\n`;
 
- 
+    pdf +=
+        "0000000000 65535 f \n";
 
-    db.consultas.push(consulta); 
+    for (
+        let i = 1;
+        i <= objetos.length;
+        i++
+    ) {
 
- 
+        pdf +=
+            String(
+                offsets[i]
+            ).padStart(
+                10,
+                "0"
+            ) +
+            " 00000 n \n";
+    }
 
-    writeDB(db); 
+    pdf +=
+        "trailer\n";
 
- 
+    pdf +=
+        `<< /Size ${objetos.length + 1} /Root 1 0 R >>\n`;
 
-    res.json(consulta); 
+    pdf +=
+        "startxref\n";
 
-}); 
+    pdf +=
+        `${inicioXref}\n`;
 
- 
+    pdf +=
+        "%%EOF";
 
-// =============================== 
+    fs.writeFileSync(
+        caminhoArquivo,
+        Buffer.from(
+            pdf,
+            "utf8"
+        )
+    );
 
-// MEDICAÇÕES 
+    return nomeArquivo;
+}
 
-// =============================== 
+// ===============================
+// REGISTRAR ALTA + GERAR PDF
+// ===============================
 
- 
+app.post("/alta", (req, res) => {
 
-app.get("/medicacoes", (req, res) => { 
+    try {
 
-    const db = readDB(); 
+        const db =
+            readDB();
 
- 
+        const nomePaciente =
+            req.body.paciente ||
+            req.body.nome;
 
-    res.json(db.consultas); 
+        if (!nomePaciente) {
 
-}); 
+            return res.status(400).json({
 
- 
+                erro:
+                    "Paciente não informado."
 
-// =============================== 
+            });
 
-// FUNÇÃO PARA LIMPAR NOME 
+        }
 
-// =============================== 
+        const paciente =
+            db.pacientes.find(
+                p =>
+                    String(p.nome).toLowerCase() ===
+                    String(nomePaciente).toLowerCase()
+            );
 
- 
+        if (!paciente) {
 
-function limparNome(nome) { 
+            return res.status(404).json({
 
-    return String(nome || "paciente") 
+                erro:
+                    "Paciente não encontrado."
 
-        .normalize("NFD") 
+            });
 
-        .replace(/[\u0300-\u036f]/g, "") 
+        }
 
-        .replace(/[^a-zA-Z0-9]/g, "_") 
+        const alta = {
 
-        .replace(/_+/g, "_") 
+            id:
+                Date.now(),
 
-        .replace(/^_+|_+$/g, "") 
+            pacienteId:
+                paciente.id,
 
-        .toLowerCase(); 
+            paciente:
+                paciente.nome,
 
-} 
+            motivo:
+                req.body.motivo ||
+                req.body.tipoAlta ||
+                "Alta hospitalar",
 
- 
+            observacoes:
+                req.body.observacoes ||
+                req.body.obs ||
+                "Nenhuma observação.",
 
-// =============================== 
+            data:
+                new Date()
 
-// CRIAR PDF 
+        };
 
-// =============================== 
+        db.altas.push(
+            alta
+        );
 
- 
+        paciente.status =
+            "alta";
 
-function criarPDF(paciente, alta) { 
+        db.triagens.forEach(
+            triagem => {
 
- 
+            if (
+                String(triagem.nome).toLowerCase() ===
+                String(paciente.nome).toLowerCase()
+            ) {
 
-    const nomeArquivo = 
+                triagem.status =
+                    "alta";
 
-        `alta_${limparNome(paciente.nome)}_${paciente.id}.pdf`; 
+            }
 
- 
+        });
 
-    const caminhoArquivo = 
+        writeDB(db);
 
-        path.join(PDF_FOLDER, nomeArquivo); 
+        const nomeArquivo =
+            criarPDF(
+                paciente,
+                alta
+            );
 
- 
+        res.json({
 
-    const nome = paciente.nome || "Não informado"; 
+            sucesso:
+                true,
 
-    const cpf = paciente.cpf || "Não informado"; 
+            mensagem:
+                "Alta registrada com sucesso.",
 
-    const tipo = paciente.tipo || "Não informado"; 
+            arquivo:
+                nomeArquivo,
 
- 
+            download:
+                `/baixar-alta/${encodeURIComponent(nomeArquivo)}`
 
-    const motivo = 
+        });
 
-        alta.motivo || 
+    } catch (erro) {
 
-        "Alta hospitalar"; 
+        console.error(
+            "ERRO NA ALTA:",
+            erro
+        );
 
- 
+        res.status(500).json({
 
-    const observacoes = 
+            erro:
+                "Erro ao registrar a alta."
 
-        alta.observacoes || 
+        });
 
-        "Nenhuma observação."; 
+    }
+});
 
- 
+// ===============================
+// BAIXAR PDF DA ALTA
+// ===============================
 
-    const data = 
+app.get(
+    "/baixar-alta/:arquivo",
+    (req, res) => {
 
-        new Date().toLocaleString("pt-BR"); 
+    const arquivo =
+        path.basename(
+            req.params.arquivo
+        );
 
- 
+    const caminho =
+        path.join(
+            PDF_FOLDER,
+            arquivo
+        );
 
-    function escapar(texto) { 
+    if (!fs.existsSync(caminho)) {
 
-        return String(texto) 
+        return res.status(404).send(
+            "PDF não encontrado."
+        );
 
-            .replace(/\\/g, "\\\\") 
+    }
 
-            .replace(/\(/g, "\\(") 
+    res.download(
+        caminho,
+        arquivo
+    );
+});
 
-            .replace(/\)/g, "\\)"); 
+// ===============================
+// LISTAR PDFs DO PACIENTE
+// ===============================
 
-    } 
+app.get("/pdfs", (req, res) => {
 
- 
+    const paciente =
+        req.query.paciente;
 
-    const linhas = [ 
+    if (!fs.existsSync(PDF_FOLDER)) {
 
-        "HOSPITAL PRO", 
+        return res.json([]);
 
-        "DOCUMENTO DE ALTA DO PACIENTE", 
+    }
 
-        "", 
+    const arquivos =
+        fs.readdirSync(
+            PDF_FOLDER
+        )
+        .filter(
+            arquivo =>
+                arquivo
+                    .toLowerCase()
+                    .endsWith(".pdf")
+        );
 
-        `Paciente: ${nome}`, 
+    if (!paciente) {
 
-        `CPF: ${cpf}`, 
+        return res.json(
 
-        `Tipo: ${tipo}`, 
+            arquivos.map(
+                nome => ({
 
-        "", 
+                nome:
+                    nome,
 
-        `Data da alta: ${data}`, 
+                url:
+                    `/baixar-alta/${encodeURIComponent(nome)}`
 
-        `Motivo: ${motivo}`, 
+            }))
 
-        "", 
+        );
 
-        `Observacoes: ${observacoes}`, 
+    }
 
-        "", 
+    const nomeLimpo =
+        limparNome(
+            paciente
+        );
 
-        "Alta registrada pelo sistema hospitalar." 
+    const encontrados =
+        arquivos.filter(
+            arquivo =>
+                arquivo
+                    .toLowerCase()
+                    .includes(nomeLimpo)
+        );
 
-    ]; 
+    res.json(
 
- 
+        encontrados.map(
+            nome => ({
 
-    let conteudo = "BT\n"; 
+            nome:
+                nome,
 
-    conteudo += "/F1 12 Tf\n"; 
+            url:
+                `/baixar-alta/${encodeURIComponent(nome)}`
 
-    conteudo += "50 750 Td\n"; 
+        }))
 
- 
+    );
 
-    linhas.forEach((linha, index) => { 
+});
 
- 
+// ===============================
+// LISTAR ALTAS
+// ===============================
 
-        if (index === 0) { 
+app.get("/altas", (req, res) => {
 
-            conteudo += "/F1 18 Tf\n"; 
+    const db =
+        readDB();
 
-        } else if (index === 1) { 
+    res.json(
+        db.altas
+    );
+});
 
-            conteudo += "/F1 14 Tf\n"; 
+// ===============================
+// TESTE
+// ===============================
 
-        } else { 
+app.get("/teste", (req, res) => {
 
-            conteudo += "/F1 12 Tf\n"; 
+    res.json({
 
-        } 
+        sucesso:
+            true,
 
- 
+        mensagem:
+            "Servidor funcionando!"
 
-        conteudo += `(${escapar(linha)}) Tj\n`; 
+    });
 
-        conteudo += "0 -25 Td\n"; 
+});
 
-    }); 
+// ===============================
+// INICIAR SERVIDOR
+// ===============================
 
- 
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
 
-    conteudo += "ET"; 
-
- 
-
-    const objetos = []; 
-
- 
-
-    objetos.push( 
-
-        "<< /Type /Catalog /Pages 2 0 R >>" 
-
-    ); 
-
- 
-
-    objetos.push( 
-
-        "<< /Type /Pages /Kids [3 0 R] /Count 1 >>" 
-
-    ); 
-
- 
-
-    objetos.push( 
-
-        "<< /Type /Page /Parent 2 0 R " + 
-
-        "/MediaBox [0 0 595 842] " + 
-
-        "/Contents 4 0 R " + 
-
-        "/Resources << /Font << /F1 5 0 R >> >> >>" 
-
-    ); 
-
- 
-
-    objetos.push( 
-
-        `<< /Length ${Buffer.byteLength(conteudo, "utf8")} >>\nstream\n${conteudo}\nendstream` 
-
-    ); 
-
- 
-
-    objetos.push( 
-
-        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>" 
-
-    ); 
-
- 
-
-    let pdf = "%PDF-1.4\n"; 
-
- 
-
-    const offsets = []; 
-
- 
-
-    objetos.forEach((objeto, index) => { 
-
- 
-
-        offsets[index + 1] = 
-
-            Buffer.byteLength(pdf, "utf8"); 
-
- 
-
-        pdf += `${index + 1} 0 obj\n`; 
-
-        pdf += objeto; 
-
-        pdf += "\nendobj\n"; 
-
-    }); 
-
- 
-
-    const inicioXref = 
-
-        Buffer.byteLength(pdf, "utf8"); 
-
- 
-
-    pdf += "xref\n"; 
-
-    pdf += `0 ${objetos.length + 1}\n`; 
-
-    pdf += "0000000000 65535 f \n"; 
-
- 
-
-    for (let i = 1; i <= objetos.length; i++) { 
-
- 
-
-        pdf += 
-
-            String(offsets[i]).padStart(10, "0") + 
-
-            " 00000 n \n"; 
-
-    } 
-
- 
-
-    pdf += "trailer\n"; 
-
-    pdf += `<< /Size ${objetos.length + 1} /Root 1 0 R >>\n`; 
-
-    pdf += "startxref\n"; 
-
-    pdf += `${inicioXref}\n`; 
-
-    pdf += "%%EOF"; 
-
- 
-
-    fs.writeFileSync( 
-
-        caminhoArquivo, 
-
-        Buffer.from(pdf, "utf8") 
-
-    ); 
-
- 
-
-    return nomeArquivo; 
-
-} 
-
- 
-
-// =============================== 
-
-// REGISTRAR ALTA + GERAR PDF 
-
-// =============================== 
-
- 
-
-app.post("/alta", (req, res) => { 
-
- 
-
-    try { 
-
- 
-
-        const db = readDB(); 
-
- 
-
-        const nomePaciente = 
-
-            req.body.paciente || 
-
-            req.body.nome; 
-
- 
-
-        if (!nomePaciente) { 
-
-            return res.status(400).json({ 
-
-                erro: "Paciente não informado." 
-
-            }); 
-
-        } 
-
- 
-
-        const paciente = 
-
-            db.pacientes.find( 
-
-                p => 
-
-                    String(p.nome).toLowerCase() === 
-
-                    String(nomePaciente).toLowerCase() 
-
-            ); 
-
- 
-
-        if (!paciente) { 
-
-            return res.status(404).json({ 
-
-                erro: "Paciente não encontrado." 
-
-            }); 
-
-        } 
-
- 
-
-        const alta = { 
-
-            id: Date.now(), 
-
-            pacienteId: paciente.id, 
-
-            paciente: paciente.nome, 
-
-            motivo: 
-
-                req.body.motivo || 
-
-                req.body.tipoAlta || 
-
-                "Alta hospitalar", 
-
-            observacoes: 
-
-                req.body.observacoes || 
-
-                req.body.obs || 
-
-                "Nenhuma observação.", 
-
-            data: new Date() 
-
-        }; 
-
- 
-
-        db.altas.push(alta); 
-
- 
-
-        // Atualiza o status do paciente 
-
-        paciente.status = "alta"; 
-
- 
-
-        // Atualiza a triagem 
-
-        db.triagens.forEach(triagem => { 
-
- 
-
-            if ( 
-
-                String(triagem.nome).toLowerCase() === 
-
-                String(paciente.nome).toLowerCase() 
-
-            ) { 
-
-                triagem.status = "alta"; 
-
-            } 
-
-        }); 
-
- 
-
-        writeDB(db); 
-
- 
-
-        // Gera o PDF 
-
-        const nomeArquivo = 
-
-            criarPDF(paciente, alta); 
-
- 
-
-        res.json({ 
-
-            sucesso: true, 
-
-            mensagem: "Alta registrada com sucesso.", 
-
-            arquivo: nomeArquivo, 
-
-            download: `/baixar-alta/${encodeURIComponent(nomeArquivo)}` 
-
-        }); 
-
- 
-
-    } catch (erro) { 
-
- 
-
-        console.error("ERRO NA ALTA:", erro); 
-
- 
-
-        res.status(500).json({ 
-
-            erro: "Erro ao registrar a alta." 
-
-        }); 
-
-    } 
-
-}); 
-
- 
-
-// =============================== 
-
-// BAIXAR PDF DA ALTA 
-
-// =============================== 
-
- 
-
-app.get("/baixar-alta/:arquivo", (req, res) => { 
-
- 
-
-    const arquivo = 
-
-        path.basename(req.params.arquivo); 
-
- 
-
-    const caminho = 
-
-        path.join(PDF_FOLDER, arquivo); 
-
- 
-
-    if (!fs.existsSync(caminho)) { 
-
-        return res.status(404).send( 
-
-            "PDF não encontrado." 
-
-        ); 
-
-    } 
-
- 
-
-    res.download( 
-
-        caminho, 
-
-        arquivo 
-
-    ); 
-
-}); 
-
- 
-
-// =============================== 
-
-// LISTAR PDFs DO PACIENTE 
-
-// =============================== 
-
- 
-
-app.get("/pdfs", (req, res) => { 
-
- 
-
-    const paciente = 
-
-        req.query.paciente; 
-
- 
-
-    if (!fs.existsSync(PDF_FOLDER)) { 
-
-        return res.json([]); 
-
-    } 
-
- 
-
-    const arquivos = 
-
-        fs.readdirSync(PDF_FOLDER) 
-
-            .filter(arquivo => 
-
-                arquivo.toLowerCase().endsWith(".pdf") 
-
-            ); 
-
- 
-
-    if (!paciente) { 
-
-        return res.json( 
-
-            arquivos.map(nome => ({ 
-
-                nome: nome, 
-
-                url: `/baixar-alta/${encodeURIComponent(nome)}` 
-
-            })) 
-
-        ); 
-
-    } 
-
- 
-
-    const nomeLimpo = 
-
-        limparNome(paciente); 
-
- 
-
-    const encontrados = 
-
-        arquivos.filter(arquivo => 
-
-            arquivo.toLowerCase().includes(nomeLimpo) 
-
-        ); 
-
- 
-
-    res.json( 
-
-        encontrados.map(nome => ({ 
-
-            nome: nome, 
-
-            url: `/baixar-alta/${encodeURIComponent(nome)}` 
-
-        })) 
-
-    ); 
-
-}); 
-
- 
-
-// =============================== 
-
-// LISTAR ALTAS 
-
-// =============================== 
-
- 
-
-app.get("/altas", (req, res) => { 
-
- 
-
-    const db = readDB(); 
-
- 
-
-    res.json(db.altas); 
-
-}); 
-
- 
-
-// =============================== 
-
-// TESTE 
-
-// =============================== 
-
- 
-
-app.get("/teste", (req, res) => { 
-
- 
-
-    res.json({ 
-
-        sucesso: true, 
-
-        mensagem: "Servidor funcionando!" 
-
-    }); 
-
-}); 
-
- 
-
-// =============================== 
-
-// INICIAR SERVIDOR 
-
-// =============================== 
-
- 
-
-app.listen(PORT, "0.0.0.0", () => { 
-
- 
-
-    console.log( 
-
-        `🏥 Hospital Pro rodando na porta ${PORT}` 
-
-    ); 
-
- 
+    console.log(
+        `🏥 Hospital Pro rodando na porta ${PORT}`
+    );
 
 });
