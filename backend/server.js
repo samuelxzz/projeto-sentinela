@@ -822,6 +822,132 @@ function criarPDF(paciente, alta) {
 }
 
 // ===============================
+// GERAR PDF DO PACIENTE
+// ===============================
+
+app.get("/gerar-pdf", (req, res) => {
+
+    try {
+
+        const db =
+            readDB();
+
+        const nomePaciente =
+            String(
+                req.query.paciente || ""
+            ).trim();
+
+        if (!nomePaciente) {
+
+            return res.status(400).json({
+
+                erro:
+                    "Paciente não informado."
+
+            });
+
+        }
+
+        const paciente =
+            db.pacientes.find(
+                p =>
+                    String(
+                        p.nome || ""
+                    ).toLowerCase() ===
+                    nomePaciente.toLowerCase()
+            );
+
+        if (!paciente) {
+
+            return res.status(404).json({
+
+                erro:
+                    "Paciente não encontrado."
+
+            });
+
+        }
+
+        const altasPaciente =
+            (db.altas || []).filter(
+                alta =>
+                    String(
+                        alta.paciente || ""
+                    ).toLowerCase() ===
+                    nomePaciente.toLowerCase()
+            );
+
+        let alta;
+
+        if (altasPaciente.length > 0) {
+
+            alta =
+                altasPaciente[
+                    altasPaciente.length - 1
+                ];
+
+        } else {
+
+            alta = {
+
+                motivo:
+                    "Documento do paciente",
+
+                observacoes:
+                    "Nenhuma observação."
+
+            };
+
+        }
+
+        const nomeArquivo =
+            criarPDF(
+                paciente,
+                alta
+            );
+
+        res.json({
+
+            sucesso:
+                true,
+
+            mensagem:
+                "PDF gerado com sucesso.",
+
+            arquivo:
+                nomeArquivo,
+
+            download:
+                `/baixar-alta/${encodeURIComponent(
+                    nomeArquivo
+                )}`,
+
+            url:
+                `/baixar-alta/${encodeURIComponent(
+                    nomeArquivo
+                )}`
+
+        });
+
+    } catch (erro) {
+
+        console.error(
+            "ERRO AO GERAR PDF:",
+            erro
+        );
+
+        res.status(500).json({
+
+            erro:
+                "Não foi possível gerar o PDF."
+
+        });
+
+    }
+
+});
+
+// ===============================
 // REGISTRAR ALTA + GERAR PDF
 // ===============================
 
