@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internação - Hospital Pro</title>
+
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             padding: 25px;
@@ -13,6 +17,7 @@
             background: #f4f6f9;
             color: #172033;
         }
+
         .container {
             width: 100%;
             max-width: 1000px;
@@ -22,15 +27,88 @@
             border-radius: 16px;
             box-shadow: 0 5px 20px rgba(0,0,0,.10);
         }
+
         h1 {
             text-align: center;
             margin-top: 0;
         }
+
         .subtitulo {
             text-align: center;
             color: #667085;
             margin-bottom: 25px;
         }
+
+        /* =========================
+           ÁREA DO LEITO
+        ========================= */
+
+        .leito-box {
+            background: #f8fafc;
+            border: 1px solid #dfe6ee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .leito-box h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .leito-box p {
+            color: #667085;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .leito-input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        .leito-input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52,152,219,.12);
+        }
+
+        .btn-confirmar {
+            width: 100%;
+            padding: 13px;
+            border: 0;
+            border-radius: 9px;
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-confirmar:hover {
+            background: #2980b9;
+        }
+
+        .leito-selecionado {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: #e8f8f0;
+            border: 1px solid #b7e4c7;
+            border-radius: 9px;
+            color: #1e8449;
+            font-weight: bold;
+        }
+
+        /* =========================
+           PACIENTES INTERNADOS
+        ========================= */
+
         .internado {
             background: #f8fafc;
             border: 1px solid #dfe6ee;
@@ -39,11 +117,13 @@
             padding: 18px;
             margin-bottom: 15px;
         }
+
         .nome {
             font-size: 19px;
             font-weight: bold;
             margin-bottom: 10px;
         }
+
         .leito {
             display: inline-block;
             background: #3498db;
@@ -53,17 +133,24 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
+
         .status {
             color: #1e8449;
             font-weight: bold;
         }
-        .vazio, .erro {
+
+        .vazio,
+        .erro {
             text-align: center;
             padding: 25px;
             border-radius: 12px;
             background: #f8fafc;
         }
-        .erro { color: #c0392b; }
+
+        .erro {
+            color: #c0392b;
+        }
+
         .voltar {
             width: 100%;
             padding: 13px;
@@ -75,91 +162,342 @@
             font-weight: bold;
             cursor: pointer;
         }
+
+        .voltar:hover {
+            background: #2c3e50;
+        }
     </style>
 </head>
+
 <body>
 
 <div class="container">
-    <h1>🏥 Pacientes Internados</h1>
-    <p class="subtitulo">Controle de internação e leitos</p>
 
-    <div id="lista">
-        <div class="vazio">⏳ Carregando...</div>
+    <h1>🏥 Pacientes Internados</h1>
+
+    <p class="subtitulo">
+        Controle de internação e leitos
+    </p>
+
+
+    <!-- =========================
+         INFORMAR LEITO
+    ========================== -->
+
+    <div class="leito-box">
+
+        <h2>🛏️ Informar leito</h2>
+
+        <p>
+            Digite o número do leito desejado para realizar a internação.
+        </p>
+
+        <input
+            type="number"
+            id="numeroLeito"
+            class="leito-input"
+            placeholder="Exemplo: 15"
+            min="1"
+        >
+
+        <button
+            class="btn-confirmar"
+            onclick="confirmarLeito()"
+        >
+            ✅ Confirmar leito
+        </button>
+
+        <div
+            id="leitoSelecionado"
+            class="leito-selecionado"
+        ></div>
+
     </div>
 
-    <button class="voltar" onclick="window.close()">
+
+    <!-- =========================
+         LISTA DE INTERNADOS
+    ========================== -->
+
+    <div id="lista">
+
+        <div class="vazio">
+            ⏳ Carregando...
+        </div>
+
+    </div>
+
+
+    <button
+        class="voltar"
+        onclick="window.close()"
+    >
         ❌ Fechar esta aba
     </button>
+
 </div>
 
+
 <script>
+
 const API = "";
 
+
+/* =========================
+   ESCAPAR HTML
+========================= */
+
 function escapeHtml(valor) {
+
     return String(valor ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+
 }
 
+
+/* =========================
+   CONFIRMAR LEITO
+========================= */
+
+function confirmarLeito() {
+
+    const campoLeito =
+        document.getElementById("numeroLeito");
+
+    const areaLeito =
+        document.getElementById("leitoSelecionado");
+
+    const valor =
+        campoLeito.value.trim();
+
+
+    if (!valor) {
+
+        alert(
+            "⚠️ Informe o número do leito para realizar a internação."
+        );
+
+        campoLeito.focus();
+
+        return;
+    }
+
+
+    const leito = Number(valor);
+
+
+    if (!Number.isInteger(leito) || leito <= 0) {
+
+        alert(
+            "⚠️ Digite um número de leito válido."
+        );
+
+        campoLeito.focus();
+
+        return;
+    }
+
+
+    /*
+       Guarda o leito escolhido.
+       Assim a outra página do sistema
+       pode utilizar esse número.
+    */
+
+    localStorage.setItem(
+        "leitoSelecionado",
+        String(leito)
+    );
+
+
+    areaLeito.style.display = "block";
+
+    areaLeito.innerHTML =
+        "✅ Leito " +
+        escapeHtml(leito) +
+        " selecionado para internação.";
+
+}
+
+
+/* =========================
+   CARREGAR LEITO SALVO
+========================= */
+
+function carregarLeitoSalvo() {
+
+    const leitoSalvo =
+        localStorage.getItem("leitoSelecionado");
+
+    const campoLeito =
+        document.getElementById("numeroLeito");
+
+    const areaLeito =
+        document.getElementById("leitoSelecionado");
+
+
+    if (!leitoSalvo) {
+        return;
+    }
+
+
+    campoLeito.value = leitoSalvo;
+
+    areaLeito.style.display = "block";
+
+    areaLeito.innerHTML =
+        "✅ Leito " +
+        escapeHtml(leitoSalvo) +
+        " selecionado para internação.";
+
+}
+
+
+/* =========================
+   CARREGAR INTERNAÇÕES
+========================= */
+
 async function carregarInternacoes() {
-    const lista = document.getElementById("lista");
+
+    const lista =
+        document.getElementById("lista");
+
 
     try {
+
         const resposta = await fetch(
             API + "/internacoes?_=" + Date.now()
         );
 
+
         if (!resposta.ok) {
-            throw new Error("Erro HTTP " + resposta.status);
+
+            throw new Error(
+                "Erro HTTP " + resposta.status
+            );
+
         }
 
-        const internacoes = await resposta.json();
 
-        if (!Array.isArray(internacoes) || internacoes.length === 0) {
+        const internacoes =
+            await resposta.json();
+
+
+        if (
+            !Array.isArray(internacoes) ||
+            internacoes.length === 0
+        ) {
+
             lista.innerHTML = `
                 <div class="vazio">
                     🏥 Nenhum paciente internado.
                 </div>
             `;
+
             return;
         }
 
+
         lista.innerHTML = "";
 
-        internacoes.forEach(internacao => {
-            const data = internacao.createdAt
-                ? new Date(internacao.createdAt).toLocaleString("pt-BR")
-                : "Data não informada";
 
-            const card = document.createElement("div");
-            card.className = "internado";
+        internacoes.forEach(internacao => {
+
+            const data =
+                internacao.createdAt
+                    ? new Date(
+                        internacao.createdAt
+                    ).toLocaleString("pt-BR")
+                    : "Data não informada";
+
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "internado";
+
 
             card.innerHTML = `
-                <div class="nome">👤 ${escapeHtml(internacao.paciente || "Paciente")}</div>
-                <div class="leito">🛏️ Leito ${escapeHtml(internacao.leito || "Não informado")}</div>
-                <div class="status">🟢 Internado</div>
-                <div>📅 ${escapeHtml(data)}</div>
+
+                <div class="nome">
+                    👤 ${escapeHtml(
+                        internacao.paciente ||
+                        "Paciente"
+                    )}
+                </div>
+
+                <div class="leito">
+                    🛏️ Leito ${
+                        escapeHtml(
+                            internacao.leito ||
+                            "Não informado"
+                        )
+                    }
+                </div>
+
+                <div class="status">
+                    🟢 Internado
+                </div>
+
+                <div>
+                    📅 ${escapeHtml(data)}
+                </div>
+
             `;
 
+
             lista.appendChild(card);
+
         });
 
+
     } catch (erro) {
+
         console.error(erro);
+
+
         lista.innerHTML = `
+
             <div class="erro">
-                ❌ Não foi possível carregar as internações.<br><br>
+
+                ❌ Não foi possível carregar
+                as internações.
+
+                <br><br>
+
                 ${escapeHtml(erro.message)}
+
             </div>
+
         `;
+
     }
+
 }
 
+
+/* =========================
+   INICIAR
+========================= */
+
+carregarLeitoSalvo();
+
 carregarInternacoes();
-setInterval(carregarInternacoes, 5000);
+
+
+/* Atualiza a lista a cada 5 segundos */
+
+setInterval(
+    carregarInternacoes,
+    5000
+);
+
 </script>
 
 </body>
