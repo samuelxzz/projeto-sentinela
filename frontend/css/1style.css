@@ -2653,3 +2653,11 @@ body {
 }
 
 
+/* ===== AJUSTE SOMENTE DO LOGIN ===== */
+.formulario input,
+.formulario button {
+  width: 400px !important;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
